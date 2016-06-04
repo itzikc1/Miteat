@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_logIn"
+        android:orderInCategory="100"
+        android:title="@string/logIn"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_myOrder"
+        android:orderInCategory="100"
+        android:title="@string/myOrder"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_myBooking"
+        android:orderInCategory="100"
+        android:title="@string/booking"
+        app:showAsAction="ifRoom" />
+</menu>

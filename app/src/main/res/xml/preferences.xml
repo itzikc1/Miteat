@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="pref_username"
+        android:title="שם משתמש" />
+    <EditTextPreference
+        android:defaultValue="הזן שם"
+        android:key="pref_name"
+        android:title="שם" />
+    <EditTextPreference
+        android:defaultValue="הזן מספר טלפון"
+        android:key="pref_telephone"
+        android:title="מספר טלפון" />
+    <Preference
+        android:key="pref_register_time"
+        android:title="זמן רישום" />
+    <EditTextPreference
+        android:defaultValue="false"
+        android:key="pref_mail"
+        android:title="מייל" />
+    <EditTextPreference
+        android:defaultValue="false"
+        android:key="pref_age"
+        android:title="גיל" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_gps"
+        android:title="GPS" />
+</PreferenceScreen>

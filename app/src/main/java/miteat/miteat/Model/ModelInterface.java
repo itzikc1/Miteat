@@ -1,6 +1,7 @@
 package miteat.miteat.Model;
 
 import miteat.miteat.Model.Entities.Gps;
+import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 
 /**
@@ -11,5 +12,6 @@ public interface ModelInterface {
     public Boolean checkIfUserExist(User user);
     public void addGps(Gps gps);
     public int numberOfRow(String tableName);
+    public void addMeeting(Meeting meeting);
 
 }

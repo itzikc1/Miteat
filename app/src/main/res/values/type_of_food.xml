@@ -1,180 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    Ainu
-    Akan
-    African American
-    Arab
-    Armenian
-    Assyrian
-    Balochi
-    Berber
-    Buddhist
-    Bulgarian
-    Cajun
-    Chinese Islamic
-    Circassian
-    Crimean Tatar
-    French cuisine
-    Greek
-    Indian Singaporean cuisine
-    Inuit
-    Italian American
-    Jewish
-    Kurdish
-    Malayali Food
-    Louisiana Creole
-    Maharashtrian
-    Malay cuisine
-    Malaysian Chinese cuisine
-    Malaysian Indian cuisine
-    Mordovian
-    Native American
-    Parsi
-    Pashtun
-    Pennsylvania Dutch
-    Peranakan
-    Persian cuisine
-    Punjabi
-    Rajasthani
-    Russian
-    Sami
-    Sindhi
-    Tatar
-    Turkish
-    Yamal
-    Zanzibari
-    South Indian
-    asparagus
-    apples
-    avacado
-    alfalfa
-    acorn squash
-    almond
-    arugala
-    artichoke
-    applesauce
-    asian noodles
-    antelope
-    ahi tuna
-    albacore tuna
-    Apple juice
-    Avocado roll
-    Bruscetta
-    bacon
-    black beans
-    bagels
-    baked beans
-    BBQ
-    bison
-    barley
-    beer
-    bisque
-    bluefish
-    bread
-    broccoli
-    buritto
-    babaganoosh
-    Cabbage
-    cake
-    carrots
-    carne asada
-    celery
-    cheese
-    chicken
-    catfish
-    chips
-    chocolate
-    chowder
-    clams
-    coffee
-    cookies
-    corn
-    cupcakes
-    crab
-    curry
-    cereal
-    chimichanga
-    dates
-    dips
-    duck
-    dumplings
-    donuts
-    eggs
-    enchilada
-    eggrolls
-    English muffins
-    edimame
-    eel sushi
-    fajita
-    falafel
-    fish
-    franks
-    fondu
-    French toast
-    French dip
-    Garlic
-    ginger
-    gnocchi
-    goose
-    granola
-    grapes
-    green beans
-    Guancamole
-    gumbo
-    grits
-    Graham crackers
-    ham
-    halibut
-    hamburger
-    honey
-    huenos rancheros
-    hash browns
-    hot dogs
-    haiku roll
-    hummus
-    ice cream
-    Irish stew
-    Indian food
-    Italian bread
-    jambalaya
-    jelly / jam
-    jerky
-    jalapeño
-    kale
-    kabobs
-    ketchup
-    kiwi
-    kidney beans
-    kingfish
-    lobster
-    Lamb
-    Linguine
-    Lasagna
-    Meatballs
-    Moose
-    Milk
-    Milkshake
-    Noodles
-    Ostrich
-    Pizza
-    Pepperoni
-    Porter
-    Pancakes
-    Quesadilla
-    Quiche
-    Reuben
-    Spinach
-    Spaghetti
-    Tater tots
-    Toast
-    Venison
-    Waffles
-    Wine
-    Walnuts
-    Yogurt
-    Ziti
-    Zucchini
-
-
-
+    <array name="type">
+        <item>Ainu</item>
+        <item>Akan</item>
+        <item>African American</item>
+        <item>Arab</item>
+        <item>Armenian</item>
+        <item>Assyrian</item>
+        <item>Balochi</item>
+        <item>Berber</item>
+        <item>Buddhist</item>
+        <item>Bulgarian</item>
+        <item>Cajun</item>
+        <item>Chinese Islamic</item>
+        <item>Circassian</item>
+        <item>Crimean Tatar</item>
+        <item>French cuisine</item>
+        <item>Greek</item>
+        <item>Israeli </item>
+        <item>Indian Singaporean cuisine</item>
+        <item>Inuit</item>
+        <item>Italian American</item>
+        <item>Jewish</item>
+        <item>Kurdish</item>
+        <item>Malayali Food</item>
+        <item>Louisiana Creole</item>
+        <item>Maharashtrian</item>
+        <item>Malay cuisine</item>
+        <item>Malaysian Chinese cuisine</item>
+        <item>Malaysian Indian cuisine</item>
+        <item>Mordovian</item>
+        <item>Native American</item>
+        <item>Parsi</item>
+        <item>Pashtun</item>
+        <item>Pennsylvania Dutch</item>
+        <item>Peranakan</item>
+        <item>Persian cuisine</item>
+        <item>Punjabi</item>
+        <item>Rajasthani</item>
+        <item>Russian</item>
+        <item>Sami</item>
+        <item>Sindhi</item>
+        <item>Tatar</item>
+        <item>Turkish</item>
+        <item>Yamal</item>
+        <item>Zanzibari</item>
+        <item>South Indian</item>
+        <item>asparagus</item>
+        <item>apples</item>
+        <item>avacado</item>
+        <item>alfalfa</item>
+        <item>acorn squash</item>
+        <item>almond</item>
+        <item>arugala</item>
+        <item>artichoke</item>
+        <item>applesauce</item>
+        <item>asian noodles</item>
+        <item>antelope</item>
+        <item>ahi tuna</item>
+        <item>albacore tuna</item>
+        <item>Apple juice</item>
+        <item>Avocado roll</item>
+        <item>Bruscetta</item>
+        <item>bacon</item>
+        <item>black beans</item>
+        <item>bagels</item>
+        <item>baked beans</item>
+        <item>BBQ</item>
+        <item>bison</item>
+        <item>barley</item>
+        <item>beer</item>
+        <item>bisque</item>
+        <item>bluefish</item>
+        <item>bread</item>
+        <item>broccoli</item>
+        <item>buritto</item>
+        <item>babaganoosh</item>
+        <item>Cabbage</item>
+        <item>cake</item>
+        <item>carrots</item>
+        <item>carne asada</item>
+        <item>celery</item>
+        <item>cheese</item>
+        <item>chicken</item>
+        <item>catfish</item>
+        <item>chips</item>
+        <item>chocolate</item>
+        <item>chowder</item>
+        <item>clams</item>
+        <item>coffee</item>
+        <item>cookies</item>
+        <item>corn</item>
+        <item>cupcakes</item>
+        <item>crab</item>
+        <item>curry</item>
+        <item>cereal</item>
+        <item>chimichanga</item>
+        <item>dates</item>
+        <item>dips</item>
+        <item>duck</item>
+        <item>dumplings</item>
+        <item>donuts</item>
+        <item>eggs</item>
+        <item>enchilada</item>
+        <item>eggrolls</item>
+        <item>English muffins</item>
+        <item>edimame</item>
+        <item>eel sushi</item>
+        <item>fajita</item>
+        <item>falafel</item>
+        <item>fish</item>
+        <item>franks</item>
+        <item>fondu</item>
+        <item>French toast</item>
+        <item>French dip</item>
+        <item>Garlic</item>
+        <item>ginger</item>
+        <item>gnocchi</item>
+        <item>goose</item>
+        <item>granola</item>
+        <item>grapes</item>
+        <item>green beans</item>
+        <item>Guancamole</item>
+        <item>gumbo</item>
+        <item>grits</item>
+        <item>Graham crackers</item>
+        <item>ham</item>
+        <item>halibut</item>
+        <item>hamburger</item>
+        <item>honey</item>
+        <item>huenos rancheros</item>
+        <item>hash browns</item>
+        <item>hot dogs</item>
+        <item>haiku roll</item>
+        <item>hummus</item>
+        <item>ice cream</item>
+        <item>Irish stew</item>
+        <item>Indian food</item>
+        <item>Italian bread</item>
+        <item>jambalaya</item>
+        <item>jelly / jam</item>
+        <item>jerky</item>
+        <item>jalapeño</item>
+        <item>kale</item>
+        <item>kabobs</item>
+        <item>ketchup</item>
+        <item>kiwi</item>
+        <item>kidney beans</item>
+        <item>kingfish</item>
+        <item>lobster</item>
+        <item>Lamb</item>
+        <item>Linguine</item>
+        <item>Lasagna</item>
+        <item>Meatballs</item>
+        <item>Moose</item>
+        <item>Milk</item>
+        <item>Milkshake</item>
+        <item>Noodles</item>
+        <item>Ostrich</item>
+        <item>Pizza</item>
+        <item>Pepperoni</item>
+        <item>Porter</item>
+        <item>Pancakes</item>
+        <item>Quesadilla</item>
+        <item>Quiche</item>
+        <item>Reuben</item>
+        <item>Spinach</item>
+        <item>Spaghetti</item>
+        <item>Tater tots</item>
+        <item>Toast</item>
+        <item>Venison</item>
+        <item>Waffles</item>
+        <item>Wine</item>
+        <item>Walnuts</item>
+        <item>Yogurt</item>
+        <item>Ziti</item>
+        <item>Zucchini</item>
+    </array>
 </resources>

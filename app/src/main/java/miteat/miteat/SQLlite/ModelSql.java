@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.MyApplication;
 import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.User;
@@ -21,6 +22,8 @@ public class ModelSql implements ModelInterface {
     MyDBHelper dbHelper;
     private static final String USER_TABLE = "user_table";
     private static final String GPS_TABLE = "gps_table";
+    private static final String MEETING_TABLE = "meeting_table";
+
 
     public ModelSql() {
         dbHelper = new MyDBHelper(MyApplication.getAppContext());
@@ -62,6 +65,15 @@ public class ModelSql implements ModelInterface {
         return cnt;
     }
 
+    @Override
+    public void addMeeting(Meeting meeting) {
+        int num = numberOfRow(MEETING_TABLE);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        meeting.setId(num);
+        MeetingSql.addmeeting(db,meeting);
+
+    }
+
     class MyDBHelper extends SQLiteOpenHelper {
 
         public MyDBHelper(Context context) {
@@ -73,12 +85,14 @@ public class ModelSql implements ModelInterface {
             //create the DB schema
             LoginSql.create(db);
             GpsSql.create(db);
+            MeetingSql.create(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             LoginSql.drop(db);
             GpsSql.drop(db);
+            MeetingSql.drop(db);
             onCreate(db);
         }
     }

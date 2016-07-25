@@ -1,6 +1,7 @@
 package miteat.miteat.Model;
 
 import miteat.miteat.Model.Entities.Gps;
+import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.MyApplication;
 import miteat.miteat.SQLlite.ModelSql;
@@ -8,6 +9,7 @@ import miteat.miteat.SQLlite.ModelSql;
 /**
  * Created by Itzik on 05/06/2016.
  */
+
 public class Model  implements ModelInterface{
 
     private final static Model instance = new Model();
@@ -38,6 +40,11 @@ public class Model  implements ModelInterface{
     @Override
     public int numberOfRow(String tableName) {
         return 0;
+    }
+
+    @Override
+    public void addMeeting(Meeting meeting) {
+        sqlModel.addMeeting(meeting);
     }
 
 }

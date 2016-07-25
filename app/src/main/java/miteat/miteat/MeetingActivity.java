@@ -1,54 +1,99 @@
 package miteat.miteat;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.MultiAutoCompleteTextView;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
+import android.support.v7.app.AppCompatActivity;
 
-public class MeetingActivity extends AppCompatActivity {
-    private AutoCompleteTextView foodPortions;
-    private MultiAutoCompleteTextView completeTextView;
-    private  Button save;
-    private  Button cancel;
-    private EditText numberParticipants;
-    private EditText numberOfMoney;
-    private DateEditText date;
-    private TimeEditText time;
-    private  CheckBox  safeCheckBox;
-    private  ImageButton menu;
-    String[] menuItems={"Android ","java","IOS","SQL","JDBC","Web services"};
+import java.io.FileNotFoundException;
 
+import miteat.miteat.Model.Entities.Meeting;
+import miteat.miteat.Model.ModelCloudinary;
+
+public class MeetingActivity extends AppCompatActivity implements MainMeetingFragment.MeetingFragmentInterface, MenuListFragment.ListFragmentInterface, MenuPortionsFragment.MenuFragmentInterface {
+    FragmentManager manager;
+    MainMeetingFragment mainMeetingFragment;
+    MenuListFragment menuListFragment;
+    MenuPortionsFragment menuPortionsFragment;
+
+    int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+
+
+    private String picName;
+    int PLACE_PICKER_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
-
-        foodPortions = (AutoCompleteTextView) findViewById(R.id.foodPortions);
-      //  completeTextView=(MultiAutoCompleteTextView)findViewById(R.id.completeTextView);
-
-         save = (Button) findViewById(R.id.save);
-         cancel = (Button) findViewById(R.id.cancel);
-         numberParticipants = (EditText) findViewById(R.id.numberParticipants);
-         numberOfMoney = (EditText) findViewById(R.id.numberOfMoney);
-          date = (DateEditText) findViewById(R.id.startDateEditText);
-          time = (TimeEditText) findViewById(R.id.startTimeEditText);
-          safeCheckBox = (CheckBox) findViewById(R.id.safe);
-          menu = (ImageButton) findViewById(R.id.menuButton);
-
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,menuItems);
-        foodPortions.setAdapter(adapter);
-        foodPortions.setThreshold(1);
-
-//        completeTextView.setAdapter(adapter);
-//        completeTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-
+        mainMeetingFragment = new MainMeetingFragment();
+        manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.meeting_main, mainMeetingFragment);
+        transaction.commit();
 
     }
+
+    @Override
+    public void menuStart(Meeting meeting) {
+
+        menuListFragment = new MenuListFragment();
+        menuListFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, menuListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
+    }
+
+    @Override
+    public void saveOrCencel() {
+        finish();
+    }
+
+    @Override
+    public void addPortions( Meeting meeting) {
+        menuPortionsFragment = new MenuPortionsFragment();
+        menuPortionsFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, menuPortionsFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+//    @Override
+//    public String addPic() {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
+//        return picName;
+//    }
+//
+//    @Override
+//    public String takePic() {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intent, REQUEST_CAMERA);
+//        return picName;
+//
+//    }
+
+    @Override
+    public void saveInterface(Meeting meeting) {
+        menuListFragment = new MenuListFragment();
+        menuListFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, menuListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
 
 }

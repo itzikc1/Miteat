@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="allergens_type">
+    <item>Abalone</item>
+    <item>perlemoen</item>
+    <item>Acerola</item>
+    <item>Alaska Pollock</item>
+    <item>Almond</item>
+    <item>Aniseed</item>
+    <item>Apple</item>
+    <item>Apricot</item>
+    <item>Avocado</item>
+    <item>Banana</item>
+    <item>Barley</item>
+    <item>Bell pepper</item>
+    <item>Brazil nut</item>
+    <item>Buckwheat</item>
+    <item>Cabbage</item>
+    <item>Camomile</item>
+    <item>Carp</item>
+    <item>Carrot</item>
+    <item>Cashew</item>
+    <item>Castor bean</item>
+    <item>Celery</item>
+    <item>Celeriac</item>
+    <item>Cherry</item>
+    <item>Chestnut</item>
+    <item>Chickpea</item>
+    <item>garbanzo</item>
+    <item>bengal</item>
+    <item>gram</item>
+    <item>Cocoa</item>
+    <item>Coconut</item>
+    <item>Cod</item>
+    <item>Cotton seed</item>
+    <item>Courgette</item>
+    <item>zucchini</item>
+    <item>Crab</item>
+    <item>Date</item>
+    <item>Egg</item>
+    <item>Fig</item>
+    <item>Fish</item>
+    <item>Flax seed, linseed</item>
+    <item>Frog, edible</item>
+    <item>Garden plum</item>
+    <item>Garlic</item>
+    <item>Grape</item>
+    <item>Hazelnut</item>
+    <item>Kiwi fruit</item>
+    <item>chinese gooseberry</item>
+    <item>Lentil</item>
+    <item>Lettuce</item>
+    <item>Lobster</item>
+    <item>Lupin or Lupine</item>
+    <item>Lychee</item>
+    <item>Mackerel</item>
+    <item>Maize, corn</item>
+    <item>Mango</item>
+    <item>Melon</item>
+    <item>Milk, cow</item>
+    <item>Mustard</item>
+    <item>Oat</item>
+    <item>Oyster</item>
+    <item>Peach</item>
+    <item>Peanut</item>
+    <item>ground nuts</item>
+    <item>monkey nuts</item>
+    <item>Pear</item>
+    <item>Pecan</item>
+    <item>Persimmon</item>
+    <item>Pine nuts</item>
+    <item>Pineapple</item>
+    <item>Pomegranate</item>
+    <item>Poppy seed</item>
+    <item>Potato</item>
+    <item>Pumpkin</item>
+    <item>Rice</item>
+    <item>Rye</item>
+    <item>Salmon</item>
+    <item>Sesame</item>
+    <item>Shrimp black tiger shrimp</item>
+    <item>Shrimp brown shrimp</item>
+    <item>Shrimp greasyback shrimp</item>
+    <item>Shrimp Indian prawn</item>
+    <item>Shrimp Neptune rose shrimp</item>
+    <item>Shrimp white shrimp</item>
+    <item>Snail</item>
+    <item>Soybean Soya</item>
+    <item>Squid</item>
+    <item>Strawberry</item>
+    <item>Sunflower seed</item>
+    <item>Tomato</item>
+    <item>Tuna</item>
+    <item>Turnip</item>
+    <item>Walnut</item>
+    <item>Wheat</item>
+    </array>
+</resources>

@@ -8,55 +8,5 @@
     <string name="google_place_api">AIzaSyA4BRvqWTo-4be58_YOIwImIW5Bq0PaEYI</string>
     <string name="title_activity_add_meeting">AddMeetingActivity</string>
     <string name="addMeeting">Add Meeting</string>
-    <string-array name="food_type_array">
-        <item>Ainu</item>
-        <item>Akan</item>
-        <item>African American</item>
-        <item>Arab</item>
-        <item>Armenian</item>
-        <item>Assyrian</item>
-        <item>Balochi</item>
-        <item>Berber</item>
-        <item>Buddhist</item>
-        <item>Cajun</item>
-        <item>Bulgarian</item>
-        <item>Chinese Islamic</item>
-        <item>Circassian</item>
-        <item>Crimean</item>
-        <item>French cuisine</item>
-        <item>Greek</item>
-        <item>Indian Singaporean cuisine</item>
-        <item>Inuit</item>
-        <item>Italian American</item>
-        <item>Jewish</item>
-        <item>Kurdish</item>
-        <item>Malayali Food</item>
-        <item>Louisiana Creole</item>
-        <item>Maharashtrian</item>
-        <item>Malay cuisine</item>
-        <item>Malaysian Chinese cuisine</item>
-        <item>Malaysian Indian cuisine</item>
-        <item>Mordovian</item>
-        <item>Native American</item>
-        <item>Parsi</item>
-        <item>Pashtun</item>
-        <item>Pennsylvania Dutch</item>
-        <item>Peranakan</item>
-        <item>Persian cuisine</item>
-        <item>Punjabi</item>
-        <item>Rajasthani</item>
-        <item>Russian</item>
-        <item>Sami</item>
-        <item>Sindhi</item>
-        <item>Tatar</item>
-        <item>Turkish</item>
-        <item>Yamal</item>
-        <item>Israeli</item>
-        <item>Zanzibari</item>
-        <item>South Indian</item>
-
-
-
-    </string-array>
 
 </resources>

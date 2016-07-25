@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.io.FileNotFoundException;
 
+import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.ModelCloudinary;
 
@@ -66,6 +67,30 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         transaction.replace(R.id.meeting_main, menuPortionsFragment);
         invalidateOptionsMenu();
         transaction.commit();
+    }
+
+    @Override
+    public void editPortions(FoodPortions f, Meeting meeting) {
+
+        menuPortionsFragment = new MenuPortionsFragment();
+        menuPortionsFragment.setMeeting(meeting);
+        menuPortionsFragment.edit(f);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, menuPortionsFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void refresh(Meeting meeting) {
+
+        menuListFragment = new MenuListFragment();
+        menuListFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, menuListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
     }
 
 //    @Override

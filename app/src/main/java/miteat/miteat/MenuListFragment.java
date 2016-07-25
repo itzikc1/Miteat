@@ -34,8 +34,10 @@ public class MenuListFragment extends Fragment {
     List<FoodPortions> data;
     MyAddapter adapter;
 
-    interface ListFragmentInterface{
+    interface ListFragmentInterface {
         public void addPortions(Meeting meeting);
+        public void editPortions(FoodPortions f,Meeting meeting);
+        public void refresh(Meeting meeting);
     }
 
     @Override
@@ -46,18 +48,44 @@ public class MenuListFragment extends Fragment {
                 container, false);
         setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.listPortions);
-        data=meeting.getFoodPortionsId();
+        data = meeting.getFoodPortionsId();
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Long","Long press!!!!!!");
 
-                return false;
+                final FoodPortions f = data.get(position);
+                // meeting.getFoodPortionsId().remove(data.get(position));
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                Log.d("log", "Yes button clicked ");
+                                meeting.getFoodPortionsId().remove(f);
+                                Toast.makeText(getActivity().getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
+                                ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
+                                listFragmentInterface.refresh(meeting);
+
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                Log.d("log", "No button clicked ");
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("you sure delete this Portions ?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+                Log.d("Long", "Long press!!!!!!");
+
+
+                return true;
             }
         });
 
@@ -67,8 +95,11 @@ public class MenuListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                int idFromList = data.get(position).getNumberOfFoodPortions();
-                Log.d("samll","samll press!!!!!!");
+                FoodPortions f = data.get(position);
+                ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
+                listFragmentInterface.editPortions(f,meeting);
+
+                Log.d("samll", "samll press!!!!!!");
 
             }
         });
@@ -80,6 +111,7 @@ public class MenuListFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_list_portions, menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -90,7 +122,7 @@ public class MenuListFragment extends Fragment {
             return true;
         }
         if (id == R.id.menu_plus) {
-            Log.d("log","plus!!!");
+            Log.d("log", "plus!!!");
 
             ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
             listFragmentInterface.addPortions(this.meeting);
@@ -137,7 +169,8 @@ public class MenuListFragment extends Fragment {
             return convertView;
         }
     }
-    public void setMeeting(Meeting meeting){
-        this.meeting=meeting;
+
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
     }
 }

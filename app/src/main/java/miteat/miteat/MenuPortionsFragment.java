@@ -34,7 +34,7 @@ import miteat.miteat.Model.ModelCloudinary;
 public class MenuPortionsFragment extends Fragment {
 
     private Meeting meeting;
-
+    private FoodPortions editPortions = null;
     private MultiAutoCompleteTextView multiAutoComplete;
     private Button save;
     private Button cancel;
@@ -77,8 +77,10 @@ public class MenuPortionsFragment extends Fragment {
 
         TextView num = (TextView) view.findViewById(R.id.portionsNumber);
         TextView costView = (TextView) view.findViewById(R.id.cost);
+        TextView nameDefault = (TextView) view.findViewById(R.id.name);
 
         //TextView nameView = (TextView) view.findViewById(R.id.name);
+        if(editPortions==null){
 
         int numMeeting = 0;
         if (this.meeting.getFoodPortionsId().isEmpty()) {
@@ -89,7 +91,14 @@ public class MenuPortionsFragment extends Fragment {
         }
         num.setText(String.valueOf(numMeeting));
         costView.setText("0");
-
+            nameDefault.setText("");
+        }
+        else{
+           num.setText(String.valueOf(editPortions.getNumberOfFoodPortions()));
+            costView.setText(String.valueOf(editPortions.getCost()));
+            nameDefault.setText(editPortions.getName().toString());
+            multiAutoComplete.setText(editPortions.getAllergens().toString());
+        }
         // imageSwitcher.setImageResource(R.drawable.map);
 
 
@@ -101,13 +110,18 @@ public class MenuPortionsFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(editPortions!=null){
+                    meeting.getFoodPortionsId().remove(editPortions);
+                }
+
                 numberId = (EditText) view.findViewById(R.id.portionsNumber);
                 costOfMoney = (EditText) view.findViewById(R.id.cost);
                 name = (EditText) view.findViewById(R.id.name);
                 String allergens = multiAutoComplete.getText().toString();
                 int numberIdText = Integer.parseInt(numberId.getText().toString());
                 int money = Integer.parseInt(costOfMoney.getText().toString());
-                FoodPortions foodPortions = new FoodPortions(numberIdText,name.toString(), image, numberIdText, money, allergens);
+                FoodPortions foodPortions = new FoodPortions(numberIdText,name.getText().toString(), image, numberIdText, money, allergens);
                 addFoodPortions(foodPortions);
                 MenuFragmentInterface menuFragmentInterface = (MenuFragmentInterface) getActivity();
                 menuFragmentInterface.saveInterface(meeting);
@@ -145,6 +159,10 @@ public class MenuPortionsFragment extends Fragment {
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
+    }
+
+    public  void edit(FoodPortions f){
+        this.editPortions=f;
     }
 
     public void addFoodPortions(FoodPortions foodPortions) {

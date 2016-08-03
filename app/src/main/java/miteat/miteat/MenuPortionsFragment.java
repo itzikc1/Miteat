@@ -12,6 +12,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -63,6 +66,8 @@ public class MenuPortionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         final View view = inflater.inflate(R.layout.menu_portions_fragment,
                 container, false);
         multiAutoComplete = (MultiAutoCompleteTextView) view.findViewById(R.id.allergensType);
@@ -156,6 +161,22 @@ public class MenuPortionsFragment extends Fragment {
         });
         return view;
     }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_empty, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;

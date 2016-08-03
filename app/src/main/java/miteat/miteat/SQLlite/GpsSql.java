@@ -42,6 +42,7 @@ public class GpsSql {
     public static Gps getGps(SQLiteDatabase db) {
 
         Cursor cursor = db.query(GPS_TABLE, null, null, null, null, null, null);
+
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
             Gps gps = null;
             return gps;
@@ -52,7 +53,9 @@ public class GpsSql {
             int longitude = cursor.getColumnIndex(LONGITUDE);
             int latitude = cursor.getColumnIndex(LATITUDE);
             int time = cursor.getColumnIndex(TIME);
-            Gps gps = new Gps(Integer.getInteger(cursor.getString(id)), cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
+           // Gps gps = new Gps(Integer.getInteger(cursor.getString(id)), cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
+            Gps gps = new Gps(1, cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
+
             return gps;
         }
         Gps gps = null;

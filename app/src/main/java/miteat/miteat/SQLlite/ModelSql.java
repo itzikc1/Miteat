@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.MyApplication;
 import miteat.miteat.Model.Entities.Gps;
@@ -72,6 +74,22 @@ public class ModelSql implements ModelInterface {
         meeting.setId(num);
         MeetingSql.addmeeting(db,meeting);
 
+    }
+
+    @Override
+    public List<Meeting> getAllMeeting() {
+        return null;
+    }
+
+    @Override
+    public void deleteMeeting(Meeting meeting) {
+
+    }
+
+    @Override
+    public Gps getGpsLocation() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        return GpsSql.getGps(db);
     }
 
     class MyDBHelper extends SQLiteOpenHelper {

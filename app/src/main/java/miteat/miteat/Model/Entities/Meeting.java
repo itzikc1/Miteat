@@ -1,6 +1,5 @@
 package miteat.miteat.Model.Entities;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,20 +18,28 @@ public class Meeting {
     private Boolean insurance;
     private int foodPortionsIds;
     private String image;
+    private Double latLocation;
+    private Double lonLocation;
 
 
-     List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
+    private Double distance;
 
-    public Meeting(int id, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, String location, Boolean insurance) {
-        this.id=id;
-        this.numberOfPartner=numberOfPartner;
-        this.typeOfFood=typeOfFood;
-        this.money=money;
-        this.dateAndTime=dateAndTime;
-        this.location=location;
-        this.insurance=insurance;
+
+    List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
+
+    public Meeting(int id, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, String location, Double latLocation, Double lonLocation, Boolean insurance) {
+        this.id = id;
+        this.numberOfPartner = numberOfPartner;
+        this.typeOfFood = typeOfFood;
+        this.money = money;
+        this.dateAndTime = dateAndTime;
+        this.location = location;
+        this.insurance = insurance;
+        this.latLocation = latLocation;
+        this.lonLocation = lonLocation;
 
     }
+
     public int getId() {
         return id;
     }
@@ -120,12 +127,34 @@ public class Meeting {
     public void setFoodPortionsId(List<FoodPortions> foodPortionsId) {
         this.foodPortionsId = foodPortionsId;
     }
+
     public void addFoodPortionsId(FoodPortions foodPortionsId) {
         this.foodPortionsId.add(foodPortionsId);
     }
 
+    public Double getLatLocation() {
+        return latLocation;
+    }
 
+    public void setLatLocation(Double latLocation) {
+        this.latLocation = latLocation;
+    }
 
+    public Double getLonLocation() {
+        return lonLocation;
+    }
+
+    public void setLonLocation(Double lonLocation) {
+        this.lonLocation = lonLocation;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 
 
 }

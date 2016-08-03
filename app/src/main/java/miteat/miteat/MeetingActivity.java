@@ -3,27 +3,21 @@ package miteat.miteat;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
-
-import java.io.FileNotFoundException;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
-import miteat.miteat.Model.ModelCloudinary;
 
-public class MeetingActivity extends AppCompatActivity implements MainMeetingFragment.MeetingFragmentInterface, MenuListFragment.ListFragmentInterface, MenuPortionsFragment.MenuFragmentInterface {
+public class MeetingActivity extends AppCompatActivity implements MainMeetingFragment.MeetingFragmentInterface, MenuListFragment.ListFragmentInterface, MenuPortionsFragment.MenuFragmentInterface, MeetingListFragment.MeetingListFragmentInterface {
     FragmentManager manager;
     MainMeetingFragment mainMeetingFragment;
     MenuListFragment menuListFragment;
     MenuPortionsFragment menuPortionsFragment;
-
+    MeetingListFragment meetingListFragment;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
 
 
@@ -34,12 +28,52 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
-        mainMeetingFragment = new MainMeetingFragment();
+        meetingListFragment = new MeetingListFragment();
         manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.meeting_main, mainMeetingFragment);
+        transaction.add(R.id.meeting_main, meetingListFragment);
         transaction.commit();
 
+//        mainMeetingFragment = new MainMeetingFragment();
+//        manager = getFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.add(R.id.meeting_main, mainMeetingFragment);
+//        transaction.commit();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_meeting_manger, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.menu_back_main) {
+
+            Intent intent = new Intent(getApplicationContext(),
+                    MainActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+
+        if (id == R.id.menu_plus_meeting) {
+            mainMeetingFragment = new MainMeetingFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.meeting_main, mainMeetingFragment);
+            invalidateOptionsMenu();
+            transaction.commit();
+            Log.d("Log", "pluse");
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -56,11 +90,17 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
 
     @Override
     public void saveOrCencel() {
-        finish();
+
+        meetingListFragment = new MeetingListFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, meetingListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
     }
 
     @Override
-    public void addPortions( Meeting meeting) {
+    public void addPortions(Meeting meeting) {
         menuPortionsFragment = new MenuPortionsFragment();
         menuPortionsFragment.setMeeting(meeting);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -88,6 +128,17 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         menuListFragment.setMeeting(meeting);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.meeting_main, menuListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
+    }
+
+    @Override
+    public void backButton(Meeting meeting) {
+        mainMeetingFragment = new MainMeetingFragment();
+        mainMeetingFragment.setMenuList(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, mainMeetingFragment);
         invalidateOptionsMenu();
         transaction.commit();
 
@@ -121,4 +172,22 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
     }
 
 
+    @Override
+    public void refreshList() {
+        meetingListFragment = new MeetingListFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, meetingListFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void editMeeting(Meeting meeting) {
+        mainMeetingFragment = new MainMeetingFragment();
+        mainMeetingFragment.setMenuList(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.meeting_main, mainMeetingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
 }

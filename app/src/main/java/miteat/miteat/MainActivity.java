@@ -90,11 +90,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
 
         if (id == R.id.menu_myBooking) {
             PlacePicker();
-//            Intent intent = new Intent(getApplicationContext(),
-//                   MapsActivity.class);
-//            startActivity(intent);
+
             return true;
         }
+        if (id == R.id.search) {
+
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -172,5 +175,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         Place place = PlacePicker.getPlace(data,this);
         String a = String.format("Place: %s",place.getAddress());
         Log.d("adress",a);
+    }
+    public void search(){
+
+
     }
 }

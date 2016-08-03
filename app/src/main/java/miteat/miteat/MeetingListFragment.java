@@ -3,7 +3,6 @@ package miteat.miteat;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,31 +13,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
+import miteat.miteat.Model.Model;
 
 /**
- * Created by Itzik on 19/07/2016.
+ * Created by Itzik on 02/08/2016.
  */
-public class MenuListFragment extends Fragment {
-
-    Meeting meeting;
+public class MeetingListFragment extends Fragment {
     ListView list;
-    List<FoodPortions> data;
+    List<Meeting> data;
     MyAddapter adapter;
 
-    interface ListFragmentInterface {
-        public void addPortions(Meeting meeting);
-        public void editPortions(FoodPortions f,Meeting meeting);
-        public void refresh(Meeting meeting);
-        public void backButton(Meeting meeting);
+    interface MeetingListFragmentInterface {
+        public void refreshList();
+
+        public void editMeeting(Meeting meeting);
     }
 
     @Override
@@ -47,14 +46,13 @@ public class MenuListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.menu_list_fragment,
                 container, false);
-        setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.listPortions);
-        data = meeting.getFoodPortionsId();
+        data = Model.instance().getAllMeeting();
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
-        TextView emptyText = (TextView)view.findViewById(android.R.id.empty);
-        emptyText.setText("empty menu please add dish");
+        TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
+        emptyText.setText("empty meeting please add new meeting by click on plus...");
         list.setEmptyView(emptyText);
 
 
@@ -63,18 +61,18 @@ public class MenuListFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                final FoodPortions f = data.get(position);
-                // meeting.getFoodPortionsId().remove(data.get(position));
+                final Meeting meeting = data.get(position);
+
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 Log.d("log", "Yes button clicked ");
-                                meeting.getFoodPortionsId().remove(f);
+                                Model.instance().deleteMeeting(meeting);
                                 Toast.makeText(getActivity().getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
-                                ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
-                                listFragmentInterface.refresh(meeting);
+                                MeetingListFragmentInterface meetingListFragmentInterface = (MeetingListFragmentInterface) getActivity();
+                                meetingListFragmentInterface.refreshList();
 
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -85,7 +83,7 @@ public class MenuListFragment extends Fragment {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("you sure delete this Portions ?").setPositiveButton("Yes", dialogClickListener)
+                builder.setMessage("you sure delete this Meeting ?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
 
                 Log.d("Long", "Long press!!!!!!");
@@ -101,9 +99,9 @@ public class MenuListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                FoodPortions f = data.get(position);
-                ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
-                listFragmentInterface.editPortions(f,meeting);
+                Meeting meeting = data.get(position);
+                MeetingListFragmentInterface meetingListFragmentInterface = (MeetingListFragmentInterface) getActivity();
+                meetingListFragmentInterface.editMeeting(meeting);
 
                 Log.d("samll", "samll press!!!!!!");
 
@@ -113,33 +111,6 @@ public class MenuListFragment extends Fragment {
         return view;
     }
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_list_portions, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.menu_back) {
-            meeting.setFoodPortionsId(data);
-            ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
-            listFragmentInterface.backButton(meeting);
-            return true;
-        }
-        if (id == R.id.menu_plus) {
-            Log.d("log", "plus!!!");
-
-            ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
-            listFragmentInterface.addPortions(this.meeting);
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     class MyAddapter extends BaseAdapter {
 
@@ -163,27 +134,39 @@ public class MenuListFragment extends Fragment {
                             ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(R.layout.menu_portions_fragment_in_list, null);
+                convertView = inflater.inflate(R.layout.my_meeting_list_row, null);
                 Log.d("TAG", "create view:" + position);
 
-            } else {
 
+
+            } else {
                 Log.d("TAG", "use convert view:" + position);
             }
 
-            TextView namee = (TextView) convertView.findViewById(R.id.name);
-            TextView dish = (TextView) convertView.findViewById(R.id.numberOfDish);
-            FoodPortions st = data.get(position);
-            if(!st.getName().equals("")) {
-                namee.setText(st.getName());
-            }
-            dish.setText(String.valueOf(st.getNumberOfFoodPortions()));
+            Meeting meeting = data.get(position);
+
+            TextView locationn = (TextView) convertView.findViewById(R.id.location);
+            TextView date = (TextView) convertView.findViewById(R.id.date);
+            TextView time = (TextView) convertView.findViewById(R.id.time);
+
+//            DateEditText dateView = (DateEditText) convertView.findViewById(R.id.startDateEditText);
+//            TimeEditText timeView = (TimeEditText) convertView.findViewById(R.id.startTimeEditText);
+
+            Calendar cls = Calendar.getInstance();
+            cls.setTimeInMillis(meeting.getDateAndTime());
+            date.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
+            time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+
+//            dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
+//            timeView.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+//                dateView.set(cls.get(Calendar.YEAR), Integer.valueOf(cls.get(Calendar.MONTH)), cls.get(Calendar.DAY_OF_MONTH));
+//                timeView.set(cls.get(Calendar.HOUR_OF_DAY), cls.get(Calendar.MINUTE));
+            locationn.setText(meeting.getLocation());
+
+
+
 
             return convertView;
         }
-    }
-
-    public void setMeeting(Meeting meeting) {
-        this.meeting = meeting;
     }
 }

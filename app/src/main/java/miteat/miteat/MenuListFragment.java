@@ -105,7 +105,7 @@ public class MenuListFragment extends Fragment {
                 ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
                 listFragmentInterface.editPortions(f,meeting);
 
-                Log.d("samll", "samll press!!!!!!");
+                Log.d("samll", "samll press in menu list!!!!!!");
 
             }
         });

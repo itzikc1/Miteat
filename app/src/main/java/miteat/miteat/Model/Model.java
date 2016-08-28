@@ -57,7 +57,7 @@ public class Model implements ModelInterface {
     @Override
     public void addMeeting(Meeting meeting) {
         meetings.add(meeting);
-        //  sqlModel.addMeeting(meeting);
+          sqlModel.addMeeting(meeting);
     }
 
     @Override
@@ -77,14 +77,13 @@ public class Model implements ModelInterface {
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
 
-
         Location locationA = new Location("point A");
         locationA.setLatitude(lat1);
         locationA.setLongitude(lon1);
         Location locationB = new Location("point B");
         locationB.setLatitude(lat2);
         locationB.setLongitude(lon2);
-        float distance = locationA.distanceTo(locationB) / 1000;
+        float distance = locationA.distanceTo(locationB) / 1000; //in KM
         return (double) distance;
 
     }

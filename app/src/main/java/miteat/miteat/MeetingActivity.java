@@ -183,6 +183,7 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
 
     @Override
     public void editMeeting(Meeting meeting) {
+        //need to be edit screen
         mainMeetingFragment = new MainMeetingFragment();
         mainMeetingFragment.setMenuList(meeting);
         FragmentTransaction transaction = manager.beginTransaction();

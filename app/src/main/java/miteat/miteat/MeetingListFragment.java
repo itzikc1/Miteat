@@ -103,7 +103,7 @@ public class MeetingListFragment extends Fragment {
                 MeetingListFragmentInterface meetingListFragmentInterface = (MeetingListFragmentInterface) getActivity();
                 meetingListFragmentInterface.editMeeting(meeting);
 
-                Log.d("samll", "samll press!!!!!!");
+                Log.d("samll", "samll press in meeting list!!!!!!");
 
             }
         });

@@ -89,7 +89,9 @@ public class MainMeetingFragment extends Fragment {
 
             numberParticipantsView.setText(String.valueOf(meeting.getNumberOfPartner()));
             numberOfMoneyView.setText(String.valueOf(meeting.getMoney()));
-
+            lat = meeting.getLatLocation();
+            lon= meeting.getLonLocation();
+            address = meeting.getLocation();
         Calendar cls = Calendar.getInstance();
         cls.setTimeInMillis(meeting.getDateAndTime());
         dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
@@ -142,6 +144,9 @@ public class MainMeetingFragment extends Fragment {
                     newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
 
                 }
+
+                    Model.instance().deleteMeeting(meeting);
+
                 Model.instance().addMeeting(newMeeting);
                 MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
                 meetingFragmentInterface.saveOrCencel();
@@ -228,18 +233,21 @@ public class MainMeetingFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Place place = PlacePicker.getPlace(data, getActivity());
-        LatLng latLng= place.getLatLng();
-         lat= latLng.latitude;
-         lon = latLng.longitude;
+        if (data != null) {
+            Place place = PlacePicker.getPlace(data, getActivity());
+            LatLng latLng = place.getLatLng();
+            lat = latLng.latitude;
+            lon = latLng.longitude;
 
-        String a = String.format("Place: %s", place.getAddress());
-        address = a;
-        Log.d("address", a);
+            String a = String.format("Place: %s", place.getAddress());
+            address = a;
+            Log.d("address", a);
+        }
     }
-    public void setMenuList(Meeting meeting){
+    public void setMenuList(Meeting meeting) {
         //this.data=data;
-        this.meeting=meeting;
+        this.meeting = meeting;
 
     }
+
 }

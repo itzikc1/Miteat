@@ -21,9 +21,7 @@ public class Meeting {
     private Double latLocation;
     private Double lonLocation;
 
-
     private Double distance;
-
 
     List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
 

@@ -8,6 +8,8 @@ import java.util.List;
  */
 public class Meeting {
 
+
+    private String userId;
     private int id;
     private String personCreate;
     private int numberOfPartner;
@@ -20,12 +22,14 @@ public class Meeting {
     private String image;
     private Double latLocation;
     private Double lonLocation;
-
     private Double distance;
 
+
+    private int takeAway;
+    private Long dateAndEndTime;
     List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
 
-    public Meeting(int id, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, String location, Double latLocation, Double lonLocation, Boolean insurance) {
+    public Meeting(int id, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, Long dateAndEndTime, String location, Double latLocation, Double lonLocation, Boolean insurance, int takeAway) {
         this.id = id;
         this.numberOfPartner = numberOfPartner;
         this.typeOfFood = typeOfFood;
@@ -35,7 +39,8 @@ public class Meeting {
         this.insurance = insurance;
         this.latLocation = latLocation;
         this.lonLocation = lonLocation;
-
+        this.takeAway = takeAway;
+        this.dateAndEndTime = dateAndEndTime;
     }
 
     public int getId() {
@@ -154,5 +159,28 @@ public class Meeting {
         this.distance = distance;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public int getTakeAway() {
+        return takeAway;
+    }
+
+    public void setTakeAway(int takeAway) {
+        this.takeAway = takeAway;
+    }
+
+    public Long getDateAndEndTime() {
+        return dateAndEndTime;
+    }
+
+    public void setDateAndEndTime(Long dateAndEndTime) {
+        this.dateAndEndTime = dateAndEndTime;
+    }
 
 }

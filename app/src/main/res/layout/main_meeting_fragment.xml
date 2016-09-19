@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="number of participants:"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/numberParticipants"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="which food:"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <MultiAutoCompleteTextView
             android:id="@+id/foodPortions"
@@ -55,25 +55,48 @@
         </MultiAutoCompleteTextView>
 
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/menuButton"
-        android:layout_width="122dp"
-        android:layout_height="121dp"
-        android:background="@drawable/menu" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.16"
         android:orientation="horizontal">
+    <ImageButton
+        android:id="@+id/menuButton"
+        android:layout_width="122dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/menu" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="58dp"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:text="Take Away option:"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/takeaway"
+            />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/spinner"
+            android:layout_toRightOf="@+id/takeaway"
+            android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="0.13">
 
         <TextView
             android:id="@+id/money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="cost per participant: "
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/numberOfMoney"
@@ -111,7 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.26"
+        android:layout_weight="0.40"
         android:orientation="horizontal">
 
         <TextView
@@ -120,7 +143,7 @@
             android:layout_height="wrap_content"
             android:autoText="false"
             android:text="in date:"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <miteat.miteat.DateEditText
             android:id="@+id/startDateEditText"
@@ -136,28 +159,60 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="58dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.26"
+        android:weightSum="1">
+    <LinearLayout
+        android:layout_width="127dp"
         android:layout_height="35dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="0.19"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_weight="0.74">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoText="false"
             android:text="start in:"
-            android:textSize="20dp" />
+            android:textSize="15dp"
+            android:layout_weight="1.76" />
 
         <miteat.miteat.TimeEditText
             android:id="@+id/startTimeEditText"
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="54dp"
             android:layout_marginLeft="5dp"
-            android:layout_weight="1"
+            android:layout_weight="24.89"
             android:editable="true"
             android:ems="10"
             android:inputType="time" />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="161dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoText="false"
+                android:text="end in:"
+                android:textSize="15dp"
+                android:layout_weight="0.01" />
+
+            <miteat.miteat.TimeEditText
+                android:id="@+id/endTimeEditText"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.02"
+                android:editable="true"
+                android:ems="10"
+                android:inputType="time" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

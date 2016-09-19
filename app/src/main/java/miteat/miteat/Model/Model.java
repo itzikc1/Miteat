@@ -5,12 +5,14 @@ import android.location.Location;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
+import miteat.miteat.Model.Entities.UserDetails;
 import miteat.miteat.SQLlite.ModelSql;
 
 /**
@@ -26,10 +28,24 @@ public class Model implements ModelInterface {
     //ModelFirebase modelFirebase;
 
     List<Meeting> meetings = new LinkedList<Meeting>();
+    HashMap<String, UserDetails> usersDetails = new HashMap<String, UserDetails>();
+    // List<UserDetails> usersDetails = new LinkedList<UserDetails>();
 
     private Model() {
 
         //  modelFirebase = new ModelFirebase(MyApplication.getAppContext());
+        //make fake meeting
+        for (int i = 0; i < 10; i++) {
+            UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
+            //usersDetails.add(userDetails);
+            usersDetails.put(userDetails.getUserName(), userDetails);
+            long dateAndTime = 0;
+            dateAndTime = 44321373 + i;
+            Meeting meeting = new Meeting(i, i + 1, "isreali", 50, dateAndTime, dateAndTime, "rishon lezion" + i, 31.959487799999998, 34.8019533, false, 2);
+            meeting.setUserId("itzik" + i);
+            meetings.add(meeting);
+
+        }
 
         sqlModel = new ModelSql();
     }
@@ -57,7 +73,7 @@ public class Model implements ModelInterface {
     @Override
     public void addMeeting(Meeting meeting) {
         meetings.add(meeting);
-          sqlModel.addMeeting(meeting);
+        sqlModel.addMeeting(meeting);
     }
 
     @Override
@@ -73,6 +89,17 @@ public class Model implements ModelInterface {
     @Override
     public Gps getGpsLocation() {
         return sqlModel.getGpsLocation();
+    }
+
+    @Override
+    public UserDetails getUserDetails(String id) {
+        usersDetails.get(id);
+        return null;
+    }
+
+    @Override
+    public void bookingToMeeting() {
+
     }
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
@@ -111,10 +138,10 @@ public class Model implements ModelInterface {
         Collections.sort(list, new Comparator<Meeting>() {
             @Override
             public int compare(Meeting lhs, Meeting rhs) {
-                if(lhs.getDistance() < rhs.getDistance()){
+                if (lhs.getDistance() < rhs.getDistance()) {
                     return -1;
                 }
-                if(lhs.getDistance() > rhs.getDistance()){
+                if (lhs.getDistance() > rhs.getDistance()) {
                     return 1;
                 }
                 return 0;

@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MeetingActivity"></activity>
+        <activity android:name=".MeetingActivity" />
 
         <service
             android:name=".Service.GpsService"
@@ -34,6 +34,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".MyBooking"></activity>
     </application>
 
 </manifest>

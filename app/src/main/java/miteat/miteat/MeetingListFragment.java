@@ -155,7 +155,11 @@ public class MeetingListFragment extends Fragment {
             Calendar cls = Calendar.getInstance();
             cls.setTimeInMillis(meeting.getDateAndTime());
             date.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
-            time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+            if (cls.get(Calendar.MINUTE) > 10)
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+
+            else
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" +"0" + cls.get(Calendar.MINUTE));
 
 //            dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
 //            timeView.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));

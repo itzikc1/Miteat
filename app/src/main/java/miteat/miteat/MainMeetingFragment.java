@@ -10,12 +10,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +50,7 @@ public class MainMeetingFragment extends Fragment {
     private EditText numberOfMoney;
     private DateEditText date;
     private TimeEditText time;
+    private TimeEditText endTime;
     private CheckBox safeCheckBox;
     private ImageButton menu;
     private ImageButton location;
@@ -54,7 +58,8 @@ public class MainMeetingFragment extends Fragment {
     private Meeting meeting;
     private Double lat;
     private Double lon;
-
+    private Spinner spinner;
+    ArrayAdapter<CharSequence> dataAdapterSpinner;
     // private List<FoodPortions> data = new LinkedList<FoodPortions>();
     int PLACE_PICKER_REQUEST = 1;
 
@@ -74,35 +79,49 @@ public class MainMeetingFragment extends Fragment {
         save = (Button) view.findViewById(R.id.save);
         cancel = (Button) view.findViewById(R.id.cancel);
         TextView numberParticipantsView = (TextView) view.findViewById(R.id.numberParticipants);
-        TextView  numberOfMoneyView = (TextView) view.findViewById(R.id.numberOfMoney);
+        TextView numberOfMoneyView = (TextView) view.findViewById(R.id.numberOfMoney);
         DateEditText dateView = (DateEditText) view.findViewById(R.id.startDateEditText);
         TimeEditText timeView = (TimeEditText) view.findViewById(R.id.startTimeEditText);
+        TimeEditText endTimeView = (TimeEditText) view.findViewById(R.id.endTimeEditText);
+        Spinner spinnerView = (Spinner) view.findViewById(R.id.spinner);
         numberParticipants = (EditText) view.findViewById(R.id.numberParticipants);
         numberOfMoney = (EditText) view.findViewById(R.id.numberOfMoney);
         date = (DateEditText) view.findViewById(R.id.startDateEditText);
         time = (TimeEditText) view.findViewById(R.id.startTimeEditText);
+        endTime = (TimeEditText) view.findViewById(R.id.endTimeEditText);
         safeCheckBox = (CheckBox) view.findViewById(R.id.safe);
         menu = (ImageButton) view.findViewById(R.id.menuButton);
         location = (ImageButton) view.findViewById(R.id.location);
+        spinner = (Spinner) view.findViewById(R.id.spinner);
 
-        if(meeting!=null){
+        dataAdapterSpinner = ArrayAdapter.createFromResource(getActivity(), R.array.takeAwayOption, android.R.layout.simple_spinner_item);
+        dataAdapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapterSpinner);
+
+
+        if (meeting != null) {
 
             numberParticipantsView.setText(String.valueOf(meeting.getNumberOfPartner()));
             numberOfMoneyView.setText(String.valueOf(meeting.getMoney()));
             lat = meeting.getLatLocation();
-            lon= meeting.getLonLocation();
+            lon = meeting.getLonLocation();
             address = meeting.getLocation();
-        Calendar cls = Calendar.getInstance();
-        cls.setTimeInMillis(meeting.getDateAndTime());
-        dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
-        timeView.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
-        dateView.set(cls.get(Calendar.YEAR), Integer.valueOf(cls.get(Calendar.MONTH)) , cls.get(Calendar.DAY_OF_MONTH));
-        timeView.set(cls.get(Calendar.HOUR_OF_DAY),cls.get(Calendar.MINUTE));
+            Calendar cls = Calendar.getInstance();
+            Calendar endCls = Calendar.getInstance();
+
+            cls.setTimeInMillis(meeting.getDateAndTime());
+            endCls.setTimeInMillis(meeting.getDateAndEndTime());
+            dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
+            endTimeView.setText(endCls.get(Calendar.HOUR_OF_DAY) + ":" + endCls.get(Calendar.MINUTE));
+            timeView.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+            dateView.set(cls.get(Calendar.YEAR), Integer.valueOf(cls.get(Calendar.MONTH)), cls.get(Calendar.DAY_OF_MONTH));
+            timeView.set(cls.get(Calendar.HOUR_OF_DAY), cls.get(Calendar.MINUTE));
+            endTimeView.set(endCls.get(Calendar.HOUR_OF_DAY), endCls.get(Calendar.MINUTE));
+            spinnerView.setSelection(meeting.getTakeAway());
             multiAutoComplete.setText(meeting.getTypeOfFood());
 
             safeCheckBox.setChecked(meeting.getInsurance());
-        }
-        else {
+        } else {
             numberParticipantsView.setText("0");
             numberOfMoneyView.setText("0");
             multiAutoComplete.setText("");
@@ -116,40 +135,55 @@ public class MainMeetingFragment extends Fragment {
         multiAutoComplete.setAdapter(adapter);
         multiAutoComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 long startMillis = 0;
+                long endMillis = 0;
                 String typeFood = multiAutoComplete.getText().toString();
                 int numberPlace = Integer.parseInt(numberParticipants.getText().toString());
                 int money = Integer.parseInt(numberOfMoney.getText().toString());
                 Calendar beginTime = Calendar.getInstance();
                 beginTime.set(date.getYear(), date.getMonth(), date.getDay(), time.getHour(), time.getMinutes());
                 startMillis = beginTime.getTimeInMillis();
+                Calendar enddTime = Calendar.getInstance();
+                enddTime.set(date.getYear(), date.getMonth(), date.getDay(), endTime.getHour(), endTime.getMinutes());
+                endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
-                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis, address,lat,lon, bool);
+                int takeAwaySelection = spinner.getSelectedItemPosition();
+                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
+                Log.d("details", "time: " + startMillis + " lat: " + lat + " lon: " + lon);
 
-
-                if(address==null){
+                if (address == null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
 
 
-                if(meeting==null){
-                    newMeeting.setFoodPortionsId(new LinkedList<FoodPortions>());
+                    if (meeting == null) {
+                        newMeeting.setFoodPortionsId(new LinkedList<FoodPortions>());
 
-                }
-                else{
-                    newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
+                    } else {
+                        newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
 
-                }
+                    }
 
                     Model.instance().deleteMeeting(meeting);
 
-                Model.instance().addMeeting(newMeeting);
-                MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
-                meetingFragmentInterface.saveOrCencel();
+                    Model.instance().addMeeting(newMeeting);
+                    MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
+                    meetingFragmentInterface.saveOrCencel();
                 }
             }
         });
@@ -166,7 +200,7 @@ public class MainMeetingFragment extends Fragment {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                long endMillis = 0;
                 long startMillis = 0;
                 String typeFood = multiAutoComplete.getText().toString();
                 int numberPlace = Integer.parseInt(numberParticipants.getText().toString());
@@ -174,15 +208,18 @@ public class MainMeetingFragment extends Fragment {
                 Calendar beginTime = Calendar.getInstance();
                 beginTime.set(date.getYear(), date.getMonth(), date.getDay(), time.getHour(), time.getMinutes());
                 startMillis = beginTime.getTimeInMillis();
+                Calendar enddTime = Calendar.getInstance();
+                enddTime.set(date.getYear(), date.getMonth(), date.getDay(), endTime.getHour(), endTime.getMinutes());
+                endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
-                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis, address,lat,lon, bool);
+                int takeAwaySelection = spinner.getSelectedItemPosition();
+                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis,endMillis, address, lat, lon, bool,takeAwaySelection);
                 newMeeting.setLatLocation(lat);
                 newMeeting.setLonLocation(lon);
-                if(meeting==null){
+                if (meeting == null) {
                     newMeeting.setFoodPortionsId(new LinkedList<FoodPortions>());
 
-                }
-                else{
+                } else {
                     newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
 
                 }
@@ -199,6 +236,7 @@ public class MainMeetingFragment extends Fragment {
                 PlacePicker();
             }
         });
+
         return view;
     }
 
@@ -212,7 +250,6 @@ public class MainMeetingFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
 
 
         return super.onOptionsItemSelected(item);
@@ -244,10 +281,12 @@ public class MainMeetingFragment extends Fragment {
             Log.d("address", a);
         }
     }
+
     public void setMenuList(Meeting meeting) {
         //this.data=data;
         this.meeting = meeting;
 
     }
+
 
 }

@@ -13,20 +13,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate {
+public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface{
     protected LocationManager locManager;
     FragmentManager manager;
     LoginFragment loginFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
+    BookingFragment bookingFragment;
     int PLACE_PICKER_REQUEST = 1;
 
 
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         }
 
         if (id == R.id.menu_myBooking) {
-            PlacePicker();
+            //PlacePicker();
 
             return true;
         }
@@ -159,25 +155,37 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         stopService(intent);
         finish();
     }
-    public void PlacePicker(){
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        Intent intent;
-        try {
-            intent = builder.build(getApplicationContext());
-            startActivityForResult(intent,PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-    }
-    protected void onActivityResult(int requestCode,int resultCode,Intent data){
-        Place place = PlacePicker.getPlace(data,this);
-        String a = String.format("Place: %s",place.getAddress());
-        Log.d("adress",a);
-    }
+//    public void PlacePicker(){
+//        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//        Intent intent;
+//        try {
+//            intent = builder.build(getApplicationContext());
+//            startActivityForResult(intent,PLACE_PICKER_REQUEST);
+//        } catch (GooglePlayServicesRepairableException e) {
+//            e.printStackTrace();
+//        } catch (GooglePlayServicesNotAvailableException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    protected void onActivityResult(int requestCode,int resultCode,Intent data){
+//        Place place = PlacePicker.getPlace(data,this);
+//        String a = String.format("Place: %s",place.getAddress());
+//        Log.d("adress",a);
+//    }
     public void search(){
 
+
+    }
+
+    @Override
+    public void booking(Meeting meeting) {
+
+        bookingFragment =new BookingFragment();
+        bookingFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.frag_container,bookingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
 
     }
 }

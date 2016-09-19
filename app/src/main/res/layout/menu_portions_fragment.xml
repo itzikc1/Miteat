@@ -120,22 +120,56 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="53dp"
-        android:orientation="horizontal"
-        android:layout_weight="0.88"
-        android:weightSum="1">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.96">
+
+        <LinearLayout
+            android:id="@+id/imageGallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/cbPrevPicView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/chef" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="53dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_weight="0.88"-->
+        <!--android:weightSum="1">-->
+    <!--android:id="@+id/imageGallery"-->
+
+        <!--<ListView-->
+            <!--android:id="@+id/listPortions"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent" />-->
 
 
-        <ImageSwitcher
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageSwitcher"
-            android:layout_gravity="center_vertical"
-             />
+        <!--<Gallery-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/gallery" />-->
 
-    </LinearLayout>
+        <!--<ImageSwitcher-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/imageSwitcher"-->
+            <!--android:layout_gravity="center_vertical"-->
+             <!--/>-->
+
+
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -36,8 +36,8 @@ public class MainFragment extends Fragment{
     List<Meeting> data;
     MyAddapter adapter;
 
-    interface MeetingListFragmentInterface {
-
+    interface MainListFragmentInterface {
+        public void booking(Meeting meeting);
 
     }
 
@@ -62,7 +62,7 @@ public class MainFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Meeting meeting = data.get(position);
+                final Meeting meeting = data.get(position);
                  final Dialog dialog = new Dialog(getActivity());
                 dialog.setContentView(R.layout.dialog_information_meeting);
                 dialog.setTitle("More Details");
@@ -74,20 +74,31 @@ public class MainFragment extends Fragment{
                 ImageView image = (ImageView) dialog.findViewById(R.id.image);
                 image.setImageResource(R.drawable.chef);
 
-                Button dialogButton = (Button) dialog.findViewById(R.id.invite);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
+                Button invite = (Button) dialog.findViewById(R.id.invite);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel);
+
+                invite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        MainListFragmentInterface mainListFragmentInterface = (MainListFragmentInterface) getActivity();
+                        mainListFragmentInterface.booking(meeting);
+
+
+                    }
+                });
+                // if button is clicked, close the custom dialog
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+
                     }
                 });
 
                 dialog.show();
-
-
-
-
 
 
                 Log.d("samll", "samll press in main !!!!!!");
@@ -140,7 +151,12 @@ public class MainFragment extends Fragment{
             Calendar cls = Calendar.getInstance();
             cls.setTimeInMillis(meeting.getDateAndTime());
             date.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
-            time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+            if (cls.get(Calendar.MINUTE) > 10)
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+
+            else
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" +"0" + cls.get(Calendar.MINUTE));
+
             locationn.setText(new DecimalFormat("##.##").format(meeting.getDistance()) + " KM from you");//only two digit
             user.setText("Itzik");
 

@@ -5,6 +5,7 @@ import java.util.List;
 import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
+import miteat.miteat.Model.Entities.UserDetails;
 
 /**
  * Created by Itzik on 05/06/2016.
@@ -18,5 +19,7 @@ public interface ModelInterface {
     public List<Meeting> getAllMeeting();
     public void deleteMeeting(Meeting meeting);
     public Gps getGpsLocation();
+    public UserDetails getUserDetails(String id);
+    public void bookingToMeeting();
 
 }

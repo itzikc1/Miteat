@@ -2,7 +2,9 @@ package miteat.miteat;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
@@ -45,11 +53,12 @@ public class MenuPortionsFragment extends Fragment {
     private EditText costOfMoney;
     private EditText name;
 
-    private ImageSwitcher imageSwitcher;
+  //  private ImageSwitcher imageSwitcher;
+    //private Gallery gallery;
     private ArrayList<String> image = new ArrayList<String>();
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     int PLACE_PICKER_REQUEST = 1;
-
+    HorizontalScrollView horizontalScrollView;
     int[] resources = {
             R.drawable.plus,
             R.drawable.map,
@@ -72,8 +81,13 @@ public class MenuPortionsFragment extends Fragment {
                 container, false);
         multiAutoComplete = (MultiAutoCompleteTextView) view.findViewById(R.id.allergensType);
         String[] countries = getResources().getStringArray(R.array.allergens_type);
+       // gallery = (Gallery) view.findViewById(R.id.gallery);
+       // gallery.setAdapter(new ImageAdapter(image));
+        //imageSwitcher = (ImageSwitcher) view.findViewById(R.id.imageSwitcher);
 
-        imageSwitcher = (ImageSwitcher) view.findViewById(R.id.imageSwitcher);
+        LinearLayout imageGallery = (LinearLayout) view.findViewById(R.id.imageGallery);
+
+
 
         Button takePic = (Button) view.findViewById(R.id.makePic);
         Button addpic = (Button) view.findViewById(R.id.getPic);
@@ -226,4 +240,16 @@ public class MenuPortionsFragment extends Fragment {
             }
         }
     }
+
+
+
+    private View getImageView(Integer image) {
+        ImageView imageView = new ImageView(getActivity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 10, 0);
+        imageView.setLayoutParams(lp);
+        imageView.setImageResource(image);
+        return imageView;
+    }
+
 }

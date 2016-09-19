@@ -10,5 +10,11 @@
     <string name="google_place_api">AIzaSyA4BRvqWTo-4be58_YOIwImIW5Bq0PaEYI</string>
     <string name="title_activity_add_meeting">AddMeetingActivity</string>
     <string name="addMeeting">Add Meeting</string>
+    <string-array name="takeAwayOption">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Only Take Away</item>
+
+    </string-array>
 
 </resources>

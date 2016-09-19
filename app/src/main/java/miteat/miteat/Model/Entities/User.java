@@ -6,7 +6,6 @@ package miteat.miteat.Model.Entities;
 public class User {
     private String user;
     private String password;
-
     private Boolean CheckBoxStart;
 
     public  User(String user,String password){

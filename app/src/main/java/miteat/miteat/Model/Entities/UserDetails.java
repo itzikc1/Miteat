@@ -18,15 +18,16 @@ public class UserDetails {
     private String mail;
     private String maritalStatus;
     List<Feedback> feedbacks = new LinkedList<Feedback>();
-    private Boolean loveTakeAwy;
+    private Boolean loveTakeAway;
     private String favoriteDish;
 
-    public UserDetails(String userName,String mail,double phoneNumber){
 
-        this.userName=userName;
-        this.mail=mail;
-        this.phoneNumber=phoneNumber;
-        this.numberOfStarAvg=0;
+    public UserDetails(String userName, String mail, double phoneNumber) {
+
+        this.userName = userName;
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.numberOfStarAvg = 0;
 
     }
 
@@ -110,12 +111,12 @@ public class UserDetails {
         this.feedbacks = feedbacks;
     }
 
-    public Boolean getLoveTakeAwy() {
-        return loveTakeAwy;
+    public Boolean getLoveTakeAway() {
+        return loveTakeAway;
     }
 
-    public void setLoveTakeAwy(Boolean loveTakeAwy) {
-        this.loveTakeAwy = loveTakeAwy;
+    public void setLoveTakeAway(Boolean loveTakeAway) {
+        this.loveTakeAway = loveTakeAway;
     }
 
     public String getFavoriteDish() {
@@ -125,8 +126,6 @@ public class UserDetails {
     public void setFavoriteDish(String favoriteDish) {
         this.favoriteDish = favoriteDish;
     }
-
-
 
 
 }

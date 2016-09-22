@@ -8,8 +8,6 @@ import java.util.ArrayList;
 public class FoodPortions {
 
     private int id;
-
-
     private String name;
     private ArrayList<String> images;
     private int numberOfFoodPortions;

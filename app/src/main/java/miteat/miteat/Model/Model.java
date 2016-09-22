@@ -1,8 +1,8 @@
 package miteat.miteat.Model;
 
 import android.location.Location;
+import android.util.Log;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,7 +29,6 @@ public class Model implements ModelInterface {
 
     List<Meeting> meetings = new LinkedList<Meeting>();
     HashMap<String, UserDetails> usersDetails = new HashMap<String, UserDetails>();
-    // List<UserDetails> usersDetails = new LinkedList<UserDetails>();
 
     private Model() {
 
@@ -37,19 +36,16 @@ public class Model implements ModelInterface {
         //make fake meeting
         for (int i = 0; i < 10; i++) {
             UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
-            //usersDetails.add(userDetails);
+            userDetails.setNumberOfStarAvg(3.6f);
             usersDetails.put(userDetails.getUserName(), userDetails);
             long dateAndTime = 0;
             dateAndTime = 44321373 + i;
-            Meeting meeting = new Meeting(i, i + 1, "isreali", 50, dateAndTime, dateAndTime, "rishon lezion" + i, 31.959487799999998, 34.8019533, false, 2);
+            Meeting meeting = new Meeting(i, i + 1, "isreali", 50, dateAndTime, dateAndTime, "rishon lezion" + i, 31.959487799999998, 34.8019533, false, 1);
             meeting.setUserId("itzik" + i);
             meetings.add(meeting);
-
         }
-
         sqlModel = new ModelSql();
     }
-
 
     public static Model instance() {
         return instance;
@@ -62,7 +58,6 @@ public class Model implements ModelInterface {
     @Override
     public void addGps(Gps gps) {
         sqlModel.addGps(gps);
-
     }
 
     @Override
@@ -93,8 +88,8 @@ public class Model implements ModelInterface {
 
     @Override
     public UserDetails getUserDetails(String id) {
-        usersDetails.get(id);
-        return null;
+        // usersDetails.get(id);
+        return usersDetails.get(id);
     }
 
     @Override
@@ -131,10 +126,16 @@ public class Model implements ModelInterface {
 //    }
 
     public List<Meeting> sortByDistance(List<Meeting> list) {
+        Gps gps = getGpsLocation();
+        if (gps == null) {
+
+            Log.d("sort", "no gps");
+        }
         for (int i = 0; i < list.size(); i++) {
             Double dis = distance(Double.parseDouble(getGpsLocation().getLatitude()), Double.parseDouble(getGpsLocation().getLongitude()), list.get(i).getLatLocation(), list.get(i).getLonLocation());
             list.get(i).setDistance(dis);
         }
+
         Collections.sort(list, new Comparator<Meeting>() {
             @Override
             public int compare(Meeting lhs, Meeting rhs) {
@@ -147,6 +148,7 @@ public class Model implements ModelInterface {
                 return 0;
             }
         });
+
         return list;
     }
 }

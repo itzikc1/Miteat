@@ -23,8 +23,6 @@ public class Meeting {
     private Double latLocation;
     private Double lonLocation;
     private Double distance;
-
-
     private int takeAway;
     private Long dateAndEndTime;
     List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();

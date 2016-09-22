@@ -1,10 +1,7 @@
 package miteat.miteat;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,21 +13,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Model;
-import miteat.miteat.R;
 
 /**
  * Created by Itzik on 05/06/2016.
  */
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
     ListView list;
     List<Meeting> data;
@@ -48,11 +42,10 @@ public class MainFragment extends Fragment{
         View view = inflater.inflate(R.layout.main_list_fragment,
                 container, false);
         list = (ListView) view.findViewById(R.id.listMeeting);
-        data = Model.instance().sortByDistance( Model.instance().getAllMeeting());
-
+        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
         adapter = new MyAddapter();
         list.setAdapter(adapter);
-        TextView emptyText = (TextView)view.findViewById(android.R.id.empty);
+        TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
         emptyText.setText("empty meeting!!!");
         list.setEmptyView(emptyText);
 
@@ -63,7 +56,7 @@ public class MainFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 final Meeting meeting = data.get(position);
-                 final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(getActivity());
                 dialog.setContentView(R.layout.dialog_information_meeting);
                 dialog.setTitle("More Details");
 
@@ -155,7 +148,7 @@ public class MainFragment extends Fragment{
                 time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
 
             else
-                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" +"0" + cls.get(Calendar.MINUTE));
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
 
             locationn.setText(new DecimalFormat("##.##").format(meeting.getDistance()) + " KM from you");//only two digit
             user.setText("Itzik");

@@ -42,6 +42,7 @@ public class BookingFragment extends Fragment {
 
 
         star.setRating(userDetails.getNumberOfStarAvg());
+       // star.setRating(4);
       //  star.setRating(Model.instance().getUserDetails(meeting.getUserId()).getNumberOfStarAvg());
 
         booking = (Button) view.findViewById(R.id.booking);
@@ -97,7 +98,6 @@ public class BookingFragment extends Fragment {
 
             }
         });
-
 
         return view;
     }

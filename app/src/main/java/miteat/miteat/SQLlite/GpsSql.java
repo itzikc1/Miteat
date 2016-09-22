@@ -55,7 +55,6 @@ public class GpsSql {
             int time = cursor.getColumnIndex(TIME);
            // Gps gps = new Gps(Integer.getInteger(cursor.getString(id)), cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
             Gps gps = new Gps(1, cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
-
             return gps;
         }
         Gps gps = null;

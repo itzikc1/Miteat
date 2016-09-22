@@ -25,11 +25,11 @@ import miteat.miteat.MyApplication;
  */
 public class ModelCloudinary {
     private final static ModelCloudinary instance = new ModelCloudinary();
-    CloudinaryManger modelCloudinary;
+    CloudinaryManger cloudinaryManger ;
     Context context;
 
     private ModelCloudinary() {
-        modelCloudinary = new CloudinaryManger();
+        cloudinaryManger = new CloudinaryManger();
         context = MyApplication.getAppContext();
 
     }
@@ -43,7 +43,7 @@ public class ModelCloudinary {
         Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
             @Override
             public void run() {
-                modelCloudinary.saveImage(imageBitmap, imageName);
+                cloudinaryManger.saveImage(imageBitmap, imageName);
             }
         });
         d.start();
@@ -54,7 +54,7 @@ public class ModelCloudinary {
         Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
             @Override
             public void run() {
-                modelCloudinary.saveImage(imageBitmap, imageName);
+                cloudinaryManger.saveImage(imageBitmap, imageName);
             }
         });
         d.start();
@@ -104,7 +104,7 @@ public class ModelCloudinary {
             protected Bitmap doInBackground(String... params) {
                 Bitmap bmp = loadImageFromFile(imageName);              //first try to fin the image on the device
                 if (bmp == null) {                                      //if image not found - try downloading it from parse
-                    bmp = modelCloudinary.loadImage(imageName);
+                    bmp = cloudinaryManger.loadImage(imageName);
                     if (bmp != null)
                         saveImageToFile(bmp, imageName);    //save the image locally for next time
                 }

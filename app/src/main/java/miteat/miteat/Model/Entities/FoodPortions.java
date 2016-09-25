@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public class FoodPortions {
 
+
+    private int meetingId;
     private int id;
     private String name;
     private ArrayList<String> images;
@@ -71,4 +73,11 @@ public class FoodPortions {
         this.name = name;
     }
 
+    public int getMeetingId() {
+        return meetingId;
+    }
+
+    public void setMeetingId(int meetingId) {
+        this.meetingId = meetingId;
+    }
 }

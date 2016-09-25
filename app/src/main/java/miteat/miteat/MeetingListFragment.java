@@ -6,23 +6,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
 
-import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Model;
 

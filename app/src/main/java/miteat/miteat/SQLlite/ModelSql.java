@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import miteat.miteat.Model.Entities.Meeting;
-import miteat.miteat.Model.Entities.UserDetails;
-import miteat.miteat.MyApplication;
 import miteat.miteat.Model.Entities.Gps;
+import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
+import miteat.miteat.Model.Entities.UserDetails;
 import miteat.miteat.Model.ModelInterface;
+import miteat.miteat.MyApplication;
 
 /**
  * Created by Itzik on 05/06/2016.
@@ -41,13 +41,13 @@ public class ModelSql implements ModelInterface {
     @Override
     public void addGps(Gps gps) {
         int num = numberOfRow(GPS_TABLE);
-        if(num==1){
+        if (num == 1) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            GpsSql.deleteGps(db,1);
+            GpsSql.deleteGps(db, 1);
         }
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-         GpsSql.addGps(db, gps);
+        GpsSql.addGps(db, gps);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class ModelSql implements ModelInterface {
         String countQuery = "SELECT  * FROM " + tableName;
         try {
             Cursor cursor = db.rawQuery(countQuery, null);
-        }catch (Exception e){
+        } catch (Exception e) {
             return 1;
         }
         Cursor cursor = db.rawQuery(countQuery, null);
-        if (!(cursor.moveToFirst()) || cursor.getCount() ==0){
+        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
             return 1;
         }
         int cnt = cursor.getCount();
@@ -73,13 +73,22 @@ public class ModelSql implements ModelInterface {
         int num = numberOfRow(MEETING_TABLE);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         meeting.setId(num);
-        MeetingSql.addmeeting(db,meeting);
+        MeetingSql.addMeeting(db, meeting);
 
     }
 
     @Override
     public List<Meeting> getAllMeeting() {
         return null;
+    }
+
+    @Override
+    public Meeting getMeeting(int id) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Meeting meeting = MeetingSql.getMeeting(db, id);
+        int[] ids = MeetingSql.getFoodPortions(db, id);
+        meeting.setFoodPortionsId(FoodPortionsSql.getAllPortionsId(db, ids, id));
+        return meeting;
     }
 
     @Override
@@ -100,7 +109,7 @@ public class ModelSql implements ModelInterface {
 
     @Override
     public void bookingToMeeting() {
-        
+
     }
 
     class MyDBHelper extends SQLiteOpenHelper {

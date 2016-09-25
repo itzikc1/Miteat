@@ -77,6 +77,11 @@ public class Model implements ModelInterface {
     }
 
     @Override
+    public Meeting getMeeting(int id) {
+        return null;
+    }
+
+    @Override
     public void deleteMeeting(Meeting meeting) {
         meetings.remove(meeting);
     }

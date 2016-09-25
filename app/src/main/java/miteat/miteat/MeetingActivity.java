@@ -141,25 +141,8 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         transaction.replace(R.id.meeting_main, mainMeetingFragment);
         invalidateOptionsMenu();
         transaction.commit();
-
     }
 
-//    @Override
-//    public String addPic() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
-//        return picName;
-//    }
-//
-//    @Override
-//    public String takePic() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, REQUEST_CAMERA);
-//        return picName;
-//
-//    }
 
     @Override
     public void saveInterface(Meeting meeting) {
@@ -170,7 +153,6 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         invalidateOptionsMenu();
         transaction.commit();
     }
-
 
 
     @Override

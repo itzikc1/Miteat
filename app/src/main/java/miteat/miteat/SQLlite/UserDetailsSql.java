@@ -1,15 +1,11 @@
 package miteat.miteat.SQLlite;
 
 import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Feedback;
-import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.UserDetails;
 
 /**
@@ -17,15 +13,9 @@ import miteat.miteat.Model.Entities.UserDetails;
  */
 public class UserDetailsSql {
 
-
-
-
-
-
     public static String strSeparator = "__,__";
-
     private static final String USER_DETAILS_TABLE = "user_details_table";
-    private static final String USER_NAME = "USER_NAME";
+    private static final String USER_NAME = "user_name";
     private static final String PIC_PROFILE = "picProfile";
     private static final String EARN_MONEY = "earnMoney";
     private static final String NUMBER_OF_STAR_AVG = "numberOfStarAvg";
@@ -46,13 +36,13 @@ public class UserDetailsSql {
         values.put(PIC_PROFILE, userDetails.getPicProfile());
         values.put(EARN_MONEY, userDetails.getEarnMoney());
         values.put(NUMBER_OF_STAR_AVG, userDetails.getNumberOfStarAvg());
-        values.put(PHONE_NUMBER,userDetails.getPhoneNumber());
+        values.put(PHONE_NUMBER, userDetails.getPhoneNumber());
         values.put(ADDRESS, userDetails.getAddress());
         values.put(AVG_PAY_FOR_MEAL, userDetails.getAvgPayForMeal());
         values.put(MAIL, userDetails.getMail());
         values.put(FEEDBACKS, convertArrayToString(userDetails.getFeedbacks()));
         values.put(LOVE_TAKEAWAY, userDetails.getLoveTakeAway());
-        values.put(FAVORITE_DISH,userDetails.getFavoriteDish());
+        values.put(FAVORITE_DISH, userDetails.getFavoriteDish());
         values.put(MARITAL_STATUS, userDetails.getMaritalStatus());
         db.insert(USER_DETAILS_TABLE, USER_NAME, values);
 
@@ -82,14 +72,11 @@ public class UserDetailsSql {
 //        Gps gps = null;
 //        return gps;
 //    }
-//
 
 
-
-    public static void deleteUserDetails(SQLiteDatabase db, String userName ) {
+    public static void deleteUserDetails(SQLiteDatabase db, String userName) {
         db.delete(USER_DETAILS_TABLE, USER_NAME + " = '" + userName + "'", null);
     }
-
 
 
     public static void create(SQLiteDatabase db) {
@@ -114,24 +101,24 @@ public class UserDetailsSql {
     }
 
 
-
-    public static String convertArrayToString(List<Feedback> feedbacks){
+    public static String convertArrayToString(List<Feedback> feedbacks) {
         String str = "";
-        for (int i = 0;i<feedbacks.size(); i++) {
-            str = str+feedbacks.get(i).getId();
+        for (int i = 0; i < feedbacks.size(); i++) {
+            str = str + feedbacks.get(i).getId();
             // Do not append comma at the end of last element
-            if(i<feedbacks.size()-1){
-                str = str+strSeparator;
+            if (i < feedbacks.size() - 1) {
+                str = str + strSeparator;
             }
         }
         return str;
     }
-    public static int[] convertStringToArray(String str){
+
+    public static int[] convertStringToArray(String str) {
         String[] arr = str.split(strSeparator);
         int[] ids;
         ids = new int[arr.length];
-        for (int i=0;i<arr.length;i++){
-           ids[i]=Integer.valueOf(arr[i]);
+        for (int i = 0; i < arr.length; i++) {
+            ids[i] = Integer.valueOf(arr[i]);
         }
         return ids;
     }

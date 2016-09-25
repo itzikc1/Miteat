@@ -11,14 +11,14 @@ public class Meeting {
 
     private String userId;
     private int id;
-    private String personCreate;
+    //private String personCreate;
     private int numberOfPartner;
     private String typeOfFood;
     private int money;
     private Long dateAndTime;
     private String location;
     private Boolean insurance;
-    private int foodPortionsIds;
+   // private int foodPortionsIds;
     private String image;
     private Double latLocation;
     private Double lonLocation;
@@ -49,13 +49,13 @@ public class Meeting {
         this.id = id;
     }
 
-    public String getPersonCreate() {
-        return personCreate;
-    }
-
-    public void setPersonCreate(String personCreate) {
-        this.personCreate = personCreate;
-    }
+//    public String getPersonCreate() {
+//        return personCreate;
+//    }
+//
+//    public void setPersonCreate(String personCreate) {
+//        this.personCreate = personCreate;
+//    }
 
     public int getNumberOfPartner() {
         return numberOfPartner;
@@ -105,13 +105,13 @@ public class Meeting {
         this.insurance = insurance;
     }
 
-    public int getFoodPortionsIds() {
-        return foodPortionsIds;
-    }
-
-    public void setFoodPortionsIds(int foodPortionsIds) {
-        this.foodPortionsIds = foodPortionsIds;
-    }
+//    public int getFoodPortionsIds() {
+//        return foodPortionsIds;
+//    }
+//
+//    public void setFoodPortionsIds(int foodPortionsIds) {
+//        this.foodPortionsIds = foodPortionsIds;
+//    }
 
     public String getImage() {
         return image;

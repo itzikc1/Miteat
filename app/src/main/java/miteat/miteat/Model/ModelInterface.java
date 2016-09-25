@@ -17,6 +17,7 @@ public interface ModelInterface {
     public int numberOfRow(String tableName);
     public void addMeeting(Meeting meeting);
     public List<Meeting> getAllMeeting();
+    public Meeting getMeeting(int id);
     public void deleteMeeting(Meeting meeting);
     public Gps getGpsLocation();
     public UserDetails getUserDetails(String id);

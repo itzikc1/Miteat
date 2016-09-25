@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,15 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
@@ -53,19 +47,15 @@ public class MenuPortionsFragment extends Fragment {
     private EditText numberId;
     private EditText costOfMoney;
     private EditText name;
-    private MyAddapter adapter;
     private ArrayList<String> image = new ArrayList<String>();
     private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-
+    private LinearLayout layout;
+    private LinearLayout.LayoutParams layoutParams;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     int PLACE_PICKER_REQUEST = 1;
-    HorizontalScrollView horizontalScrollView;
-
 
     interface MenuFragmentInterface {
-
         public void saveInterface(Meeting meeting);
-
     }
 
     @Override
@@ -79,8 +69,8 @@ public class MenuPortionsFragment extends Fragment {
         multiAutoComplete = (MultiAutoCompleteTextView) view.findViewById(R.id.allergensType);
         String[] countries = getResources().getStringArray(R.array.allergens_type);
 
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.image_container);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout = (LinearLayout) view.findViewById(R.id.image_container);
+        layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         Button takePic = (Button) view.findViewById(R.id.makePic);
         Button addpic = (Button) view.findViewById(R.id.getPic);
@@ -91,40 +81,18 @@ public class MenuPortionsFragment extends Fragment {
         TextView costView = (TextView) view.findViewById(R.id.cost);
         TextView nameDefault = (TextView) view.findViewById(R.id.name);
 
-        if(editPortions==null){
-        int numMeeting = 0;
-        num.setText(String.valueOf(numMeeting));
-        costView.setText("0");
+        if (editPortions == null) {
+            int numMeeting = 0;
+            num.setText(String.valueOf(numMeeting));
+            costView.setText("0");
             nameDefault.setText("");
-        }
-        else{
-           num.setText(String.valueOf(editPortions.getNumberOfFoodPortions()));
+        } else {
+            num.setText(String.valueOf(editPortions.getNumberOfFoodPortions()));
             costView.setText(String.valueOf(editPortions.getCost()));
             nameDefault.setText(editPortions.getName().toString());
             multiAutoComplete.setText(editPortions.getAllergens().toString());
-
             image = editPortions.getImages();
-
-            for (int i = 0; i < image.size(); i++) {
-                layoutParams.setMargins(1, 1, 1, 1);
-                layoutParams.gravity = Gravity.CENTER;
-                final  ImageView  imageView = new ImageView(getActivity());
-
-                ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
-                    @Override
-                    public void onResult(Bitmap imageBmp) {
-                        if(imageBmp.getWidth()>4096||imageBmp.getHeight()>4096){
-                            Bitmap.createScaledBitmap(imageBmp, 120, 120, false);
-                        }
-                        imageView.setImageBitmap(imageBmp);
-                    }
-                });
-                imageView.setLayoutParams(layoutParams);
-                layout.addView(imageView);
-
-
-            }
-
+            refreshPic();
         }
 
 
@@ -137,17 +105,18 @@ public class MenuPortionsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(editPortions!=null){
+                int id = meeting.getFoodPortionsId().size() + 1;
+                if (editPortions != null) {
+                    id = editPortions.getId();
                     meeting.getFoodPortionsId().remove(editPortions);
                 }
-
                 numberId = (EditText) view.findViewById(R.id.portionsNumber);
                 costOfMoney = (EditText) view.findViewById(R.id.cost);
                 name = (EditText) view.findViewById(R.id.name);
                 String allergens = multiAutoComplete.getText().toString();
                 int numberIdText = Integer.parseInt(numberId.getText().toString());
                 int money = Integer.parseInt(costOfMoney.getText().toString());
-                FoodPortions foodPortions = new FoodPortions(numberIdText,name.getText().toString(), image, numberIdText, money, allergens);
+                FoodPortions foodPortions = new FoodPortions(id, name.getText().toString(), image, numberIdText, money, allergens);
                 addFoodPortions(foodPortions);
                 MenuFragmentInterface menuFragmentInterface = (MenuFragmentInterface) getActivity();
                 menuFragmentInterface.saveInterface(meeting);
@@ -169,13 +138,12 @@ public class MenuPortionsFragment extends Fragment {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
-
-
             }
         });
         takePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, REQUEST_CAMERA);
             }
@@ -194,7 +162,6 @@ public class MenuPortionsFragment extends Fragment {
         int id = item.getItemId();
 
 
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -203,17 +170,19 @@ public class MenuPortionsFragment extends Fragment {
         this.meeting = meeting;
     }
 
-    public  void edit(FoodPortions f){
-        this.editPortions=f;
+    public void edit(FoodPortions f) {
+        this.editPortions = f;
     }
 
     public void addFoodPortions(FoodPortions foodPortions) {
+        foodPortions.setMeetingId(this.meeting.getId());
         this.meeting.addFoodPortionsId(foodPortions);
     }
 
     public static int getImageId(Context context, String imageName) {
         return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -227,8 +196,8 @@ public class MenuPortionsFragment extends Fragment {
                 String pic = System.currentTimeMillis() + ".jpg";
                 Log.d("name-------------- ", pic);
                 image.add(pic);
-               // adapter.notifyDataSetChanged();
-               ModelCloudinary.getInstance().saveImage(imageBitmap, pic);
+                ModelCloudinary.getInstance().saveImage(imageBitmap, pic);
+                refreshPic();
 
             } else if (requestCode == SELECT_FILE) {
 
@@ -245,33 +214,33 @@ public class MenuPortionsFragment extends Fragment {
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImageUri));
                     ModelCloudinary.getInstance().saveImageOncloudinary(bitmap, filename);
+                    refreshPic();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
-    class MyAddapter extends BaseAdapter{
 
-        @Override
-        public int getCount() {
-            return 0;
+    private void refreshPic() {
+        layout.removeAllViews();//clean all pic before
+        for (int i = 0; i < image.size(); i++) {
+            layoutParams.setMargins(1, 1, 1, 1);
+            layoutParams.gravity = Gravity.CENTER;
+            final ImageView imageView = new ImageView(getActivity());
+
+            ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
+                @Override
+                public void onResult(Bitmap imageBmp) {
+                    if (imageBmp.getWidth() > 4096 || imageBmp.getHeight() > 4096) {
+                        Bitmap.createScaledBitmap(imageBmp, 120, 120, false);
+                    }
+                    imageView.setImageBitmap(imageBmp);
+                }
+            });
+            imageView.setLayoutParams(layoutParams);
+            layout.addView(imageView);
         }
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return null;
-        }
     }
-
 }

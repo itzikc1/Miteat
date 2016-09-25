@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Model;
-import miteat.miteat.R;
 
 /**
  * Created by Itzik on 05/06/2016.

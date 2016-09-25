@@ -3,10 +3,7 @@ package miteat.miteat.SQLlite;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
-
 import miteat.miteat.Model.Entities.ListOfPortions;
-import miteat.miteat.Model.Entities.Meeting;
 
 /**
  * Created by Itzik on 24/07/2016.
@@ -30,4 +27,5 @@ public class ListOfPortionsSql {
         db.insert(PORTIONS_LIST_TABLE, ID, values);
 
     }
+
 }

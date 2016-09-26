@@ -22,5 +22,7 @@ public interface ModelInterface {
     public Gps getGpsLocation();
     public UserDetails getUserDetails(String id);
     public void bookingToMeeting();
+    public void setUserDetails(UserDetails userDetails);
+    public UserDetails getUserDetails();
 
 }

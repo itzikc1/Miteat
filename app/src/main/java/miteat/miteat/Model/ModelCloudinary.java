@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import miteat.miteat.Model.Cloudinary.CloudinaryManger;
 import miteat.miteat.MyApplication;
@@ -139,6 +140,18 @@ public class ModelCloudinary {
             e.printStackTrace();
         }
         return bitmap;
+    }
+    public void deleteImageFromCloudinary(final ArrayList<String> imageName){
+        Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
+            @Override
+            public void run() {
+                for(int i=0;i<imageName.size();i++){
+                    cloudinaryManger.deleteImage(imageName.get(i));
+                }
+
+            }
+        });
+        d.start();
     }
 
 }

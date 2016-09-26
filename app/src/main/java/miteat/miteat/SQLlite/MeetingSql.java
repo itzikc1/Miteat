@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.FoodPortions;
@@ -39,10 +40,10 @@ public class MeetingSql {
 
         ContentValues values = new ContentValues();
         values.put(ID, meeting.getId());
-        values.put(USER_ID, meeting.getId());
-        values.put(DATE_AND_END_TIME, meeting.getId());
-        values.put(LAT_LOCATION, meeting.getId());
-        values.put(LON_LOCATION, meeting.getId());
+        values.put(USER_ID, meeting.getUserId());
+        values.put(DATE_AND_END_TIME, meeting.getDateAndEndTime());
+        values.put(LAT_LOCATION, meeting.getLatLocation());
+        values.put(LON_LOCATION, meeting.getLonLocation());
         values.put(DISTANCE, meeting.getDistance());
         values.put(TAKE_AWAY, meeting.getTakeAway());
         //  values.put(PERSON_CREATE, meeting.getId());
@@ -103,16 +104,72 @@ public class MeetingSql {
             String image = cursor.getString(imageIndex);
             Double distance = Double.parseDouble(cursor.getString(distanceIndex));
 
-            Meeting meeting = new Meeting(id, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
+            Meeting meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
             meeting.setImage(image);
             meeting.setDistance(distance);
-            meeting.setUserId(userId);
+           // meeting.setUserId(userId);
             return meeting;
         }
         Meeting meeting = null;
         return meeting;
     }
+    public static List<Meeting> getAllMeeting(SQLiteDatabase db) {
+        List<Meeting> meetings = new LinkedList<Meeting>();
 
+        Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
+
+        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+            return meetings;
+        }
+
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(ID);
+            int userIdIndex = cursor.getColumnIndex(USER_ID);
+            int numberOfPartnerIndex = cursor.getColumnIndex(NUMBER_OF_PARTNER);
+            int typeOfFoodIndex = cursor.getColumnIndex(TYPE_OF_FOOD);
+            int moneyIndex = cursor.getColumnIndex(MONEY);
+            int dateAndTimeIndex = cursor.getColumnIndex(DATE_AND_TIME);
+            int dateAndEndTimeIndex = cursor.getColumnIndex(DATE_AND_END_TIME);
+            int locationIndex = cursor.getColumnIndex(LOCATION);
+            int latLocationIndex = cursor.getColumnIndex(LAT_LOCATION);
+            int lonLocationIndex = cursor.getColumnIndex(LON_LOCATION);
+            int insuranceIndex = cursor.getColumnIndex(INSURANCE);
+            int takeAwayIndex = cursor.getColumnIndex(TAKE_AWAY);
+            int foodPortionsIdIndex = cursor.getColumnIndex(FOOD_PORTIONS_IDS);
+            int imageIndex = cursor.getColumnIndex(IMAGE);
+            int distanceIndex = cursor.getColumnIndex(DISTANCE);
+            do {
+            int id = Integer.parseInt(cursor.getString(idIndex));
+            String userId = cursor.getString(userIdIndex);
+            int numberOfPartner = Integer.parseInt(cursor.getString(numberOfPartnerIndex));
+            String typeOfFood = cursor.getString(typeOfFoodIndex);
+            int money = Integer.parseInt(cursor.getString(moneyIndex));
+            Long dateAndTime = Long.parseLong(cursor.getString(dateAndTimeIndex));
+            Long dateAndEndTime = Long.parseLong(cursor.getString(dateAndEndTimeIndex));
+            String location = cursor.getString(locationIndex);
+            Double latLocation = Double.parseDouble(cursor.getString(latLocationIndex));
+            Double lonLocation = Double.parseDouble(cursor.getString(lonLocationIndex));
+            Boolean insurance = Boolean.parseBoolean(cursor.getString(insuranceIndex));
+            int takeAway = Integer.parseInt(cursor.getString(takeAwayIndex));
+            // int[] foodPortionsId = convertStringToArray(cursor.getString(foodPortionsIdIndex));//cheak if null
+            String image = cursor.getString(imageIndex);
+
+
+
+            Meeting meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
+            meeting.setImage(image);
+                if(cursor.getString(distanceIndex)!=null){
+                    Double distance = Double.parseDouble(cursor.getString(distanceIndex));
+                    meeting.setDistance(distance);
+                }
+
+            meetings.add(meeting);
+            } while (cursor.moveToNext());
+        }
+        return meetings;
+
+    }
 
     public static int[] getFoodPortions(SQLiteDatabase db, int id) {
 
@@ -165,20 +222,24 @@ public class MeetingSql {
     }
 
     public static String convertArrayToString(List<FoodPortions> foodPortionsId) {
-        String str = "";
-        for (int i = 0; i < foodPortionsId.size(); i++) {
-            str = str + foodPortionsId.get(i).getId();
-            // Do not append comma at the end of last element
-            if (i < foodPortionsId.size() - 1) {
-                str = str + strSeparator;
+        if(foodPortionsId.size()>0) {
+            String str = "";
+            for (int i = 0; i < foodPortionsId.size(); i++) {
+                str = str + foodPortionsId.get(i).getId();
+                // Do not append comma at the end of last element
+                if (i < foodPortionsId.size() - 1) {
+                    str = str + strSeparator;
+                }
             }
+            return str;
         }
-        return str;
+        else{
+            return null;
+        }
     }
 
     public static int[] convertStringToArray(String str) {
         if (str != null) {
-
 
             String[] arr = str.split(strSeparator);
             int[] ids;
@@ -188,7 +249,7 @@ public class MeetingSql {
             }
             return ids;
         } else {
-            return null;
+             return null;
         }
 
     }

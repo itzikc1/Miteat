@@ -1,8 +1,10 @@
 package miteat.miteat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -47,8 +50,8 @@ public class MenuPortionsFragment extends Fragment {
     private EditText numberId;
     private EditText costOfMoney;
     private EditText name;
-    private ArrayList<String> image = new ArrayList<String>();
-    private ArrayList<Bitmap> images = new ArrayList<Bitmap>();
+    private ArrayList<String> image;
+    private ArrayList<String> deleteImage;
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
@@ -80,7 +83,8 @@ public class MenuPortionsFragment extends Fragment {
         TextView num = (TextView) view.findViewById(R.id.portionsNumber);
         TextView costView = (TextView) view.findViewById(R.id.cost);
         TextView nameDefault = (TextView) view.findViewById(R.id.name);
-
+        image = new ArrayList<String>();
+        deleteImage = new ArrayList<String>();
         if (editPortions == null) {
             int numMeeting = 0;
             num.setText(String.valueOf(numMeeting));
@@ -91,7 +95,12 @@ public class MenuPortionsFragment extends Fragment {
             costView.setText(String.valueOf(editPortions.getCost()));
             nameDefault.setText(editPortions.getName().toString());
             multiAutoComplete.setText(editPortions.getAllergens().toString());
-            image = editPortions.getImages();
+
+            for(int i = 0;i<editPortions.getImages().size();i++){
+                image.add(editPortions.getImages().get(i));
+            }
+         //   image = editPortions.getImages();
+           // newImage=image;
             refreshPic();
         }
 
@@ -105,9 +114,9 @@ public class MenuPortionsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int id = meeting.getFoodPortionsId().size() + 1;
+                // int id = meeting.getFoodPortionsId().size() + 1;
                 if (editPortions != null) {
-                    id = editPortions.getId();
+                    //   id = editPortions.getId();
                     meeting.getFoodPortionsId().remove(editPortions);
                 }
                 numberId = (EditText) view.findViewById(R.id.portionsNumber);
@@ -116,8 +125,11 @@ public class MenuPortionsFragment extends Fragment {
                 String allergens = multiAutoComplete.getText().toString();
                 int numberIdText = Integer.parseInt(numberId.getText().toString());
                 int money = Integer.parseInt(costOfMoney.getText().toString());
-                FoodPortions foodPortions = new FoodPortions(id, name.getText().toString(), image, numberIdText, money, allergens);
+                FoodPortions foodPortions = new FoodPortions(numberIdText, name.getText().toString(), image, numberIdText, money, allergens);
                 addFoodPortions(foodPortions);
+                if(deleteImage.size()>0){
+                    ModelCloudinary.getInstance().deleteImageFromCloudinary(deleteImage);
+                }
                 MenuFragmentInterface menuFragmentInterface = (MenuFragmentInterface) getActivity();
                 menuFragmentInterface.saveInterface(meeting);
 
@@ -194,7 +206,7 @@ public class MenuPortionsFragment extends Fragment {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 String pic = System.currentTimeMillis() + ".jpg";
-                Log.d("name-------------- ", pic);
+                //  Log.d("name-------------- ", pic);
                 image.add(pic);
                 ModelCloudinary.getInstance().saveImage(imageBitmap, pic);
                 refreshPic();
@@ -209,7 +221,7 @@ public class MenuPortionsFragment extends Fragment {
                 cursor.moveToFirst();
                 String selectedImagePath = cursor.getString(column_index);
                 String filename = selectedImagePath.substring(selectedImagePath.lastIndexOf("/") + 1);
-                Log.d("name-------------- ", filename);
+                //Log.d("name-------------- ", filename);
                 image.add(filename);
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImageUri));
@@ -228,19 +240,48 @@ public class MenuPortionsFragment extends Fragment {
             layoutParams.setMargins(1, 1, 1, 1);
             layoutParams.gravity = Gravity.CENTER;
             final ImageView imageView = new ImageView(getActivity());
-
+            final String srt = image.get(i);
             ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
                 @Override
                 public void onResult(Bitmap imageBmp) {
-                    if (imageBmp.getWidth() > 4096 || imageBmp.getHeight() > 4096) {
-                        Bitmap.createScaledBitmap(imageBmp, 120, 120, false);
+                    if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
+                        imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
                     }
                     imageView.setImageBitmap(imageBmp);
                 }
             });
+
             imageView.setLayoutParams(layoutParams);
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Log.d("log", "Yes button clicked ");
+                                    image.remove(srt);
+                                    deleteImage.add(srt);
+                                    Toast.makeText(getActivity().getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
+                                    refreshPic();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    Log.d("log", "No button clicked ");
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("you sure delete this picture ?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                    return true;
+                }
+            });
             layout.addView(imageView);
         }
 
     }
+
 }

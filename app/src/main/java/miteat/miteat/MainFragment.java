@@ -94,7 +94,7 @@ public class MainFragment extends Fragment {
                 dialog.show();
 
 
-                Log.d("samll", "samll press in main !!!!!!");
+               // Log.d("samll", "samll press in main !!!!!!");
 
             }
         });
@@ -126,10 +126,10 @@ public class MainFragment extends Fragment {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.main_row_list, null);
-                Log.d("TAG", "create view:" + position);
+             //   Log.d("TAG", "create view:" + position);
 
             } else {
-                Log.d("TAG", "use convert view:" + position);
+              //  Log.d("TAG", "use convert view:" + position);
             }
 
 
@@ -149,8 +149,10 @@ public class MainFragment extends Fragment {
 
             else
                 time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
+            if(meeting.getDistance()!=null){
+                locationn.setText(new DecimalFormat("##.##").format(meeting.getDistance()) + " KM from you");//only two digit
+            }
 
-            locationn.setText(new DecimalFormat("##.##").format(meeting.getDistance()) + " KM from you");//only two digit
             user.setText("Itzik");
 
 

@@ -42,15 +42,20 @@ public class FoodPortionsSql {
     public static List<FoodPortions> getAllPortionsId(SQLiteDatabase db, int[] ids,int meetingId) {
 
         List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
-        for (int i = 0; i < ids.length; i++) {
+       // for (int i = 0; i < ids.length; i++) {
 
-            String[] params = {String.valueOf(ids[i]),String.valueOf(meetingId)};
-           // String[] params = new String[1];
-           // params[0] = String.valueOf(ids[i]);
-            Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null, ID + " = ?" + "and " + MEETING_ID + " = ?", params, null, null, null, null);
+
+            //String[] params = {String.valueOf(ids[i]),String.valueOf(meetingId)};
+
+            String[] params = new String[1];
+          //  params[0] = String.valueOf(ids[i]);
+        params[0] = String.valueOf(meetingId);
+          //  Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null, ID + " = ?" + "and " + MEETING_ID + " = ?", params, null, null, null, null);
+        Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null,  MEETING_ID + " = ?", params, null, null, null, null);
 
             if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-                continue;
+                return foodPortionsId;
+               // continue;
             }
             if (cursor.moveToFirst()) {
                 int idIndex = cursor.getColumnIndex(ID);
@@ -59,7 +64,7 @@ public class FoodPortionsSql {
                 int numberOfFoodPortionsIndex = cursor.getColumnIndex(NUMBER_OF_FOOD_PORTIONS);
                 int costIndex = cursor.getColumnIndex(COST);
                 int allergensIndex = cursor.getColumnIndex(ALLERGENS);
-
+                do {
                 int id = Integer.parseInt(cursor.getString(idIndex));
                 String name = cursor.getString(nameIndex);
                 ArrayList<String> images = convertStringToArray(cursor.getString(imagesIndex));
@@ -69,13 +74,13 @@ public class FoodPortionsSql {
                 FoodPortions foodPortions = new FoodPortions(id, name, images, numberOfFoodPortions, cost, allergens);
                 foodPortions.setMeetingId(meetingId);
                 foodPortionsId.add(foodPortions);
-            }
+            } while (cursor.moveToNext());
         }
         return foodPortionsId;
     }
 
     public static void deleteFoodPortions(SQLiteDatabase db, int id) {
-        db.delete(FOOD_PORTIONS_TABLE, ID + " = '" + id + "'", null);
+        db.delete(FOOD_PORTIONS_TABLE, MEETING_ID + " = '" + id + "'", null);
     }
 
 

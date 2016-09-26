@@ -27,8 +27,9 @@ public class Meeting {
     private Long dateAndEndTime;
     List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
 
-    public Meeting(int id, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, Long dateAndEndTime, String location, Double latLocation, Double lonLocation, Boolean insurance, int takeAway) {
+    public Meeting(int id,String userId, int numberOfPartner, String typeOfFood, int money, Long dateAndTime, Long dateAndEndTime, String location, Double latLocation, Double lonLocation, Boolean insurance, int takeAway) {
         this.id = id;
+        this.userId=userId;
         this.numberOfPartner = numberOfPartner;
         this.typeOfFood = typeOfFood;
         this.money = money;

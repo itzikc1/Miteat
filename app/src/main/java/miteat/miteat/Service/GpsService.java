@@ -45,14 +45,14 @@ public class GpsService extends Service implements LocationListener {
 
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, this);
 
-        Log.d("TAG", "service gps on create");
+      //  Log.d("TAG", "service gps on create");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("TAG", "service gps on destroy");
+       // Log.d("TAG", "service gps on destroy");
     }
 
     @Override
@@ -80,8 +80,8 @@ public class GpsService extends Service implements LocationListener {
         Gps gps = new Gps(1,lon, lat,time);
         Model.instance().addGps(gps);
 
-        Log.d("Tag", lat);
-        Log.d("Tag", lon);
+       // Log.d("Tag", lat);
+       // Log.d("Tag", lon);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class GpsService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        Log.d("TAG", "service gps onStartCommand");
+      //  Log.d("TAG", "service gps onStartCommand");
 
         return START_STICKY;
     }

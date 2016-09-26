@@ -1,6 +1,7 @@
 package miteat.miteat.SQLlite;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
@@ -49,29 +50,49 @@ public class UserDetailsSql {
     }
 
 
-//    public static UserDetails getUserDetails(SQLiteDatabase db) {
-//
-//        Cursor cursor = db.query(USER_DETAILS_TABLE, null, null, null, null, null, null);
-//
-//        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-//            UserDetails getUserDetails = null;
-//
-//            return getUserDetails;
-//        }
-//
-//        if (cursor.moveToFirst()) {
-//            int id = cursor.getColumnIndex(ID);
-//            int longitude = cursor.getColumnIndex(LONGITUDE);
-//            int latitude = cursor.getColumnIndex(LATITUDE);
-//            int time = cursor.getColumnIndex(TIME);
-//            // Gps gps = new Gps(Integer.getInteger(cursor.getString(id)), cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
-//            Gps gps = new Gps(1, cursor.getString(longitude), cursor.getString(latitude), Long.parseLong(cursor.getString(time)));
-//
-//            return gps;
-//        }
-//        Gps gps = null;
-//        return gps;
-//    }
+    public static UserDetails getUserDetails(SQLiteDatabase db) {
+
+        Cursor cursor = db.query(USER_DETAILS_TABLE, null, null, null, null, null, null);
+        UserDetails userDetails = null;
+        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+
+            return userDetails;
+        }
+
+
+
+
+        if (cursor.moveToFirst()) {
+
+            int userNameIndex = cursor.getColumnIndex(USER_NAME);
+            int picProfileIndex = cursor.getColumnIndex(PIC_PROFILE);
+            int earnMoneyIndex = cursor.getColumnIndex(EARN_MONEY);
+            int numberOfStarAvgIndex = cursor.getColumnIndex(NUMBER_OF_STAR_AVG);
+            int phoneNumberIndex = cursor.getColumnIndex(PHONE_NUMBER);
+            int addressIndex = cursor.getColumnIndex(ADDRESS);
+            int avgPayForMealIndex = cursor.getColumnIndex(AVG_PAY_FOR_MEAL);
+            int mailIndex = cursor.getColumnIndex(MAIL);
+            int feedbacksIndex = cursor.getColumnIndex(FEEDBACKS);
+            int loveTakeAwayIndex = cursor.getColumnIndex(LOVE_TAKEAWAY);
+            int favoriteDishIndex  = cursor.getColumnIndex(FAVORITE_DISH);
+            int maritalStatusIndex = cursor.getColumnIndex(MARITAL_STATUS);
+
+            String userName = cursor.getString(userNameIndex);
+            String picProfile = cursor.getString(picProfileIndex);
+            double earnMoney = Double.parseDouble(cursor.getString(earnMoneyIndex));
+            float numberOfStarAvg = Float.parseFloat(cursor.getString(numberOfStarAvgIndex));
+            double phoneNumber = Double.parseDouble(cursor.getString(phoneNumberIndex));
+            String address = cursor.getString(addressIndex);
+            double avgPayForMeal = Double.parseDouble(cursor.getString(avgPayForMealIndex));
+            String mail = cursor.getString(mailIndex);
+          //  List<Feedback> feedbacks = cursor.getString(feedbacksIndex);
+            Boolean loveTakeAway = Boolean.parseBoolean(cursor.getString(loveTakeAwayIndex));
+            String favoriteDish = cursor.getString(favoriteDishIndex);
+            String maritalStatus = cursor.getString(maritalStatusIndex);
+            userDetails =new UserDetails(userName,mail,phoneNumber);
+        }
+        return userDetails;
+    }
 
 
     public static void deleteUserDetails(SQLiteDatabase db, String userName) {

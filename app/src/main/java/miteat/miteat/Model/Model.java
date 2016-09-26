@@ -13,6 +13,7 @@ import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
+import miteat.miteat.SQLlite.MeetingSql;
 import miteat.miteat.SQLlite.ModelSql;
 
 /**
@@ -31,20 +32,24 @@ public class Model implements ModelInterface {
     HashMap<String, UserDetails> usersDetails = new HashMap<String, UserDetails>();
 
     private Model() {
-
+        sqlModel = new ModelSql();
         //  modelFirebase = new ModelFirebase(MyApplication.getAppContext());
         //make fake meeting
-        for (int i = 0; i < 10; i++) {
-            UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
-            userDetails.setNumberOfStarAvg(3.6f);
-            usersDetails.put(userDetails.getUserName(), userDetails);
-            long dateAndTime = 0;
-            dateAndTime = 44321373 + i;
-            Meeting meeting = new Meeting(i, i + 1, "isreali", 50, dateAndTime, dateAndTime, "rishon lezion" + i, 31.959487799999998, 34.8019533, false, 1);
-            meeting.setUserId("itzik" + i);
-            meetings.add(meeting);
-        }
-        sqlModel = new ModelSql();
+//        for (int i = 0; i < 10; i++) {
+//            UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
+//            userDetails.setNumberOfStarAvg(3.6f);
+//            usersDetails.put(userDetails.getUserName(), userDetails);
+//            long dateAndTime = 0;
+//            dateAndTime = 44321373 + i;
+//            Meeting meeting = new Meeting(i, i + 1, "isreali", 50, dateAndTime, dateAndTime, "rishon lezion" + i, 31.959487799999998, 34.8019533, false, 1);
+//            meeting.setUserId("itzik" + i);
+//            meetings.add(meeting);
+//        }
+        UserDetails userDetails = new UserDetails("itzik","mail",0525541676);
+        userDetails.setNumberOfStarAvg(3.6f);
+        setUserDetails(userDetails);
+        usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
+
     }
 
     public static Model instance() {
@@ -73,7 +78,9 @@ public class Model implements ModelInterface {
 
     @Override
     public List<Meeting> getAllMeeting() {
+        List<Meeting> meetings = sqlModel.getAllMeeting();
         return meetings;
+        //return meetings;
     }
 
     @Override
@@ -83,7 +90,8 @@ public class Model implements ModelInterface {
 
     @Override
     public void deleteMeeting(Meeting meeting) {
-        meetings.remove(meeting);
+       // meetings.remove(meeting);
+        sqlModel.deleteMeeting(meeting);
     }
 
     @Override
@@ -100,6 +108,16 @@ public class Model implements ModelInterface {
     @Override
     public void bookingToMeeting() {
 
+    }
+
+    @Override
+    public void setUserDetails(UserDetails userDetails) {
+        sqlModel.setUserDetails(userDetails);
+    }
+
+    @Override
+    public UserDetails getUserDetails() {
+        return sqlModel.getUserDetails();
     }
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
@@ -135,6 +153,7 @@ public class Model implements ModelInterface {
         if (gps == null) {
 
             Log.d("sort", "no gps");
+            return list;
         }
         for (int i = 0; i < list.size(); i++) {
             Double dis = distance(Double.parseDouble(getGpsLocation().getLatitude()), Double.parseDouble(getGpsLocation().getLongitude()), list.get(i).getLatLocation(), list.get(i).getLonLocation());

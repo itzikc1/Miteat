@@ -160,7 +160,7 @@ public class MainMeetingFragment extends Fragment {
                 endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
                 int takeAwaySelection = spinner.getSelectedItemPosition();
-                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
+                Meeting newMeeting = new Meeting(-1,Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
                 Log.d("details", "time: " + startMillis + " lat: " + lat + " lon: " + lon);
 
                 if (address == null) {
@@ -173,10 +173,10 @@ public class MainMeetingFragment extends Fragment {
 
                     } else {
                         newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
-
+                        Log.d("delete meeting ",String.valueOf(meeting.getId()));
+                        newMeeting.setId(meeting.getId());
+                        Model.instance().deleteMeeting(meeting);
                     }
-
-                    Model.instance().deleteMeeting(meeting);
 
                     Model.instance().addMeeting(newMeeting);
                     MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
@@ -210,7 +210,7 @@ public class MainMeetingFragment extends Fragment {
                 endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
                 int takeAwaySelection = spinner.getSelectedItemPosition();
-                Meeting newMeeting = new Meeting(1, numberPlace, typeFood, money, startMillis,endMillis, address, lat, lon, bool,takeAwaySelection);
+                Meeting newMeeting = new Meeting(-1,Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis,endMillis, address, lat, lon, bool,takeAwaySelection);
                 newMeeting.setLatLocation(lat);
                 newMeeting.setLonLocation(lon);
                 if (meeting == null) {
@@ -218,6 +218,8 @@ public class MainMeetingFragment extends Fragment {
 
                 } else {
                     newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
+                    newMeeting.setId(meeting.getId());
+
 
                 }
                 MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();

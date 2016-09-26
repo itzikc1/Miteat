@@ -40,7 +40,7 @@ public class CloudinaryManger {
                     byte[] bitmapdata = bos.toByteArray();
                     ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
                     String name = imageName.substring(0, imageName.lastIndexOf("."));
-                    Log.d("name", "----------------------------------------" + name);
+                  //  Log.d("name", "----------------------------------------" + name);
                     Map res = cloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -55,7 +55,7 @@ public class CloudinaryManger {
         URL url = null;
         try {
             url = new URL(cloudinary.url().generate(imageName));
-            Log.d("TAG", "load image from url" + url);
+         //   Log.d("TAG", "load image from url" + url);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             return bmp;
         } catch (MalformedURLException e) {
@@ -63,8 +63,23 @@ public class CloudinaryManger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d("TAG", "url" + url);
-
         return null;
+    }
+    public void deleteImage(final String imageName) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String name = imageName.substring(0, imageName.lastIndexOf("."));
+                    Map result = cloudinary.uploader().destroy(name, ObjectUtils.emptyMap());
+                    //Log.d("delete",result.get("result").toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        t.start();
+
     }
 }

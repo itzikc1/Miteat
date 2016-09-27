@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import miteat.miteat.Model.Entities.Booking;
 import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
@@ -106,7 +107,7 @@ public class Model implements ModelInterface {
     }
 
     @Override
-    public void bookingToMeeting() {
+    public void bookingToMeeting(Booking booking) {
 
     }
 
@@ -119,6 +120,7 @@ public class Model implements ModelInterface {
     public UserDetails getUserDetails() {
         return sqlModel.getUserDetails();
     }
+
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
 

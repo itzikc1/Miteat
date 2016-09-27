@@ -26,7 +26,7 @@ import miteat.miteat.MyApplication;
  */
 public class ModelCloudinary {
     private final static ModelCloudinary instance = new ModelCloudinary();
-    CloudinaryManger cloudinaryManger ;
+    CloudinaryManger cloudinaryManger;
     Context context;
 
     private ModelCloudinary() {
@@ -106,8 +106,8 @@ public class ModelCloudinary {
                 Bitmap bmp = loadImageFromFile(imageName);              //first try to fin the image on the device
                 if (bmp == null) {                                      //if image not found - try downloading it from parse
                     bmp = cloudinaryManger.loadImage(imageName);
-                    if (bmp != null)
-                        saveImageToFile(bmp, imageName);    //save the image locally for next time
+//                    if (bmp != null)
+//                        saveImageToFile(bmp, imageName);    //save the image locally for next time
                 }
                 return bmp;
             }
@@ -132,20 +132,21 @@ public class ModelCloudinary {
             //File dir = context.getExternalFilesDir(null);
             InputStream inputStream = new FileInputStream(imageFile);
             bitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("tag", "got image from cache: " + imageFileName);
+          //  Log.d("tag", "got image from cache: " + imageFileName);
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return bitmap;
     }
-    public void deleteImageFromCloudinary(final ArrayList<String> imageName){
+
+    public void deleteImageFromCloudinary(final ArrayList<String> imageName) {
         Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
             @Override
             public void run() {
-                for(int i=0;i<imageName.size();i++){
+                for (int i = 0; i < imageName.size(); i++) {
                     cloudinaryManger.deleteImage(imageName.get(i));
                 }
 

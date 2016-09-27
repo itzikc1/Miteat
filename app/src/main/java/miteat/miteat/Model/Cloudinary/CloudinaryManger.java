@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
 import java.io.ByteArrayInputStream;
@@ -23,7 +24,6 @@ public class CloudinaryManger {
 
     public CloudinaryManger() {
         cloudinary = new Cloudinary("cloudinary://351742125169825:y3l-NLJcziTM7xMCUrhQH7jjPL0@dqfossdgc");
-
     }
 
     public static Cloudinary getInstance() {
@@ -36,26 +36,25 @@ public class CloudinaryManger {
             public void run() {
                 try {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, bos);
                     byte[] bitmapdata = bos.toByteArray();
                     ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
                     String name = imageName.substring(0, imageName.lastIndexOf("."));
-                  //  Log.d("name", "----------------------------------------" + name);
+                    cloudinary.url().transformation(new Transformation().quality("auto:eco")).imageTag(name);
                     Map res = cloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));
+                    //Map res = cloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name,"moderation", "webpurify"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
         t.start();
-
     }
-
     public Bitmap loadImage(String imageName) {
         URL url = null;
         try {
             url = new URL(cloudinary.url().generate(imageName));
-         //   Log.d("TAG", "load image from url" + url);
+            //   Log.d("TAG", "load image from url" + url);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             return bmp;
         } catch (MalformedURLException e) {
@@ -65,6 +64,7 @@ public class CloudinaryManger {
         }
         return null;
     }
+
     public void deleteImage(final String imageName) {
         Thread t = new Thread(new Runnable() {
             @Override

@@ -3,7 +3,9 @@ package miteat.miteat.SQLlite;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -115,6 +117,7 @@ public class MeetingSql {
     }
     public static List<Meeting> getAllMeeting(SQLiteDatabase db) {
         List<Meeting> meetings = new LinkedList<Meeting>();
+        Calendar cls = Calendar.getInstance();
 
         Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
 
@@ -190,6 +193,7 @@ public class MeetingSql {
         }
         return null;
     }
+
 
     public static void deleteMeeting(SQLiteDatabase db, int id) {
 

@@ -16,14 +16,16 @@ import android.view.MenuItem;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface{
+public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface {
     protected LocationManager locManager;
     FragmentManager manager;
     LoginFragment loginFragment;
     MainFragment mainFragment;
     SettingsFragment settingsFragment;
     BookingFragment bookingFragment;
+    MyDetailsFragment myDetailsFragment;
     int PLACE_PICKER_REQUEST = 1;
+    UserDetailsFragment userDetailsFragment;
 
 
     @Override
@@ -32,10 +34,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         setContentView(R.layout.activity_main);
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(!enabled) {
+        if (!enabled) {
             showDialogGPS();
-        }
-        else {
+        } else {
 
             Intent intent = new Intent(MainActivity.this, GpsService.class);
             startService(intent);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
 //            startService(intent);
         }
         manager = getFragmentManager();
-        FragmentTransaction transaction=manager.beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
         mainFragment = new MainFragment();
         transaction.add(R.id.frag_container, mainFragment);
         transaction.commit();
@@ -67,20 +68,29 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
 
         if (id == R.id.menu_settings) {
             settings();
-            Log.d("Log","settings");
+            Log.d("Log", "settings");
             return true;
         }
 
         if (id == R.id.menu_addMeeting) {
-                        Intent intent = new Intent(getApplicationContext(),
-                   MeetingActivity.class);
+            Intent intent = new Intent(getApplicationContext(),
+                    MeetingActivity.class);
             startActivity(intent);
+            return true;
+        }
+        if (id == R.id.menu_my_details) {
+            myDetailsFragment = new MyDetailsFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.frag_container, myDetailsFragment);
+            invalidateOptionsMenu();
+            transaction.commit();
+
             return true;
         }
 
         if (id == R.id.menu_logIn) {
             loginStartFragment();
-            Log.d("Log","logIn");
+            Log.d("Log", "logIn");
             return true;
         }
 
@@ -98,17 +108,18 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         return super.onOptionsItemSelected(item);
     }
 
-    private void loginStartFragment(){
+    private void loginStartFragment() {
         loginFragment = new LoginFragment();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_container,loginFragment);
+        transaction.replace(R.id.frag_container, loginFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }
-    private void settings(){
+
+    private void settings() {
         settingsFragment = new SettingsFragment();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_container,settingsFragment);
+        transaction.replace(R.id.frag_container, settingsFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }
@@ -123,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(
                         new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                Intent intent = new Intent(MainActivity.this,GpsService.class);
+                Intent intent = new Intent(MainActivity.this, GpsService.class);
                 startService(intent);
             }
         });
@@ -140,10 +151,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     public void finishLogin() {
         mainFragment = new MainFragment();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_container,mainFragment);
+        transaction.replace(R.id.frag_container, mainFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }
+
     @Override
     public void goToRegister() {
 
@@ -151,28 +163,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(MainActivity.this,GpsService.class);
+        Intent intent = new Intent(MainActivity.this, GpsService.class);
         stopService(intent);
         finish();
     }
-//    public void PlacePicker(){
-//        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//        Intent intent;
-//        try {
-//            intent = builder.build(getApplicationContext());
-//            startActivityForResult(intent,PLACE_PICKER_REQUEST);
-//        } catch (GooglePlayServicesRepairableException e) {
-//            e.printStackTrace();
-//        } catch (GooglePlayServicesNotAvailableException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    protected void onActivityResult(int requestCode,int resultCode,Intent data){
-//        Place place = PlacePicker.getPlace(data,this);
-//        String a = String.format("Place: %s",place.getAddress());
-//        Log.d("adress",a);
-//    }
-    public void search(){
+
+
+    public void search() {
 
 
     }
@@ -180,12 +177,43 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     @Override
     public void booking(Meeting meeting) {
 
-        bookingFragment =new BookingFragment();
+        bookingFragment = new BookingFragment();
         bookingFragment.setMeeting(meeting);
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_container,bookingFragment);
+        transaction.replace(R.id.frag_container, bookingFragment);
         invalidateOptionsMenu();
         transaction.commit();
 
+    }
+
+    @Override
+    public void finishBooking() {
+
+        mainFragment = new MainFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.frag_container, mainFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void detailsLoad(String userId) {
+
+        userDetailsFragment = new UserDetailsFragment();
+        userDetailsFragment.setUserId(userId);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.hide(bookingFragment);
+        transaction.add(R.id.frag_container,userDetailsFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void backPressUserDetails() {
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.remove(userDetailsFragment);
+        transaction.show(bookingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
     }
 }

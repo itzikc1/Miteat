@@ -13,6 +13,29 @@
         android:weightSum="1">
 
 
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/horizontalScrollView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/image_container"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+            </HorizontalScrollView>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rowImageProgressBar"
+                android:visibility="gone"/>
+
+
+
+
     </LinearLayout>
 
     <RelativeLayout
@@ -93,7 +116,7 @@
             android:id="@+id/numberParticipants"
             android:layout_width="156dp"
             android:layout_height="match_parent"
-            android:text="number of participants:" />
+            android:text="number of to order:" />
 
         <EditText
             android:layout_width="68dp"
@@ -101,7 +124,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/numUser"
-            android:text="0" />
+            android:text="1" />
 
     </LinearLayout>
 

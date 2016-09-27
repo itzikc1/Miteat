@@ -16,16 +16,17 @@ import miteat.miteat.Model.Model;
 /**
  * Created by Itzik on 05/06/2016.
  */
-public class RegisterFragment extends Fragment{
+public class RegisterFragment extends Fragment {
 
-    private String username,password;
-    private EditText editTextUsername,editTextPassword;
+    private String username, password;
+    private EditText editTextUsername, editTextPassword;
     private CheckBox saveLoginCheckBox;
     private Boolean saveLogin;
     Delegate delegate;
 
-    interface Delegate{
+    interface Delegate {
         public void finishLogin();
+
         public void goToRegister();
 
     }
@@ -72,10 +73,9 @@ public class RegisterFragment extends Fragment{
         return view;
     }
 
-    private Boolean checkIfUserExist(String user,String password)
-    {
-        User newUser = new User(user,password);
+    private Boolean checkIfUserExist(String user, String password) {
+        User newUser = new User(user, password);
         Boolean bool = Model.instance().checkIfUserExist(newUser);
-        return  bool;
+        return bool;
     }
 }

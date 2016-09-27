@@ -21,12 +21,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class MenuPortionsFragment extends Fragment {
     private ArrayList<String> deleteImage;
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams;
+    private ProgressBar mProgress;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     int PLACE_PICKER_REQUEST = 1;
 
@@ -80,6 +83,8 @@ public class MenuPortionsFragment extends Fragment {
         save = (Button) view.findViewById(R.id.save);
         cancel = (Button) view.findViewById(R.id.cancel);
 
+        mProgress = (ProgressBar) view.findViewById(R.id.rowImageProgressBar);
+
         TextView num = (TextView) view.findViewById(R.id.portionsNumber);
         TextView costView = (TextView) view.findViewById(R.id.cost);
         TextView nameDefault = (TextView) view.findViewById(R.id.name);
@@ -96,12 +101,13 @@ public class MenuPortionsFragment extends Fragment {
             nameDefault.setText(editPortions.getName().toString());
             multiAutoComplete.setText(editPortions.getAllergens().toString());
 
-            for(int i = 0;i<editPortions.getImages().size();i++){
+            for (int i = 0; i < editPortions.getImages().size(); i++) {
                 image.add(editPortions.getImages().get(i));
             }
-         //   image = editPortions.getImages();
-           // newImage=image;
-            refreshPic();
+            //   image = editPortions.getImages();
+            // newImage=image;
+
+           refreshPic();
         }
 
 
@@ -127,7 +133,7 @@ public class MenuPortionsFragment extends Fragment {
                 int money = Integer.parseInt(costOfMoney.getText().toString());
                 FoodPortions foodPortions = new FoodPortions(numberIdText, name.getText().toString(), image, numberIdText, money, allergens);
                 addFoodPortions(foodPortions);
-                if(deleteImage.size()>0){
+                if (deleteImage.size() > 0) {
                     ModelCloudinary.getInstance().deleteImageFromCloudinary(deleteImage);
                 }
                 MenuFragmentInterface menuFragmentInterface = (MenuFragmentInterface) getActivity();
@@ -236,33 +242,58 @@ public class MenuPortionsFragment extends Fragment {
 
     private void refreshPic() {
         layout.removeAllViews();//clean all pic before
+
+        //mProgress.setVisibility(layout.getVisibility());
+
+        mProgress.setVisibility(layout.getVisibility());
         for (int i = 0; i < image.size(); i++) {
             layoutParams.setMargins(1, 1, 1, 1);
             layoutParams.gravity = Gravity.CENTER;
+
             final ImageView imageView = new ImageView(getActivity());
+            final ImageView imageViewBigger = new ImageView(getActivity());
             final String srt = image.get(i);
             ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
                 @Override
                 public void onResult(Bitmap imageBmp) {
+
+                    if(imageBmp==null){
+                        mProgress.setVisibility(layout.getVisibility());
+                        refreshPic();
+                       // Log.d("null image","null image load");
+                    }
+                    else{
+                        imageViewBigger.setImageBitmap(imageBmp);
                     if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
                         imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
                     }
+                        mProgress.setVisibility(layout.GONE);
                     imageView.setImageBitmap(imageBmp);
+
+                    }
                 }
             });
 
             imageView.setLayoutParams(layoutParams);
+           // imageViewBigger.setLayoutParams(layoutParams);
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
+                   // layout.setBackground(imageView.getDrawable());
+                  //  imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    Log.d("log", "Yes button clicked ");
-                                    image.remove(srt);
+                                    int c = image.size();
+                                    if(image.size()==1){
+                                        image.clear();
+                                    }
+                                    else{
+                                        image.remove(srt);
+                                    }
+
                                     deleteImage.add(srt);
                                     Toast.makeText(getActivity().getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
                                     refreshPic();
@@ -279,8 +310,38 @@ public class MenuPortionsFragment extends Fragment {
                     return true;
                 }
             });
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                    builder.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    });
+                    final AlertDialog dialog = builder.create();
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View dialogLayout = inflater.inflate(R.layout.full_screen_image, null);
+                    dialog.setView(dialogLayout);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface d) {
+                             ImageView imagee = (ImageView) dialog.findViewById(R.id.fullImage);
+                            imagee.setImageDrawable(imageView.getDrawable());
+                        }
+                    });
+                    dialog.show();
+                }
+            });
             layout.addView(imageView);
         }
+
 
     }
 

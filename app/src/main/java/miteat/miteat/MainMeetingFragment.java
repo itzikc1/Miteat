@@ -105,7 +105,6 @@ public class MainMeetingFragment extends Fragment {
             address = meeting.getLocation();
             Calendar cls = Calendar.getInstance();
             Calendar endCls = Calendar.getInstance();
-
             cls.setTimeInMillis(meeting.getDateAndTime());
             endCls.setTimeInMillis(meeting.getDateAndEndTime());
             dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
@@ -119,7 +118,7 @@ public class MainMeetingFragment extends Fragment {
 
             safeCheckBox.setChecked(meeting.getInsurance());
         } else {
-            numberParticipantsView.setText("0");
+            numberParticipantsView.setText("1");
             numberOfMoneyView.setText("0");
             multiAutoComplete.setText("");
             safeCheckBox.setChecked(false);
@@ -147,8 +146,9 @@ public class MainMeetingFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long startMillis = 0;
-                long endMillis = 0;
+                //Long f = new Long(444);
+                Long startMillis = new Long(0);
+                Long endMillis =new Long(0);
                 String typeFood = multiAutoComplete.getText().toString();
                 int numberPlace = Integer.parseInt(numberParticipants.getText().toString());
                 int money = Integer.parseInt(numberOfMoney.getText().toString());
@@ -160,12 +160,21 @@ public class MainMeetingFragment extends Fragment {
                 endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
                 int takeAwaySelection = spinner.getSelectedItemPosition();
-                Meeting newMeeting = new Meeting(-1,Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
-                Log.d("details", "time: " + startMillis + " lat: " + lat + " lon: " + lon);
+                Meeting newMeeting = new Meeting(-1, Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
+//                Calendar cls = Calendar.getInstance();
+//                Long itzik =new Long(0);
+//                itzik= cls.getTimeInMillis();
+//
+//              Log.d("details", "time: " + startMillis + " end time : " + itzik );
+//                int i = endMillis.compareTo(startMillis);
+//
+//                    Log.d("time",String.valueOf(i) );
 
                 if (address == null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
-                } else {
+                }else if(numberPlace<1) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
+                }else {
 
 
                     if (meeting == null) {
@@ -173,7 +182,7 @@ public class MainMeetingFragment extends Fragment {
 
                     } else {
                         newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
-                        Log.d("delete meeting ",String.valueOf(meeting.getId()));
+                        Log.d("delete meeting ", String.valueOf(meeting.getId()));
                         newMeeting.setId(meeting.getId());
                         Model.instance().deleteMeeting(meeting);
                     }
@@ -210,7 +219,7 @@ public class MainMeetingFragment extends Fragment {
                 endMillis = enddTime.getTimeInMillis();
                 Boolean bool = safeCheckBox.isChecked();
                 int takeAwaySelection = spinner.getSelectedItemPosition();
-                Meeting newMeeting = new Meeting(-1,Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis,endMillis, address, lat, lon, bool,takeAwaySelection);
+                Meeting newMeeting = new Meeting(-1, Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
                 newMeeting.setLatLocation(lat);
                 newMeeting.setLonLocation(lon);
                 if (meeting == null) {

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Miteat</string>
     <string name="settings">Settings</string>
+    <string name="my_details">My details</string>
     <string name="logIn">Login</string>
     <string name="my_meeting">My Meeting</string>
     <string name="myOrder">My Order</string>

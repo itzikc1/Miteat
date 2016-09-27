@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.FoodPortions;
+import miteat.miteat.Model.ModelCloudinary;
 
 /**
  * Created by Itzik on 24/07/2016.
@@ -39,32 +40,28 @@ public class FoodPortionsSql {
         db.insert(FOOD_PORTIONS_TABLE, ID, values);
     }
 
-    public static List<FoodPortions> getAllPortionsId(SQLiteDatabase db, int[] ids,int meetingId) {
+    public static List<FoodPortions> getAllPortionsId(SQLiteDatabase db, int[] ids, int meetingId) {
 
         List<FoodPortions> foodPortionsId = new LinkedList<FoodPortions>();
-       // for (int i = 0; i < ids.length; i++) {
+        // for (int i = 0; i < ids.length; i++) {
 
-
-            //String[] params = {String.valueOf(ids[i]),String.valueOf(meetingId)};
-
-            String[] params = new String[1];
-          //  params[0] = String.valueOf(ids[i]);
+        //String[] params = {String.valueOf(ids[i]),String.valueOf(meetingId)};
+        String[] params = new String[1];
         params[0] = String.valueOf(meetingId);
-          //  Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null, ID + " = ?" + "and " + MEETING_ID + " = ?", params, null, null, null, null);
-        Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null,  MEETING_ID + " = ?", params, null, null, null, null);
+        Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null, MEETING_ID + " = ?", params, null, null, null, null);
 
-            if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-                return foodPortionsId;
-               // continue;
-            }
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(ID);
-                int nameIndex = cursor.getColumnIndex(NAME);
-                int imagesIndex = cursor.getColumnIndex(IMAGES);
-                int numberOfFoodPortionsIndex = cursor.getColumnIndex(NUMBER_OF_FOOD_PORTIONS);
-                int costIndex = cursor.getColumnIndex(COST);
-                int allergensIndex = cursor.getColumnIndex(ALLERGENS);
-                do {
+        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+            return foodPortionsId;
+            // continue;
+        }
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(ID);
+            int nameIndex = cursor.getColumnIndex(NAME);
+            int imagesIndex = cursor.getColumnIndex(IMAGES);
+            int numberOfFoodPortionsIndex = cursor.getColumnIndex(NUMBER_OF_FOOD_PORTIONS);
+            int costIndex = cursor.getColumnIndex(COST);
+            int allergensIndex = cursor.getColumnIndex(ALLERGENS);
+            do {
                 int id = Integer.parseInt(cursor.getString(idIndex));
                 String name = cursor.getString(nameIndex);
                 ArrayList<String> images = convertStringToArray(cursor.getString(imagesIndex));
@@ -80,7 +77,10 @@ public class FoodPortionsSql {
     }
 
     public static void deleteFoodPortions(SQLiteDatabase db, int id) {
+
+        deleteImages(db,id);
         db.delete(FOOD_PORTIONS_TABLE, MEETING_ID + " = '" + id + "'", null);
+
     }
 
 
@@ -102,27 +102,46 @@ public class FoodPortionsSql {
 
 
     public static String convertArrayToString(ArrayList<String> images) {
-        String str = "";
-        for (int i = 0; i < images.size(); i++) {
-            str = str + images.get(i);
-            // Do not append comma at the end of last element
-            if (i < images.size() - 1) {
-                str = str + strSeparator;
+        if (images.size() > 0) {
+            String str = "";
+            for (int i = 0; i < images.size(); i++) {
+                str = str + images.get(i);
+                // Do not append comma at the end of last element
+                if (i < images.size() - 1) {
+                    str = str + strSeparator;
+                }
             }
+            return str;
+        } else {
+            return null;
         }
-        return str;
+    }
+
+    public static void deleteImages(SQLiteDatabase db, int id){
+        String[] params = new String[1];
+        params[0] = String.valueOf(id);
+        Cursor cursor = db.query(FOOD_PORTIONS_TABLE, null, MEETING_ID + " = ?", params, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            int imagesIndex = cursor.getColumnIndex(IMAGES);
+            do {
+                ModelCloudinary.getInstance().deleteImageFromCloudinary(convertStringToArray(cursor.getString(imagesIndex)));
+            } while (cursor.moveToNext());
+        }
+
     }
 
     public static ArrayList<String> convertStringToArray(String str) {
-
-        String[] arr = str.split(strSeparator);
         ArrayList<String> images = new ArrayList<String>();
-        for (int i = 0; i < arr.length; i++) {
-            images.add(arr[i]);
+        if (str != null) {
+            String[] arr = str.split(strSeparator);
+
+            for (int i = 0; i < arr.length; i++) {
+                images.add(arr[i]);
+            }
+            return images;
+        } else {
+            return images;
         }
-        return images;
     }
-
 }
-
 

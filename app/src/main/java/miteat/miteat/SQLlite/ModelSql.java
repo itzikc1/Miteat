@@ -4,10 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import miteat.miteat.Model.Entities.Booking;
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
@@ -30,7 +32,7 @@ public class ModelSql implements ModelInterface {
     private static final String MEETING_TABLE = "meeting_table";
     private static final String FOOD_PORTIONS_TABLE = "food_portions_table";
     private static final String USER_DETAILS_TABLE = "user_details_table";
-
+    private static final String ID_MEETING_MAKER = "id_meeting_maker";
 
     public ModelSql() {
         dbHelper = new MyDBHelper(MyApplication.getAppContext());
@@ -76,10 +78,15 @@ public class ModelSql implements ModelInterface {
     public void addMeeting(Meeting meeting) {
        // int num = numberOfRow(MEETING_TABLE);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
-        int num = cursor.getCount();
+
+
+//        Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
+//        int num = cursor.getCount();
         if(meeting.getId()==-1){
-            meeting.setId(num);
+            int id = IdMeetingMakerSql.getId(db);
+            IdMeetingMakerSql.deleteId(db,id);
+            meeting.setId(id);
+            Log.d("id",String.valueOf(id));
         }
         MeetingSql.addMeeting(db, meeting);
         for(int i =0; i<meeting.getFoodPortionsId().size();i++){
@@ -134,7 +141,7 @@ public class ModelSql implements ModelInterface {
     }
 
     @Override
-    public void bookingToMeeting() {
+    public void bookingToMeeting(Booking booking) {
 
     }
 
@@ -150,6 +157,7 @@ public class ModelSql implements ModelInterface {
         return UserDetailsSql.getUserDetails(db);
     }
 
+
     class MyDBHelper extends SQLiteOpenHelper {
 
         public MyDBHelper(Context context) {
@@ -164,6 +172,7 @@ public class ModelSql implements ModelInterface {
             MeetingSql.create(db);
             FoodPortionsSql.create(db);
             UserDetailsSql.create(db);
+            IdMeetingMakerSql.create(db);
         }
 
         @Override
@@ -173,6 +182,7 @@ public class ModelSql implements ModelInterface {
             MeetingSql.drop(db);
             FoodPortionsSql.drop(db);
             UserDetailsSql.drop(db);
+            IdMeetingMakerSql.drop(db);
             onCreate(db);
         }
     }

@@ -132,7 +132,6 @@ public class MeetingListFragment extends Fragment {
                 Log.d("TAG", "create view:" + position);
 
 
-
             } else {
                 Log.d("TAG", "use convert view:" + position);
             }
@@ -153,15 +152,13 @@ public class MeetingListFragment extends Fragment {
                 time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
 
             else
-                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" +"0" + cls.get(Calendar.MINUTE));
+                time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
 
 //            dateView.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
 //            timeView.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
 //                dateView.set(cls.get(Calendar.YEAR), Integer.valueOf(cls.get(Calendar.MONTH)), cls.get(Calendar.DAY_OF_MONTH));
 //                timeView.set(cls.get(Calendar.HOUR_OF_DAY), cls.get(Calendar.MINUTE));
             locationn.setText(meeting.getLocation());
-
-
 
 
             return convertView;

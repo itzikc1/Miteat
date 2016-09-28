@@ -16,7 +16,7 @@
         android:layout_height="288dp"
         android:weightSum="1">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/picProfile"
             android:layout_height="match_parent"
             android:layout_width="match_parent" />
@@ -25,7 +25,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="174dp"
+        android:layout_height="298dp"
         android:weightSum="1">
 
         <LinearLayout
@@ -36,13 +36,13 @@
             <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ratingBar2" />
+                android:id="@+id/numberOfStarAvg" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="33dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Not excellent"
+                android:text="Average"
                 android:id="@+id/textView2" />
 
         </LinearLayout>
@@ -55,13 +55,13 @@
             <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ratingBar3" />
+                android:id="@+id/cleaningStar" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Not excellent"
+                android:text="Cleaning"
                 android:id="@+id/textView3" />
         </LinearLayout>
 
@@ -72,75 +72,299 @@
         <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/numberOfStarAvg" />
+            android:id="@+id/serviceStar" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
+            android:text="Service"
             android:id="@+id/numberOfStarAvgUsers" />
     </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/atmosphereStar" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Atmosphere"
+                android:id="@+id/textView4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal" >
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/valueStar" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Value"
+                android:id="@+id/textView5" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="185dp"
-        android:weightSum="1"
-        android:layout_weight="0.64">
+        android:layout_height="448dp"
+        android:weightSum="4">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/userName" />
-
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/mail"
-            android:layout_weight="0.17" />
+            android:weightSum="1"
+            android:layout_weight="0.34">
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="User name"
+                android:id="@+id/text"
+                android:layout_weight="0.22" />
 
-        <TextView
+            <TextView
+                android:layout_width="89dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/userName"
+                android:layout_weight="0.29" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/favoriteDish"
-            android:layout_weight="0.20"
-            android:layout_gravity="center_horizontal" />
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal">
 
-        <TextView
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Avg pay for meal"
+                android:id="@+id/textView7"
+                android:layout_weight="0.22" />
+
+            <TextView
+                android:layout_width="89dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/avgPayForMeal"
+                android:layout_weight="0.29" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/phoneNumber"
-            android:layout_weight="0.17"
-            android:layout_gravity="center_horizontal" />
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal">
 
-        <TextView
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Earn Money"
+                android:id="@+id/textView9"
+                android:layout_weight="0.22" />
+
+            <TextView
+                android:layout_width="89dp"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/earnMoney"
+                android:layout_weight="0.29" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/address"
-            android:layout_weight="0.17"
-            android:layout_gravity="center_horizontal" />
-
+            android:weightSum="1"
+            android:layout_weight="0.34">
         <TextView
+            android:layout_width="136dp"
+            android:layout_height="35dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Address"
+            android:id="@+id/textView10"
+            android:layout_weight="0.22" />
+
+            <EditText
+                android:layout_width="243dp"
+                android:layout_height="match_parent"
+                android:id="@+id/address" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/maritalStatus"
-            android:layout_weight="0.17"
-            android:layout_gravity="center_horizontal" />
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Favorite Dish"
+                android:id="@+id/textView8"
+                android:layout_weight="0.22" />
+
+            <EditText
+                android:layout_width="243dp"
+                android:layout_height="match_parent"
+                android:id="@+id/favoriteDish" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Mail"
+                android:id="@+id/textView6"
+                android:layout_weight="0.22" />
+
+
+            <EditText
+                android:layout_width="243dp"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/mail" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="phone number"
+                android:id="@+id/textView11"
+                android:layout_weight="0.22" />
+
+
+
+            <EditText
+                android:layout_width="243dp"
+                android:layout_height="match_parent"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/phoneNumber" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Birthday"
+                android:id="@+id/textView12"
+                android:layout_weight="0.22" />
+
+            <miteat.miteat.DateEditText
+                android:id="@+id/birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:editable="true"
+                android:ems="10"
+                android:inputType="date" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="136dp"
+                android:layout_height="35dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Marital status"
+                android:id="@+id/textView13"
+                android:layout_weight="0.22" />
+
+            <Spinner
+                android:layout_width="243dp"
+                android:layout_height="match_parent"
+                android:id="@+id/spinner"
+                android:layout_toRightOf="@+id/maritalStatus"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_weight="0.34"
+            android:layout_gravity="center_horizontal" >
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Love take away?"
+                android:id="@+id/loveTakeAway" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -152,7 +376,6 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="76dp"
-            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:text="Back" />
 

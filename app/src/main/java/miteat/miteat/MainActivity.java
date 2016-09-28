@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface {
+public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface,MyDetailsFragment.MyDetailsFragmentInterface {
     protected LocationManager locManager;
     FragmentManager manager;
     LoginFragment loginFragment;
@@ -213,6 +213,15 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.remove(userDetailsFragment);
         transaction.show(bookingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void backPressMyDetails() {
+        mainFragment = new MainFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.frag_container, mainFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }

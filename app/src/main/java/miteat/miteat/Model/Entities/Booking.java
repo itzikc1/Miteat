@@ -11,12 +11,12 @@ public class Booking {
     private Meeting meeting;
     private boolean confirmation;
     private int numberOfPartner;
-    private String userId;
+    private String userIdOfBooking;
 
-    public Booking(Meeting meeting,int id,String userId){
+    public Booking(Meeting meeting,int id,String userIdOfBooking){
         this.meeting=meeting;
         this.id=id;
-        this.userId=userId;
+        this.userIdOfBooking=userIdOfBooking;
     }
     public boolean isConfirmation() {
         return confirmation;
@@ -48,11 +48,11 @@ public class Booking {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserIdOfBooking() {
+        return userIdOfBooking;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserIdOfBooking(String userIdOfBooking) {
+        this.userIdOfBooking = userIdOfBooking;
     }
 }

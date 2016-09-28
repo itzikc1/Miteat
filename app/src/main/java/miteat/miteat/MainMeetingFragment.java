@@ -127,7 +127,6 @@ public class MainMeetingFragment extends Fragment {
 
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, countries);
 
-
         multiAutoComplete.setAdapter(adapter);
         multiAutoComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
@@ -164,7 +163,7 @@ public class MainMeetingFragment extends Fragment {
 //                Calendar cls = Calendar.getInstance();
 //                Long itzik =new Long(0);
 //                itzik= cls.getTimeInMillis();
-//
+
 //              Log.d("details", "time: " + startMillis + " end time : " + itzik );
 //                int i = endMillis.compareTo(startMillis);
 //
@@ -174,7 +173,10 @@ public class MainMeetingFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
                 }else if(numberPlace<1) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
-                }else {
+                }else if(endMillis.compareTo(startMillis)==-1){
+                    Toast.makeText(getActivity().getApplicationContext(), "The start time before  end time", Toast.LENGTH_LONG).show();
+                }
+                else {
 
 
                     if (meeting == null) {

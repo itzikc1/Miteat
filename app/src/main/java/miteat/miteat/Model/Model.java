@@ -46,10 +46,14 @@ public class Model implements ModelInterface {
 //            meeting.setUserId("itzik" + i);
 //            meetings.add(meeting);
 //        }
-        UserDetails userDetails = new UserDetails("itzik","mail",0525541676);
-        userDetails.setNumberOfStarAvg(3.6f);
-        setUserDetails(userDetails);
-        usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
+
+
+//        UserDetails userDetails = new UserDetails("itzik","mail","0525541676");
+//        userDetails.setNumberOfStarAvg(3.6f);
+//        setUserDetails(userDetails);
+
+
+      //  usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
 
     }
 

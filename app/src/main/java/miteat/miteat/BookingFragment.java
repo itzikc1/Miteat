@@ -37,10 +37,17 @@ public class BookingFragment extends Fragment {
     private Button cancel;
     private Button details;
     private TextView numPartners;
+    private TextView userNameView;
+    private TextView location;
+    private TextView date;
+    private TextView startTime;
+    private TextView endTime;
+    private RatingBar star;
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams;
     private ProgressBar mProgress;
     private ArrayList<String> image;
+
     interface BookingFragmentInterface {
         public void finishBooking();
 
@@ -54,23 +61,27 @@ public class BookingFragment extends Fragment {
         View view = inflater.inflate(R.layout.booking_fragment,
                 container, false);
 
-        TextView location = (TextView) view.findViewById(R.id.location);
-        TextView date = (TextView) view.findViewById(R.id.date);
-        TextView time = (TextView) view.findViewById(R.id.time);
+        location = (TextView) view.findViewById(R.id.location);
+        date = (TextView) view.findViewById(R.id.date);
+        startTime = (TextView) view.findViewById(R.id.startTime);
+        endTime = (TextView) view.findViewById(R.id.endTime);
+        userNameView = (TextView) view.findViewById(R.id.userIdMeeting);
         numPartners = (TextView) view.findViewById(R.id.numUser);
-        RatingBar star = (RatingBar) view.findViewById(R.id.ratingBar);
-        UserDetails userDetails = Model.instance().getUserDetails(meeting.getUserId());
-
+        star = (RatingBar) view.findViewById(R.id.ratingBar);
+        //with ferbase:
+        //UserDetails userDetails = Model.instance().getUserDetails(meeting.getUserId());
+        UserDetails userDetails = Model.instance().getUserDetails();
         layout = (LinearLayout) view.findViewById(R.id.image_container);
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         image = new ArrayList<String>();
         for (int i = 0; i < meeting.getFoodPortionsId().size(); i++) {
-            for (int j =0;j<meeting.getFoodPortionsId().get(i).getImages().size();j++){
+            for (int j = 0; j < meeting.getFoodPortionsId().get(i).getImages().size(); j++) {
                 image.add(meeting.getFoodPortionsId().get(i).getImages().get(j));
             }
         }
         star.setRating(userDetails.getNumberOfStarAvg());
+
         refreshPic();
         // star.setRating(4);
         //  star.setRating(Model.instance().getUserDetails(meeting.getUserId()).getNumberOfStarAvg());
@@ -81,17 +92,21 @@ public class BookingFragment extends Fragment {
 
         // num.setText(meeting.getNumberOfPartner());
         location.setText(meeting.getLocation());
+        userNameView.setText(meeting.getUserId());
         Calendar cls = Calendar.getInstance();
+        Calendar endCls = Calendar.getInstance();
+        endCls.setTimeInMillis(meeting.getDateAndEndTime());
+
         cls.setTimeInMillis(meeting.getDateAndTime());
         date.setText(cls.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(Integer.valueOf(cls.get(Calendar.MONTH)) + 1) + "/" + cls.get(Calendar.YEAR));
 
-        if (cls.get(Calendar.MINUTE) > 10)
-            time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
-
-        else
-            time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
-
-
+        if (cls.get(Calendar.MINUTE) > 10) {
+            startTime.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + cls.get(Calendar.MINUTE));
+            endTime.setText(endCls.get(Calendar.HOUR_OF_DAY) + ":" + endCls.get(Calendar.MINUTE));
+        } else {
+            startTime.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
+            endTime.setText(endCls.get(Calendar.HOUR_OF_DAY) + ":" + endCls.get(Calendar.MINUTE));
+        }
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,40 +151,40 @@ public class BookingFragment extends Fragment {
     }
 
     private void refreshPic() {
-        layout.removeAllViews();//clean all pic before
-        //mProgress.setVisibility(layout.getVisibility());
-       // mProgress.setVisibility(layout.getVisibility());
-        for (int i = 0; i < image.size(); i++) {
-            layoutParams.setMargins(1, 1, 1, 1);
-            layoutParams.gravity = Gravity.CENTER;
-            final ImageView imageView = new ImageView(getActivity());
-            final String srt = image.get(i);
+        if(image.size()!=0) {
+            layout.removeAllViews();//clean all pic before
+            //mProgress.setVisibility(layout.getVisibility());
+            // mProgress.setVisibility(layout.getVisibility());
+            for (int i = 0; i < image.size(); i++) {
+                layoutParams.setMargins(1, 1, 1, 1);
+                layoutParams.gravity = Gravity.CENTER;
+                final ImageView imageView = new ImageView(getActivity());
+                final String srt = image.get(i);
 
-            ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
-                @Override
-                public void onResult(Bitmap imageBmp) {
-
-                    if(imageBmp==null){
-                        //mProgress.setVisibility(layout.getVisibility());
-                        refreshPic();
-                        // Log.d("null image","null image load");
-                    }
-                    else{
-                        if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
-                            imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
+                ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
+                    @Override
+                    public void onResult(Bitmap imageBmp) {
+                        if (imageBmp == null) {
+                            //mProgress.setVisibility(layout.getVisibility());
+                            refreshPic();
+                            // Log.d("null image","null image load");
+                        } else {
+                            if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
+                                imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
+                            }
+                            // mProgress.setVisibility(layout.GONE);
+                            imageView.setImageBitmap(imageBmp);
                         }
-                       // mProgress.setVisibility(layout.GONE);
-                        imageView.setImageBitmap(imageBmp);
-
-
                     }
-                }
-            });
+                });
+                imageView.setLayoutParams(layoutParams);
+                layout.addView(imageView);
+            }
 
-            imageView.setLayoutParams(layoutParams);
+        }else {
+            final ImageView imageView = new ImageView(getActivity());
+            imageView.setImageResource(R.drawable.chef);
             layout.addView(imageView);
         }
-
-
     }
 }

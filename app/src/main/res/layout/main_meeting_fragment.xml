@@ -228,7 +228,7 @@
             android:layout_height="68dp"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/common_signin_btn_default_background"
             android:text="Cancel" />
 
         <Button

@@ -7,33 +7,52 @@ public class Feedback {
 
     private int id;
     private int idMeeting;
-    private int avgStar;
+    private int idBooking;
+    private String fromUserId;
+    private String toUserId;
+    private float avgStar;
     private String feedBackText;
     private String replyText;
-    private int cleaningStar;
-    private int serviceStar;
-    private int atmosphereStar;
-    private int valueStar;
+    private float cleaningStar;
+    private float serviceStar;
+    private float atmosphereStar;
+    private float valueStar;
     private boolean takeAwy;
 
-    public int getAtmosphereStar() {
-        return atmosphereStar;
-    }
 
-    public void setAtmosphereStar(int atmosphereStar) {
-        this.atmosphereStar = atmosphereStar;
-    }
+    public Feedback(int id, int idMeeting, int idBooking, String fromUserId, String toUserId, float avgStar, String feedBackText, String replyText, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, boolean takeAwy) {
 
-    public int getServiceStar() {
-        return serviceStar;
-    }
-
-    public void setServiceStar(int serviceStar) {
+        this.id = id;
+        this.idMeeting = idMeeting;
+        this.idBooking = idBooking;
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.avgStar = avgStar;
+        this.feedBackText = feedBackText;
+        this.replyText = replyText;
+        this.cleaningStar = cleaningStar;
         this.serviceStar = serviceStar;
+        this.atmosphereStar = atmosphereStar;
+        this.valueStar = valueStar;
+        this.takeAwy = takeAwy;
+
+
     }
 
-    public int getCleaningStar() {
-        return cleaningStar;
+    public String getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
     public void setCleaningStar(int cleaningStar) {
@@ -56,12 +75,12 @@ public class Feedback {
         this.feedBackText = feedBackText;
     }
 
-    public int getAvgStar() {
-        return avgStar;
+    public float getValueStar() {
+        return valueStar;
     }
 
-    public void setAvgStar(int avgStar) {
-        this.avgStar = avgStar;
+    public void setValueStar(float valueStar) {
+        this.valueStar = valueStar;
     }
 
     public int getIdMeeting() {
@@ -88,12 +107,44 @@ public class Feedback {
         this.takeAwy = takeAwy;
     }
 
-    public int getValueStar() {
-        return valueStar;
+    public int getIdBooking() {
+        return idBooking;
     }
 
-    public void setValueStar(int valueStar) {
-        this.valueStar = valueStar;
+    public void setIdBooking(int idBooking) {
+        this.idBooking = idBooking;
+    }
+
+    public float getAtmosphereStar() {
+        return atmosphereStar;
+    }
+
+    public void setAtmosphereStar(float atmosphereStar) {
+        this.atmosphereStar = atmosphereStar;
+    }
+
+    public float getServiceStar() {
+        return serviceStar;
+    }
+
+    public void setServiceStar(float serviceStar) {
+        this.serviceStar = serviceStar;
+    }
+
+    public float getCleaningStar() {
+        return cleaningStar;
+    }
+
+    public void setCleaningStar(float cleaningStar) {
+        this.cleaningStar = cleaningStar;
+    }
+
+    public float getAvgStar() {
+        return avgStar;
+    }
+
+    public void setAvgStar(float avgStar) {
+        this.avgStar = avgStar;
     }
 
 

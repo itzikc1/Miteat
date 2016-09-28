@@ -17,5 +17,14 @@
         <item>Only Take Away</item>
 
     </string-array>
+    <string-array name="maritalStatus">
+        <item>Not matter</item>
+        <item>Single </item>
+        <item>Married</item>
+        <item>Separated</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+
+    </string-array>
 
 </resources>

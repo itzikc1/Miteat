@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="false"
     android:weightSum="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
 
 
     <LinearLayout
@@ -76,22 +82,104 @@
         </LinearLayout>
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/numberOfStarAvg" />
-
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Not excellent"
-            android:id="@+id/numberOfStarAvgUsers" />
-    </LinearLayout>
+            android:layout_height="298dp"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="61dp"
+                android:orientation="horizontal">
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberOfStarAvg" />
+
+                <TextView
+                    android:layout_width="113dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/numberOfStarAvgUsers" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cleaningStar" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Cleaning"
+                    android:id="@+id/textView3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/serviceStar" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Service"
+                    android:id="@+id/service2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/atmosphereStar" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Atmosphere"
+                    android:id="@+id/textView4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal" >
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/valueStar" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Value"
+                    android:id="@+id/textView5" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="186dp"
@@ -117,3 +205,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>

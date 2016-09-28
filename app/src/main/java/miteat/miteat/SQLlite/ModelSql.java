@@ -33,6 +33,7 @@ public class ModelSql implements ModelInterface {
     private static final String FOOD_PORTIONS_TABLE = "food_portions_table";
     private static final String USER_DETAILS_TABLE = "user_details_table";
     private static final String ID_MEETING_MAKER = "id_meeting_maker";
+    private static final String FEED_BACK_TABLE = "feedBack_table";
 
     public ModelSql() {
         dbHelper = new MyDBHelper(MyApplication.getAppContext());
@@ -147,6 +148,12 @@ public class ModelSql implements ModelInterface {
 
     @Override
     public void setUserDetails(UserDetails userDetails) {
+
+        int num = numberOfRow(USER_DETAILS_TABLE);
+        if (num == 1) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+           UserDetailsSql.deleteUserDetails(db,userDetails.getUserName());
+        }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         UserDetailsSql.addUserDetails(db,userDetails);
     }
@@ -154,6 +161,17 @@ public class ModelSql implements ModelInterface {
     @Override
     public UserDetails getUserDetails() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(USER_DETAILS_TABLE, null, null, null, null, null, null);
+       int num = cursor.getCount();
+
+        if(num==0){
+        UserDetails userDetails = new UserDetails("itzik","mail","0525541676");
+       // userDetails.setNumberOfStarAvg(3.6f);
+            return userDetails;
+        }
+
+       // UserDetails userDetails=UserDetailsSql.getUserDetails(db);
+        //userDetails.setFeedbacks();
         return UserDetailsSql.getUserDetails(db);
     }
 
@@ -173,6 +191,7 @@ public class ModelSql implements ModelInterface {
             FoodPortionsSql.create(db);
             UserDetailsSql.create(db);
             IdMeetingMakerSql.create(db);
+            FeedBackSql.create(db);
         }
 
         @Override
@@ -183,6 +202,7 @@ public class ModelSql implements ModelInterface {
             FoodPortionsSql.drop(db);
             UserDetailsSql.drop(db);
             IdMeetingMakerSql.drop(db);
+            FeedBackSql.drop(db);
             onCreate(db);
         }
     }

@@ -1,5 +1,8 @@
 package miteat.miteat.Model.Entities;
 
+import android.util.Log;
+
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,25 +12,53 @@ import java.util.List;
 public class UserDetails {
 
     private float numberOfStarAvg;
+    private float cleaningStar;
+    private float serviceStar;
+    private float atmosphereStar;
+    private float valueStar;
     private double earnMoney;
     private String picProfile;
     private String userName;
-    private double phoneNumber;
+    private String phoneNumber;
     private String address;
     private double avgPayForMeal;
     private String mail;
-    private String maritalStatus;
+    private int maritalStatus;
     List<Feedback> feedbacks = new LinkedList<Feedback>();
     private Boolean loveTakeAway;
     private String favoriteDish;
+    private Long birthday;
 
 
-    public UserDetails(String userName, String mail, double phoneNumber) {
+    public UserDetails(String userName, String mail, String phoneNumber) {
 
         this.userName = userName;
         this.mail = mail;
         this.phoneNumber = phoneNumber;
         this.numberOfStarAvg = 0;
+        this.loveTakeAway = true;
+        Calendar cal = Calendar.getInstance();
+        cal.set(1989, 8, 7);
+        this.birthday = cal.getTimeInMillis();
+
+    }
+
+    public void setAllParm(float numberOfStarAvg, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, double earnMoney, String picProfile, String address, double avgPayForMeal, int maritalStatus, Boolean loveTakeAway, String favoriteDish, Long birthday) {
+
+        this.numberOfStarAvg = numberOfStarAvg;
+        this.cleaningStar = cleaningStar;
+        this.serviceStar = serviceStar;
+        this.valueStar = valueStar;
+        this.atmosphereStar = atmosphereStar;
+        this.earnMoney = earnMoney;
+        this.picProfile = picProfile;
+        this.address = address;
+        this.avgPayForMeal = avgPayForMeal;
+        this.maritalStatus = maritalStatus;
+        this.loveTakeAway = loveTakeAway;
+        this.favoriteDish = favoriteDish;
+        this.birthday = birthday;
+
 
     }
 
@@ -37,6 +68,14 @@ public class UserDetails {
 
     public void setNumberOfStarAvg(float numberOfStarAvg) {
         this.numberOfStarAvg = numberOfStarAvg;
+    }
+
+    public int getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(int maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public double getEarnMoney() {
@@ -63,11 +102,11 @@ public class UserDetails {
         this.userName = userName;
     }
 
-    public double getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(double phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -95,13 +134,6 @@ public class UserDetails {
         this.mail = mail;
     }
 
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
 
     public List<Feedback> getFeedbacks() {
         return feedbacks;
@@ -127,5 +159,43 @@ public class UserDetails {
         this.favoriteDish = favoriteDish;
     }
 
+    public Long getBirthday() {
+        return birthday;
+    }
 
+    public void setBirthday(Long birthday) {
+        this.birthday = birthday;
+    }
+
+    public float getCleaningStar() {
+        return cleaningStar;
+    }
+
+    public void setCleaningStar(float cleaningStar) {
+        this.cleaningStar = cleaningStar;
+    }
+
+    public float getServiceStar() {
+        return serviceStar;
+    }
+
+    public void setServiceStar(float serviceStar) {
+        this.serviceStar = serviceStar;
+    }
+
+    public float getAtmosphereStar() {
+        return atmosphereStar;
+    }
+
+    public void setAtmosphereStar(float atmosphereStar) {
+        this.atmosphereStar = atmosphereStar;
+    }
+
+    public float getValueStar() {
+        return valueStar;
+    }
+
+    public void setValueStar(float valueStar) {
+        this.valueStar = valueStar;
+    }
 }

@@ -67,8 +67,10 @@ public class UserDetailsFragment extends Fragment {
         numberOfUserStarAvg.setText(String.valueOf("Number of users: "+userDetails.getFeedbacks().size()));
         userName.setText("User name: "+userDetails.getUserName());
         phoneNumber.setText(String.valueOf("Phone number: "+String.valueOf(userDetails.getPhoneNumber())));
+        phoneNumber.setVisibility(View.GONE);
         address.setText(String.valueOf("Address: "+userDetails.getAddress()));
         mail.setText(String.valueOf("Mail "+userDetails.getMail()));
+        mail.setVisibility(View.GONE);
         maritalStatus.setText(String.valueOf("Marital status "+userDetails.getMaritalStatus()));
         favoriteDish.setText(String.valueOf("Favorite dish "+userDetails.getFavoriteDish()));
         numberOfStarAvg.setRating(userDetails.getNumberOfStarAvg());
@@ -132,7 +134,9 @@ public class UserDetailsFragment extends Fragment {
     }
 
     public void setUserId(String userId){
-        this.userDetails = Model.instance().getUserDetails(userId);
+        //with fierbase:
+        //this.userDetails = Model.instance().getUserDetails(userId);
+        this.userDetails = Model.instance().getUserDetails();
     }
 
 

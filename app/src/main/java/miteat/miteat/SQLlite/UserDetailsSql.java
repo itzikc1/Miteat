@@ -28,9 +28,13 @@ public class UserDetailsSql {
     private static final String LOVE_TAKEAWAY = "loveTakeAway";
     private static final String FAVORITE_DISH = "favoriteDish";
     private static final String MARITAL_STATUS = "maritalStatus";
+    private static final String CLEANING_STAR = "cleaningStar";
+    private static final String SERVICE_STAR = "serviceStar";
+    private static final String ATMOSPHERE_STAR = "atmosphereStar";
+    private static final String VALUE_STAR = "valueStar";
+    private static final String BIRTHDAY = "birthday";
 
     public static void addUserDetails(SQLiteDatabase db, UserDetails userDetails) {
-
 
         ContentValues values = new ContentValues();
         values.put(USER_NAME, userDetails.getUserName());
@@ -45,6 +49,11 @@ public class UserDetailsSql {
         values.put(LOVE_TAKEAWAY, userDetails.getLoveTakeAway());
         values.put(FAVORITE_DISH, userDetails.getFavoriteDish());
         values.put(MARITAL_STATUS, userDetails.getMaritalStatus());
+        values.put(CLEANING_STAR, userDetails.getCleaningStar());
+        values.put(SERVICE_STAR, userDetails.getServiceStar());
+        values.put(ATMOSPHERE_STAR, userDetails.getAtmosphereStar());
+        values.put(VALUE_STAR, userDetails.getValueStar());
+        values.put(BIRTHDAY, userDetails.getBirthday());
         db.insert(USER_DETAILS_TABLE, USER_NAME, values);
 
     }
@@ -55,12 +64,8 @@ public class UserDetailsSql {
         Cursor cursor = db.query(USER_DETAILS_TABLE, null, null, null, null, null, null);
         UserDetails userDetails = null;
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-
             return userDetails;
         }
-
-
-
 
         if (cursor.moveToFirst()) {
 
@@ -76,20 +81,31 @@ public class UserDetailsSql {
             int loveTakeAwayIndex = cursor.getColumnIndex(LOVE_TAKEAWAY);
             int favoriteDishIndex  = cursor.getColumnIndex(FAVORITE_DISH);
             int maritalStatusIndex = cursor.getColumnIndex(MARITAL_STATUS);
+            int cleaningStarIndex = cursor.getColumnIndex(CLEANING_STAR);
+            int serviceStarIndex = cursor.getColumnIndex(SERVICE_STAR);
+            int atmosphereStarIndex = cursor.getColumnIndex(ATMOSPHERE_STAR);
+            int valueStarIndex = cursor.getColumnIndex(VALUE_STAR);
+            int birthdayIndex = cursor.getColumnIndex(BIRTHDAY);
 
             String userName = cursor.getString(userNameIndex);
             String picProfile = cursor.getString(picProfileIndex);
             double earnMoney = Double.parseDouble(cursor.getString(earnMoneyIndex));
             float numberOfStarAvg = Float.parseFloat(cursor.getString(numberOfStarAvgIndex));
-            double phoneNumber = Double.parseDouble(cursor.getString(phoneNumberIndex));
+            float cleaningStar = Float.parseFloat(cursor.getString(cleaningStarIndex));
+            float serviceStar = Float.parseFloat(cursor.getString(serviceStarIndex));
+            float atmosphereStar = Float.parseFloat(cursor.getString(atmosphereStarIndex));
+            float valueStar = Float.parseFloat(cursor.getString(valueStarIndex));
+            Long birthday = Long.parseLong(cursor.getString(birthdayIndex));
+            String phoneNumber = cursor.getString(phoneNumberIndex);
             String address = cursor.getString(addressIndex);
             double avgPayForMeal = Double.parseDouble(cursor.getString(avgPayForMealIndex));
             String mail = cursor.getString(mailIndex);
           //  List<Feedback> feedbacks = cursor.getString(feedbacksIndex);
             Boolean loveTakeAway = Boolean.parseBoolean(cursor.getString(loveTakeAwayIndex));
             String favoriteDish = cursor.getString(favoriteDishIndex);
-            String maritalStatus = cursor.getString(maritalStatusIndex);
+            int maritalStatus = Integer.parseInt(cursor.getString(maritalStatusIndex));
             userDetails =new UserDetails(userName,mail,phoneNumber);
+            userDetails.setAllParm(numberOfStarAvg,cleaningStar,serviceStar,atmosphereStar,valueStar,earnMoney,picProfile,address,avgPayForMeal,maritalStatus,loveTakeAway,favoriteDish,birthday);
         }
         return userDetails;
     }
@@ -107,14 +123,19 @@ public class UserDetailsSql {
                 PIC_PROFILE + " TEXT," +
                 EARN_MONEY + " DOUBLE," +
                 NUMBER_OF_STAR_AVG + " FLOAT," +
-                PHONE_NUMBER + " DOUBLE," +
+                CLEANING_STAR + " FLOAT," +
+                SERVICE_STAR + " FLOAT," +
+                ATMOSPHERE_STAR + " FLOAT," +
+                VALUE_STAR + " FLOAT," +
+                BIRTHDAY + " TEXT," +
+                PHONE_NUMBER + " TEXT," +
                 ADDRESS + " TEXT," +
                 AVG_PAY_FOR_MEAL + " DOUBLE," +
                 MAIL + " TEXT," +
                 FEEDBACKS + " TEXT," +
                 LOVE_TAKEAWAY + " BOOLEAN," +
                 FAVORITE_DISH + " TEXT," +
-                MARITAL_STATUS + " TEXT);");
+                MARITAL_STATUS + " INTEGER);");
     }
 
     public static void drop(SQLiteDatabase db) {

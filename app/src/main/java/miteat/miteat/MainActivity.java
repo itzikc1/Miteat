@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface,MyDetailsFragment.MyDetailsFragmentInterface {
+public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface,MyDetailsFragment.MyDetailsFragmentInterface,BookingListMenuFragment.BookingListMenuFragmentInterface {
     protected LocationManager locManager;
     FragmentManager manager;
     LoginFragment loginFragment;
@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     SettingsFragment settingsFragment;
     BookingFragment bookingFragment;
     MyDetailsFragment myDetailsFragment;
+    BookingListMenuFragment bookingListMenuFragment;
     int PLACE_PICKER_REQUEST = 1;
     UserDetailsFragment userDetailsFragment;
 
@@ -95,8 +96,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         }
 
         if (id == R.id.menu_myBooking) {
-            //PlacePicker();
-
+            Intent intent = new Intent(getApplicationContext(),
+                    MyBookingActivity.class);
+            startActivity(intent);
             return true;
         }
         if (id == R.id.search) {
@@ -197,15 +199,28 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     }
 
     @Override
-    public void detailsLoad(String userId) {
+    public void detailsLoad(String userId,Boolean confirmation) {
 
         userDetailsFragment = new UserDetailsFragment();
         userDetailsFragment.setUserId(userId);
+        userDetailsFragment.setConfirmation(confirmation);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.hide(bookingFragment);
         transaction.add(R.id.frag_container,userDetailsFragment);
         invalidateOptionsMenu();
         transaction.commit();
+    }
+
+    @Override
+    public void bookingMenu(Meeting meeting) {
+        bookingListMenuFragment = new BookingListMenuFragment();
+        bookingListMenuFragment.setMeeting(meeting);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.hide(bookingFragment);
+        transaction.add(R.id.frag_container,bookingListMenuFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
     }
 
     @Override
@@ -222,6 +237,15 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         mainFragment = new MainFragment();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.frag_container, mainFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+    }
+
+    @Override
+    public void backPressFromMenu() {
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.remove(bookingListMenuFragment);
+        transaction.show(bookingFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }

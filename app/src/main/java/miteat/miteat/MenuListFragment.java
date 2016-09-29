@@ -175,7 +175,7 @@ public class MenuListFragment extends Fragment {
             if(!st.getName().equals("")) {
                 namee.setText(st.getName());
             }
-            dish.setText(String.valueOf(st.getNumberOfFoodPortions()));
+            dish.setText(String.valueOf(st.getDishNumber()));
 
             return convertView;
         }

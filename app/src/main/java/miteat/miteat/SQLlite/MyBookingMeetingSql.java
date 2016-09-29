@@ -3,7 +3,6 @@ package miteat.miteat.SQLlite;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -15,11 +14,11 @@ import miteat.miteat.Model.Entities.Meeting;
 /**
  * Created by Itzik on 24/07/2016.
  */
-public class MeetingSql {
+public class MyBookingMeetingSql {
 
 
     public static String strSeparator = "__,__";
-    private static final String MEETING_TABLE = "meeting_table";
+    private static final String MY_BOOKING_MEETING_TABLE = "my_booking_meeting_table";
     private static final String USER_ID = "userId";
     private static final String ID = "id";
     private static final String NUMBER_OF_PARTNER = "numberOfPartner";
@@ -34,7 +33,6 @@ public class MeetingSql {
     private static final String LON_LOCATION = "lonLocation";
     private static final String DISTANCE = "distance";
     private static final String TAKE_AWAY = "takeAway";
-    //  private static final String PERSON_CREATE = "personCreate";
     private static final String FOOD_PORTIONS_IDS = "foodPortionsIds";
 
 
@@ -48,7 +46,6 @@ public class MeetingSql {
         values.put(LON_LOCATION, meeting.getLonLocation());
         values.put(DISTANCE, meeting.getDistance());
         values.put(TAKE_AWAY, meeting.getTakeAway());
-        //  values.put(PERSON_CREATE, meeting.getId());
         values.put(NUMBER_OF_PARTNER, meeting.getNumberOfPartner());
         values.put(TYPE_OF_FOOD, meeting.getTypeOfFood());
         values.put(MONEY, meeting.getMoney());
@@ -57,24 +54,24 @@ public class MeetingSql {
         values.put(INSURANCE, meeting.getInsurance());
         values.put(IMAGE, meeting.getImage());
         values.put(FOOD_PORTIONS_IDS, convertArrayToString(meeting.getFoodPortionsId()));
-        db.insert(MEETING_TABLE, ID, values);
+        db.insert(MY_BOOKING_MEETING_TABLE, ID, values);
 
     }
 
-    public static Meeting getMeeting(SQLiteDatabase db, int id) {
+    public static Meeting getMeetingWithUser(SQLiteDatabase db, int idMeeting,String user) {
 
-        String[] params = new String[1];
-        params[0] = String.valueOf(id);
 
-        Cursor cursor = db.query(MEETING_TABLE, null, ID + "=?", params, null, null, null, null);
+        String [] selectionArgs ={String.valueOf(idMeeting),user};
+        Cursor cursor = db.query(MY_BOOKING_MEETING_TABLE, null, ID + " = ?" + "and " + USER_ID + " = ?", selectionArgs, null, null, null);
+        Meeting meeting = null;
 
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-            Meeting meeting = null;
             return meeting;
         }
 
 
         if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(ID);
             int userIdIndex = cursor.getColumnIndex(USER_ID);
             int numberOfPartnerIndex = cursor.getColumnIndex(NUMBER_OF_PARTNER);
             int typeOfFoodIndex = cursor.getColumnIndex(TYPE_OF_FOOD);
@@ -90,7 +87,7 @@ public class MeetingSql {
             int imageIndex = cursor.getColumnIndex(IMAGE);
             int distanceIndex = cursor.getColumnIndex(DISTANCE);
 
-
+            int id = Integer.parseInt(cursor.getString(idIndex));
             String userId = cursor.getString(userIdIndex);
             int numberOfPartner = Integer.parseInt(cursor.getString(numberOfPartnerIndex));
             String typeOfFood = cursor.getString(typeOfFoodIndex);
@@ -104,26 +101,25 @@ public class MeetingSql {
             int takeAway = Integer.parseInt(cursor.getString(takeAwayIndex));
             // int[] foodPortionsId = convertStringToArray(cursor.getString(foodPortionsIdIndex));//cheak if null
             String image = cursor.getString(imageIndex);
-            Double distance = Double.parseDouble(cursor.getString(distanceIndex));
 
-            Meeting meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
+
+             meeting = new Meeting(id, userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
             meeting.setImage(image);
-            meeting.setDistance(distance);
-           // meeting.setUserId(userId);
-            return meeting;
+            if (cursor.getString(distanceIndex) != null) {
+                Double distance = Double.parseDouble(cursor.getString(distanceIndex));
+                meeting.setDistance(distance);
+            }
+
         }
-        Meeting meeting = null;
         return meeting;
     }
-    public static List<Meeting> getAllMeeting(SQLiteDatabase db) {
-
-
+    public static List<Meeting> getAllMeetingWithUser(SQLiteDatabase db,String user) {
 
 
         List<Meeting> meetings = new LinkedList<Meeting>();
         Calendar cls = Calendar.getInstance();
 
-        Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
+        Cursor cursor = db.query(MY_BOOKING_MEETING_TABLE, null, null, null, null, null, null);
 
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
             return meetings;
@@ -178,12 +174,10 @@ public class MeetingSql {
 
     }
 
-    public static int[] getFoodPortions(SQLiteDatabase db, int id) {
+    public static int[] getFoodPortions(SQLiteDatabase db, int id,String user) {
 
-        String[] params = new String[1];
-        params[0] = String.valueOf(id);
-
-        Cursor cursor = db.query(MEETING_TABLE, null, ID + "=?", params, null, null, null, null);
+        String [] selectionArgs ={String.valueOf(id),user};
+        Cursor cursor = db.query(MY_BOOKING_MEETING_TABLE, null, ID + " = ?" + "and " + USER_ID + " = ?", selectionArgs, null, null, null);
 
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
             return null;
@@ -201,13 +195,13 @@ public class MeetingSql {
 
     public static void deleteMeeting(SQLiteDatabase db, int id) {
 
-        db.delete(MEETING_TABLE, ID + " = '" + id + "'", null);
+        db.delete(MY_BOOKING_MEETING_TABLE, ID + " = '" + id + "'", null);
 
     }
 
     public static void create(SQLiteDatabase db) {
         db.execSQL("create table " +
-                MEETING_TABLE + " (" +
+                MY_BOOKING_MEETING_TABLE + " (" +
                 ID + " INTEGER," +
                 USER_ID + " TEXT," +
                 NUMBER_OF_PARTNER + " INTEGER," +
@@ -226,7 +220,7 @@ public class MeetingSql {
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " + MEETING_TABLE);
+        db.execSQL("drop table " + MY_BOOKING_MEETING_TABLE);
     }
 
     public static String convertArrayToString(List<FoodPortions> foodPortionsId) {

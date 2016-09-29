@@ -112,6 +112,7 @@ public class Model implements ModelInterface {
 
     @Override
     public void bookingToMeeting(Booking booking) {
+        sqlModel.bookingToMeeting(booking);
 
     }
 
@@ -123,6 +124,11 @@ public class Model implements ModelInterface {
     @Override
     public UserDetails getUserDetails() {
         return sqlModel.getUserDetails();
+    }
+
+    @Override
+    public List<Booking> getMyBookingList() {
+        return sqlModel.getMyBookingList();
     }
 
 

@@ -42,6 +42,9 @@ public class Meeting {
         this.dateAndEndTime = dateAndEndTime;
     }
 
+    public Meeting(int id){
+        this.id=id;
+    }
     public int getId() {
         return id;
     }

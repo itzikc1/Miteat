@@ -15,6 +15,7 @@ import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
+import miteat.miteat.Model.Model;
 import miteat.miteat.Model.ModelInterface;
 import miteat.miteat.MyApplication;
 
@@ -34,6 +35,8 @@ public class ModelSql implements ModelInterface {
     private static final String USER_DETAILS_TABLE = "user_details_table";
     private static final String ID_MEETING_MAKER = "id_meeting_maker";
     private static final String FEED_BACK_TABLE = "feedBack_table";
+    private static final String MY_BOOKING_TABLE = "my_booking_table";
+
 
     public ModelSql() {
         dbHelper = new MyDBHelper(MyApplication.getAppContext());
@@ -106,6 +109,7 @@ public class ModelSql implements ModelInterface {
     @Override
     public List<Meeting> getAllMeeting() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+       // List<Meeting> meetings = MeetingSql.getAllMeeting(db);
         List<Meeting> meetings = MeetingSql.getAllMeeting(db);
         for(int i =0;i<meetings.size();i++){
             int[] ids = MeetingSql.getFoodPortions(db, meetings.get(i).getId());
@@ -141,10 +145,34 @@ public class ModelSql implements ModelInterface {
         return null;
     }
 
+
+
     @Override
     public void bookingToMeeting(Booking booking) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MyBookingSql.addBooking(db,booking);//enter the booking to table
+        addMeetingForBooking(booking.getMeeting());//add the meting with user id to meeting table
+    }
+
+    public void addMeetingForBooking(Meeting meeting){
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MyBookingMeetingSql.addMeeting(db, meeting);
+
+        for(int i =0; i<meeting.getFoodPortionsId().size();i++){
+            meeting.getFoodPortionsId().get(i).setId(i);
+            meeting.getFoodPortionsId().get(i).setMeetingId(meeting.getId());
+            addMyBookingFoodPortions( meeting.getFoodPortionsId().get(i),meeting.getUserId());
+        }
 
     }
+
+    public void addMyBookingFoodPortions(FoodPortions foodPortions,String userId){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MyBookingFoodPortionsSql.addFoodPortions(db,foodPortions,userId);//enter to MyBookingFoodPortions table by user name
+    }
+
+
 
     @Override
     public void setUserDetails(UserDetails userDetails) {
@@ -175,6 +203,23 @@ public class ModelSql implements ModelInterface {
         return UserDetailsSql.getUserDetails(db);
     }
 
+    @Override
+    public List<Booking> getMyBookingList() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Booking> bookings = MyBookingSql.getAllBooking(db);
+        for(int i =0;i<bookings.size();i++){
+            SQLiteDatabase dbc = dbHelper.getReadableDatabase();
+            Booking booking = bookings.get(i);
+            bookings.get(i).setMeeting(MyBookingMeetingSql.getMeetingWithUser(dbc,booking.getMeeting().getId(),booking.getId()));
+            SQLiteDatabase dbp = dbHelper.getReadableDatabase();
+            int[] ids = MyBookingMeetingSql.getFoodPortions(dbp,booking.getMeeting().getId(),booking.getId());
+            bookings.get(i).getMeeting().setFoodPortionsId(MyBookingFoodPortionsSql.getAllPortionsId(dbp,ids,booking.getMeeting().getId(),booking.getId()));
+
+        }
+
+        return bookings;
+    }
+
 
     class MyDBHelper extends SQLiteOpenHelper {
 
@@ -192,6 +237,9 @@ public class ModelSql implements ModelInterface {
             UserDetailsSql.create(db);
             IdMeetingMakerSql.create(db);
             FeedBackSql.create(db);
+            MyBookingSql.create(db);
+            MyBookingFoodPortionsSql.create(db);
+            MyBookingMeetingSql.create(db);
         }
 
         @Override
@@ -203,6 +251,9 @@ public class ModelSql implements ModelInterface {
             UserDetailsSql.drop(db);
             IdMeetingMakerSql.drop(db);
             FeedBackSql.drop(db);
+            MyBookingSql.drop(db);
+            MyBookingMeetingSql.drop(db);
+            MyBookingFoodPortionsSql.drop(db);
             onCreate(db);
         }
     }

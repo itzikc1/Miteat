@@ -36,6 +36,7 @@ public class BookingFragment extends Fragment {
     private Button booking;
     private Button cancel;
     private Button details;
+    private Button menu;
     private TextView numPartners;
     private TextView userNameView;
     private TextView location;
@@ -50,8 +51,8 @@ public class BookingFragment extends Fragment {
 
     interface BookingFragmentInterface {
         public void finishBooking();
-
-        public void detailsLoad(String userId);
+        public void detailsLoad(String userId,Boolean confirmation);
+        public void bookingMenu(Meeting meeting);
     }
 
     @Override
@@ -89,6 +90,7 @@ public class BookingFragment extends Fragment {
         booking = (Button) view.findViewById(R.id.booking);
         cancel = (Button) view.findViewById(R.id.cancel);
         details = (Button) view.findViewById(R.id.details);
+        menu = (Button) view.findViewById(R.id.menu);
 
         // num.setText(meeting.getNumberOfPartner());
         location.setText(meeting.getLocation());
@@ -107,6 +109,14 @@ public class BookingFragment extends Fragment {
             startTime.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
             endTime.setText(endCls.get(Calendar.HOUR_OF_DAY) + ":" + endCls.get(Calendar.MINUTE));
         }
+        userNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
+                bookingFragmentInterface.detailsLoad(meeting.getUserId(),false);
+            }
+        });
+
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +129,7 @@ public class BookingFragment extends Fragment {
 
                 } else {
 
-                    Booking booking = new Booking(meeting, -1, Model.instance().getUserDetails().getUserName());
+                    Booking booking = new Booking( meeting.getUserId(),meeting, Model.instance().getUserDetails().getUserName());
                     booking.setNumberOfPartner(numberPlace);
                     booking.setConfirmation(false);
                     Model.instance().bookingToMeeting(booking);
@@ -140,7 +150,14 @@ public class BookingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
-                bookingFragmentInterface.detailsLoad(meeting.getUserId());
+                bookingFragmentInterface.detailsLoad(meeting.getUserId(),false);
+            }
+        });
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
+                bookingFragmentInterface.bookingMenu(meeting);
             }
         });
         return view;

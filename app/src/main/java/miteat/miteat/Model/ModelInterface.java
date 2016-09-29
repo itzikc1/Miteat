@@ -31,11 +31,13 @@ public interface ModelInterface {
 
     public UserDetails getUserDetails(String id);
 
-    public void bookingToMeeting(Booking booking);
+    public void bookingToMeeting(Booking booking);//makeBooking
 
     public void setUserDetails(UserDetails userDetails);
 
     public UserDetails getUserDetails();
+
+    public List<Booking> getMyBookingList();
 
 
 }

@@ -95,6 +95,7 @@ public class MenuPortionsFragment extends Fragment {
             num.setText(String.valueOf(numMeeting));
             costView.setText("0");
             nameDefault.setText("");
+            multiAutoComplete.setText("");
         } else {
             num.setText(String.valueOf(editPortions.getNumberOfFoodPortions()));
             costView.setText(String.valueOf(editPortions.getCost()));
@@ -131,7 +132,7 @@ public class MenuPortionsFragment extends Fragment {
                 String allergens = multiAutoComplete.getText().toString();
                 int numberIdText = Integer.parseInt(numberId.getText().toString());
                 int money = Integer.parseInt(costOfMoney.getText().toString());
-                FoodPortions foodPortions = new FoodPortions(numberIdText, name.getText().toString(), image, numberIdText, money, allergens);
+                FoodPortions foodPortions = new FoodPortions(numberIdText, name.getText().toString(),numberIdText, image, numberIdText, money, allergens);
                 addFoodPortions(foodPortions);
                 if (deleteImage.size() > 0) {
                     ModelCloudinary.getInstance().deleteImageFromCloudinary(deleteImage);

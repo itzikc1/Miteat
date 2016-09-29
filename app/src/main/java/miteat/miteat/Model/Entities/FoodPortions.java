@@ -11,15 +11,17 @@ public class FoodPortions {
     private int meetingId;
     private int id;
     private String name;
+    private int dishNumber;
     private ArrayList<String> images;
     private int numberOfFoodPortions;
     private int cost;
     private String allergens;
 
-    public FoodPortions(int id,String name, ArrayList<String> images, int numberOfFoodPortions, int cost, String allergens) {
+    public FoodPortions(int id,String name,int dishNumber, ArrayList<String> images, int numberOfFoodPortions, int cost, String allergens) {
 
         this.id = id;
         this.name=name;
+        this.dishNumber = dishNumber;
         this.images = images;
         this.numberOfFoodPortions = numberOfFoodPortions;
         this.cost = cost;
@@ -79,5 +81,13 @@ public class FoodPortions {
 
     public void setMeetingId(int meetingId) {
         this.meetingId = meetingId;
+    }
+
+    public int getDishNumber() {
+        return dishNumber;
+    }
+
+    public void setDishNumber(int dishNumber) {
+        this.dishNumber = dishNumber;
     }
 }

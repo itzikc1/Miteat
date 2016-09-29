@@ -3,7 +3,7 @@ package miteat.miteat.Model.Entities;
 /**
  * Created by Itzik on 27/09/2016.
  */
-public class Booking {
+public class OrderToBooking {
 
 
     private String id;
@@ -12,7 +12,7 @@ public class Booking {
     private int numberOfPartner;
     private String userIdOfBooking;
 
-    public Booking(String id, Meeting meeting, String userIdOfBooking) {
+    public OrderToBooking(String id, Meeting meeting, String userIdOfBooking) {
         this.meeting = meeting;
         this.id = id;
         this.userIdOfBooking = userIdOfBooking;

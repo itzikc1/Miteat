@@ -35,10 +35,15 @@ public class UserDetailsFragment extends Fragment {
     private TextView maritalStatus;
     private TextView favoriteDish;
     private Button back;
-    private  RatingBar numberOfStarAvg;
+    private RatingBar numberOfStarAvgView;
+    private RatingBar cleaningStarView;
+    private RatingBar serviceStarView;
+    private RatingBar atmosphereStarView;
+    private RatingBar valueStarView;
     private ListView list;
     private ImageView picProfile;
     private MyAddapter adapter;
+    private Boolean confirmation;
 
     interface UserDetailsInterface {
         public void backPressUserDetails();
@@ -60,20 +65,38 @@ public class UserDetailsFragment extends Fragment {
         picProfile = (ImageView) view.findViewById(R.id.picProfile);
         list = (ListView) view.findViewById(R.id.feedbacks);
         back = (Button) view.findViewById(R.id.back);
-        numberOfStarAvg = (RatingBar) view.findViewById(R.id.numberOfStarAvg);
+        numberOfStarAvgView = (RatingBar) view.findViewById(R.id.numberOfStarAvg);
+        cleaningStarView = (RatingBar) view.findViewById(R.id.cleaningStar);
+        serviceStarView = (RatingBar) view.findViewById(R.id.serviceStar);
+        atmosphereStarView = (RatingBar) view.findViewById(R.id.atmosphereStar);
+        valueStarView = (RatingBar) view.findViewById(R.id.valueStar);
+
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
         numberOfUserStarAvg.setText(String.valueOf("Number of users: "+userDetails.getFeedbacks().size()));
+        numberOfStarAvgView.setRating(userDetails.getNumberOfStarAvg());
+        cleaningStarView.setRating(userDetails.getCleaningStar());
+        serviceStarView.setRating(userDetails.getServiceStar());
+        atmosphereStarView.setRating(userDetails.getAtmosphereStar());
+        valueStarView.setRating(userDetails.getValueStar());
+
         userName.setText("User name: "+userDetails.getUserName());
         phoneNumber.setText(String.valueOf("Phone number: "+String.valueOf(userDetails.getPhoneNumber())));
-        phoneNumber.setVisibility(View.GONE);
         address.setText(String.valueOf("Address: "+userDetails.getAddress()));
         mail.setText(String.valueOf("Mail "+userDetails.getMail()));
-        mail.setVisibility(View.GONE);
-        maritalStatus.setText(String.valueOf("Marital status "+userDetails.getMaritalStatus()));
+
+
+        if(confirmation==false){
+            phoneNumber.setVisibility(View.GONE);
+            mail.setVisibility(View.GONE);
+            address.setVisibility(View.GONE);
+        }
+
+        String[] some_array = getResources().getStringArray(R.array.maritalStatus);
+        maritalStatus.setText(String.valueOf("Marital status "+some_array[userDetails.getMaritalStatus()]));
         favoriteDish.setText(String.valueOf("Favorite dish "+userDetails.getFavoriteDish()));
-        numberOfStarAvg.setRating(userDetails.getNumberOfStarAvg());
+        numberOfStarAvgView.setRating(userDetails.getNumberOfStarAvg());
 
 //        ModelCloudinary.getInstance().loadImage(userDetails.getPicProfile() , new ModelCloudinary.LoadImageListener() {
 //            @Override
@@ -137,6 +160,9 @@ public class UserDetailsFragment extends Fragment {
         //with fierbase:
         //this.userDetails = Model.instance().getUserDetails(userId);
         this.userDetails = Model.instance().getUserDetails();
+    }
+    public void setConfirmation(Boolean confirmation){
+        this.confirmation=confirmation;
     }
 
 

@@ -84,7 +84,7 @@ public class BookingListMenuFragment extends Fragment {
 
         int id = item.getItemId();
 
-        if (id == R.id.menu_back) {
+        if (id == R.id.back_to_main) {
             BookingListMenuFragmentInterface bookingListMenuFragmentInterface = (BookingListMenuFragmentInterface) getActivity();
             bookingListMenuFragmentInterface.backPressFromMenu();
             return true;

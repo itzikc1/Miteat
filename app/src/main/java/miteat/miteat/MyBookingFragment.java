@@ -1,10 +1,8 @@
 package miteat.miteat;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,20 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
-import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Model;
-import miteat.miteat.Model.ModelCloudinary;
 
 /**
  * Created by Itzik on 29/09/2016.
@@ -40,7 +33,7 @@ public class MyBookingFragment extends Fragment {
     MyAddapter adapter;
 
     interface MyBookingFragmentInterface {
-        public void detailsLoad(String userId,Boolean confirmation);
+        public void detailsLoad(String userId, Boolean confirmation);
 
         public void bookingMenu(Meeting meeting);
 
@@ -53,7 +46,7 @@ public class MyBookingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_booking_fragment,
                 container, false);
-        setHasOptionsMenu(true);
+    //    setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.myBookingList);
         data = Model.instance().getMyBookingList();
         adapter = new MyAddapter();
@@ -76,24 +69,24 @@ public class MyBookingFragment extends Fragment {
         return view;
     }
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.bookin_menu_list, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.menu_back) {
-//            BookingListMenuFragmentInterface bookingListMenuFragmentInterface = (BookingListMenuFragmentInterface) getActivity();
-//            bookingListMenuFragmentInterface.backPressFromMenu();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        menu.clear();
+//        inflater.inflate(R.menu.bookin_menu_list, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        if (id == R.id.menu_back) {
+////            BookingListMenuFragmentInterface bookingListMenuFragmentInterface = (BookingListMenuFragmentInterface) getActivity();
+////            bookingListMenuFragmentInterface.backPressFromMenu();
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     class MyAddapter extends BaseAdapter {
 
@@ -144,8 +137,8 @@ public class MyBookingFragment extends Fragment {
             moreOnUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
-                    myBookingFragmentInterface.detailsLoad(booking.getId(),booking.isConfirmation());
+                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
+                    myBookingFragmentInterface.detailsLoad(booking.getId(), booking.isConfirmation());
 
                 }
             });
@@ -153,6 +146,8 @@ public class MyBookingFragment extends Fragment {
             moreOnMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
+                    myBookingFragmentInterface.bookingMenu(booking.getMeeting());
 
                 }
             });
@@ -160,6 +155,7 @@ public class MyBookingFragment extends Fragment {
             cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
 
 
                 }

@@ -131,6 +131,11 @@ public class Model implements ModelInterface {
         return sqlModel.getMyBookingList();
     }
 
+    @Override
+    public Boolean checkIfBooking(Booking booking) {
+        return sqlModel.checkIfBooking(booking);
+    }
+
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
 

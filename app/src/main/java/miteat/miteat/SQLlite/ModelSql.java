@@ -220,6 +220,18 @@ public class ModelSql implements ModelInterface {
         return bookings;
     }
 
+    @Override
+    public Boolean checkIfBooking(Booking booking) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Meeting meeting1= MyBookingMeetingSql.getMeetingWithUser(db,booking.getMeeting().getId(),booking.getMeeting().getUserId());
+        if(meeting1==null){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 
     class MyDBHelper extends SQLiteOpenHelper {
 

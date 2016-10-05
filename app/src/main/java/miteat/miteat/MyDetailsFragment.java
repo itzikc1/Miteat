@@ -3,7 +3,6 @@ package miteat.miteat;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
-import miteat.miteat.Model.Entities.Feedback;
-import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.UserDetails;
 import miteat.miteat.Model.Model;
 import miteat.miteat.Model.ModelCloudinary;
@@ -61,7 +53,7 @@ public class MyDetailsFragment extends Fragment {
 
     private ArrayAdapter<CharSequence> dataAdapterSpinner;
 
-    interface MyDetailsFragmentInterface{
+    interface MyDetailsFragmentInterface {
         public void backPressMyDetails();
     }
 

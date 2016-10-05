@@ -39,5 +39,6 @@ public interface ModelInterface {
 
     public List<Booking> getMyBookingList();
 
+    public Boolean checkIfBooking(Booking booking);
 
 }

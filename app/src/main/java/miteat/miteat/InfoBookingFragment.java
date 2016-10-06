@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,18 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import miteat.miteat.Model.Entities.Booking;
 import miteat.miteat.Model.Entities.Meeting;
-import miteat.miteat.Model.Entities.UserDetails;
-import miteat.miteat.Model.Model;
 import miteat.miteat.Model.ModelCloudinary;
 
 /**
@@ -47,8 +43,10 @@ public class InfoBookingFragment extends Fragment {
     private LinearLayout.LayoutParams layoutParams;
     private ArrayList<String> image;
 
+
     interface InfoBookingFragmentInterface {
         public void backToListBooking();
+
         public void bookingGoTOhMenu(Meeting meeting);
     }
 
@@ -88,7 +86,7 @@ public class InfoBookingFragment extends Fragment {
         Calendar endCls = Calendar.getInstance();
         endCls.setTimeInMillis(meeting.getDateAndEndTime());
         numPartners.setText(String.valueOf(meeting.getNumberOfPartner()));
- //       numPartners.setText("1");
+        //       numPartners.setText("1");
 
 
         cls.setTimeInMillis(meeting.getDateAndTime());
@@ -117,6 +115,8 @@ public class InfoBookingFragment extends Fragment {
                 bookingFragmentInterface.bookingGoTOhMenu(meeting);
             }
         });
+
+
         return view;
     }
 
@@ -135,13 +135,33 @@ public class InfoBookingFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    InfoBookingFragmentInterface bookingFragmentInterface = (InfoBookingFragmentInterface) getActivity();
+                    bookingFragmentInterface.backToListBooking();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
     }
 
     private void refreshPic() {
-        if(image.size()!=0) {
+        if (image.size() != 0) {
             layout.removeAllViews();//clean all pic before
 
             for (int i = 0; i < image.size(); i++) {
@@ -170,7 +190,7 @@ public class InfoBookingFragment extends Fragment {
                 layout.addView(imageView);
             }
 
-        }else {
+        } else {
             final ImageView imageView = new ImageView(getActivity());
             imageView.setImageResource(R.drawable.chef);
             layout.addView(imageView);

@@ -69,24 +69,6 @@ public class MyBookingFragment extends Fragment {
         return view;
     }
 
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        menu.clear();
-//        inflater.inflate(R.menu.bookin_menu_list, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == R.id.menu_back) {
-////            BookingListMenuFragmentInterface bookingListMenuFragmentInterface = (BookingListMenuFragmentInterface) getActivity();
-////            bookingListMenuFragmentInterface.backPressFromMenu();
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     class MyAddapter extends BaseAdapter {
 
@@ -170,5 +152,7 @@ public class MyBookingFragment extends Fragment {
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
     }
+
+
 
 }

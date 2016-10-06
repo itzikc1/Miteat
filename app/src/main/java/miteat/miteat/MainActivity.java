@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface ,UserDetailsFragment.UserDetailsInterface,MyDetailsFragment.MyDetailsFragmentInterface,BookingListMenuFragment.BookingListMenuFragmentInterface {
+public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface, UserDetailsFragment.UserDetailsInterface, MyDetailsFragment.MyDetailsFragmentInterface, BookingListMenuFragment.BookingListMenuFragmentInterface {
     protected LocationManager locManager;
     FragmentManager manager;
     LoginFragment loginFragment;
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
 //            Intent intent = new Intent(MainActivity.this,GpsService.class);
 //            startService(intent);
         }
+
+
         manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         mainFragment = new MainFragment();
@@ -199,14 +201,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     }
 
     @Override
-    public void detailsLoad(String userId,Boolean confirmation) {
+    public void detailsLoad(String userId, Boolean confirmation) {
 
         userDetailsFragment = new UserDetailsFragment();
         userDetailsFragment.setUserId(userId);
         userDetailsFragment.setConfirmation(confirmation);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.hide(bookingFragment);
-        transaction.add(R.id.frag_container,userDetailsFragment);
+        transaction.add(R.id.frag_container, userDetailsFragment);
         invalidateOptionsMenu();
         transaction.commit();
     }
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         bookingListMenuFragment.setMeeting(meeting);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.hide(bookingFragment);
-        transaction.add(R.id.frag_container,bookingListMenuFragment);
+        transaction.add(R.id.frag_container, bookingListMenuFragment);
         invalidateOptionsMenu();
         transaction.commit();
 

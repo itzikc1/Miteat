@@ -1,25 +1,20 @@
 package miteat.miteat;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import miteat.miteat.Model.Entities.FoodPortions;
-import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.UserDetails;
 import miteat.miteat.Model.Model;
-import miteat.miteat.Model.ModelCloudinary;
 
 /**
  * Created by Itzik on 27/09/2016.
@@ -48,6 +43,7 @@ public class UserDetailsFragment extends Fragment {
     interface UserDetailsInterface {
         public void backPressUserDetails();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -74,28 +70,28 @@ public class UserDetailsFragment extends Fragment {
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
-        numberOfUserStarAvg.setText(String.valueOf("Number of users: "+userDetails.getFeedbacks().size()));
+        numberOfUserStarAvg.setText(String.valueOf("Number of users: " + userDetails.getFeedbacks().size()));
         numberOfStarAvgView.setRating(userDetails.getNumberOfStarAvg());
         cleaningStarView.setRating(userDetails.getCleaningStar());
         serviceStarView.setRating(userDetails.getServiceStar());
         atmosphereStarView.setRating(userDetails.getAtmosphereStar());
         valueStarView.setRating(userDetails.getValueStar());
 
-        userName.setText("User name: "+userDetails.getUserName());
-        phoneNumber.setText(String.valueOf("Phone number: "+String.valueOf(userDetails.getPhoneNumber())));
-        address.setText(String.valueOf("Address: "+userDetails.getAddress()));
-        mail.setText(String.valueOf("Mail "+userDetails.getMail()));
+        userName.setText("User name: " + userDetails.getUserName());
+        phoneNumber.setText(String.valueOf("Phone number: " + String.valueOf(userDetails.getPhoneNumber())));
+        address.setText(String.valueOf("Address: " + userDetails.getAddress()));
+        mail.setText(String.valueOf("Mail " + userDetails.getMail()));
 
 
-        if(confirmation==false){
+        if (confirmation == false) {
             phoneNumber.setVisibility(View.GONE);
             mail.setVisibility(View.GONE);
             address.setVisibility(View.GONE);
         }
 
         String[] some_array = getResources().getStringArray(R.array.maritalStatus);
-        maritalStatus.setText(String.valueOf("Marital status "+some_array[userDetails.getMaritalStatus()]));
-        favoriteDish.setText(String.valueOf("Favorite dish "+userDetails.getFavoriteDish()));
+        maritalStatus.setText(String.valueOf("Marital status " + some_array[userDetails.getMaritalStatus()]));
+        favoriteDish.setText(String.valueOf("Favorite dish " + userDetails.getFavoriteDish()));
         numberOfStarAvgView.setRating(userDetails.getNumberOfStarAvg());
 
 //        ModelCloudinary.getInstance().loadImage(userDetails.getPicProfile() , new ModelCloudinary.LoadImageListener() {
@@ -108,12 +104,13 @@ public class UserDetailsFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDetailsInterface userDetailsFragment = (UserDetailsInterface) getActivity();
-                userDetailsFragment.backPressUserDetails();
+                UserDetailsInterface userDetailsInterface = (UserDetailsInterface) getActivity();
+                userDetailsInterface.backPressUserDetails();
             }
         });
         return view;
     }
+
     class MyAddapter extends BaseAdapter {
 
         @Override
@@ -156,14 +153,34 @@ public class UserDetailsFragment extends Fragment {
         }
     }
 
-    public void setUserId(String userId){
+    public void setUserId(String userId) {
         //with fierbase:
         //this.userDetails = Model.instance().getUserDetails(userId);
         this.userDetails = Model.instance().getUserDetails();
     }
-    public void setConfirmation(Boolean confirmation){
-        this.confirmation=confirmation;
+
+    public void setConfirmation(Boolean confirmation) {
+        this.confirmation = confirmation;
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    UserDetailsInterface userDetailsInterface = (UserDetailsInterface) getActivity();
+                    userDetailsInterface.backPressUserDetails();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
 }

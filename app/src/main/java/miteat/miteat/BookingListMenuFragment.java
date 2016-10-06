@@ -1,26 +1,23 @@
 package miteat.miteat;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +41,7 @@ public class BookingListMenuFragment extends Fragment {
     interface BookingListMenuFragmentInterface {
         public void backPressFromMenu();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -93,6 +91,26 @@ public class BookingListMenuFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    BookingListMenuFragmentInterface bookingListMenuFragmentInterface = (BookingListMenuFragmentInterface) getActivity();
+                    bookingListMenuFragmentInterface.backPressFromMenu();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+
     class MyAddapter extends BaseAdapter {
 
         @Override
@@ -135,11 +153,11 @@ public class BookingListMenuFragment extends Fragment {
             dishNumber.setText(String.valueOf(st.getDishNumber()));
             cost.setText(String.valueOf(st.getCost()));
             allergens.setText(st.getAllergens());
-            ArrayList<String>  image = new ArrayList<String>();
+            ArrayList<String> image = new ArrayList<String>();
             for (int i = 0; i < st.getImages().size(); i++) {
-                    image.add(st.getImages().get(i));
+                image.add(st.getImages().get(i));
             }
-            if(image.size()!=0) {
+            if (image.size() != 0) {
 
                 for (int i = 0; i < image.size(); i++) {
                     layoutParams.setMargins(1, 1, 1, 1);
@@ -167,7 +185,7 @@ public class BookingListMenuFragment extends Fragment {
                     layout.addView(imageView);
                 }
 
-            }else {
+            } else {
                 final ImageView imageView = new ImageView(getActivity());
                 imageView.setImageResource(R.drawable.chef);
                 layout.addView(imageView);
@@ -181,10 +199,10 @@ public class BookingListMenuFragment extends Fragment {
 //            }
 //            dish.setText(String.valueOf(st.getNumberOfFoodPortions()));
 
-        return convertView;
-    }
+            return convertView;
+        }
 
-}
+    }
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;

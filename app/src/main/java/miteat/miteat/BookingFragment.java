@@ -1,12 +1,10 @@
 package miteat.miteat;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +49,9 @@ public class BookingFragment extends Fragment {
 
     interface BookingFragmentInterface {
         public void finishBooking();
-        public void detailsLoad(String userId,Boolean confirmation);
+
+        public void detailsLoad(String userId, Boolean confirmation);
+
         public void bookingMenu(Meeting meeting);
     }
 
@@ -113,37 +113,35 @@ public class BookingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
-                bookingFragmentInterface.detailsLoad(meeting.getUserId(),false);
+                bookingFragmentInterface.detailsLoad(meeting.getUserId(), false);
             }
         });
 
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Booking booking = new Booking( meeting.getUserId(),meeting, Model.instance().getUserDetails().getUserName());
+                Booking booking = new Booking(meeting.getUserId(), meeting, Model.instance().getUserDetails().getUserName());
                 int numberPlace = Integer.parseInt(numPartners.getText().toString());
-                if(Model.instance().checkIfBooking(booking)){
+                if (Model.instance().checkIfBooking(booking)) {
                     Toast.makeText(getActivity().getApplicationContext(), "You all ready booking to this meeting!", Toast.LENGTH_LONG).show();
-                }else {
+                } else {
 
 
+                    if (numberPlace > meeting.getNumberOfPartner()) {
+                        Toast.makeText(getActivity().getApplicationContext(), "We have place only for " + meeting.getNumberOfPartner(), Toast.LENGTH_LONG).show();
+                    } else if (numberPlace < 1) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
 
-                if (numberPlace > meeting.getNumberOfPartner()) {
-                    Toast.makeText(getActivity().getApplicationContext(), "We have place only for " + meeting.getNumberOfPartner(), Toast.LENGTH_LONG).show();
-                } else if (numberPlace < 1) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
-
-                }else {
-
+                    } else {
 
 
-                    booking.setNumberOfPartner(numberPlace);
-                    booking.setConfirmation(false);
-                    Model.instance().bookingToMeeting(booking);
-                    Toast.makeText(getActivity().getApplicationContext(), "Thanks for booking with us", Toast.LENGTH_LONG).show();
-                    BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
-                    bookingFragmentInterface.finishBooking();
-                }
+                        booking.setNumberOfPartner(numberPlace);
+                        booking.setConfirmation(false);
+                        Model.instance().bookingToMeeting(booking);
+                        Toast.makeText(getActivity().getApplicationContext(), "Thanks for booking with us", Toast.LENGTH_LONG).show();
+                        BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
+                        bookingFragmentInterface.finishBooking();
+                    }
                 }
             }
         });
@@ -158,7 +156,7 @@ public class BookingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
-                bookingFragmentInterface.detailsLoad(meeting.getUserId(),false);
+                bookingFragmentInterface.detailsLoad(meeting.getUserId(), false);
             }
         });
         menu.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +174,7 @@ public class BookingFragment extends Fragment {
     }
 
     private void refreshPic() {
-        if(image.size()!=0) {
+        if (image.size() != 0) {
             layout.removeAllViews();//clean all pic before
             //mProgress.setVisibility(layout.getVisibility());
             // mProgress.setVisibility(layout.getVisibility());
@@ -206,10 +204,29 @@ public class BookingFragment extends Fragment {
                 layout.addView(imageView);
             }
 
-        }else {
+        } else {
             final ImageView imageView = new ImageView(getActivity());
             imageView.setImageResource(R.drawable.chef);
             layout.addView(imageView);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();
+                    bookingFragmentInterface.finishBooking();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

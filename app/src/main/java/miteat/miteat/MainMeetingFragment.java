@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -147,7 +148,7 @@ public class MainMeetingFragment extends Fragment {
             public void onClick(View v) {
                 //Long f = new Long(444);
                 Long startMillis = new Long(0);
-                Long endMillis =new Long(0);
+                Long endMillis = new Long(0);
                 String typeFood = multiAutoComplete.getText().toString();
                 int numberPlace = Integer.parseInt(numberParticipants.getText().toString());
                 int money = Integer.parseInt(numberOfMoney.getText().toString());
@@ -171,12 +172,11 @@ public class MainMeetingFragment extends Fragment {
 
                 if (address == null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
-                }else if(numberPlace<1) {
+                } else if (numberPlace < 1) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
-                }else if(endMillis.compareTo(startMillis)==-1){
+                } else if (endMillis.compareTo(startMillis) == -1) {
                     Toast.makeText(getActivity().getApplicationContext(), "The start time before  end time", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
 
 
                     if (meeting == null) {
@@ -251,6 +251,26 @@ public class MainMeetingFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
+                    meetingFragmentInterface.saveOrCencel();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_empty, menu);
@@ -297,6 +317,7 @@ public class MainMeetingFragment extends Fragment {
         this.meeting = meeting;
 
     }
+
 
 
 }

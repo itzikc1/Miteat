@@ -3,6 +3,8 @@ package miteat.miteat;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,7 @@ public class MyDetailsFragment extends Fragment {
     private EditText addressView;
     private EditText mailView;
     private EditText favoriteDishView;
-
+    private UserDetails userDetails;
     private CheckBox loveTakeAwayView;
 
     private Spinner maritalStatusView;
@@ -86,7 +88,8 @@ public class MyDetailsFragment extends Fragment {
         dataAdapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         maritalStatusView.setAdapter(dataAdapterSpinner);
 
-        final UserDetails userDetails = Model.instance().getUserDetails();
+//        final UserDetails userDetails = Model.instance().getUserDetails();
+        userDetails = Model.instance().getUserDetails();
 
         numberOfStarAvgView.setRating(userDetails.getNumberOfStarAvg());
         cleaningStarView.setRating(userDetails.getCleaningStar());
@@ -128,10 +131,7 @@ public class MyDetailsFragment extends Fragment {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 //  String picProfile;
-
                 String phoneNumber = phoneNumberView.getText().toString();
                 String address = addressView.getText().toString();
                 int maritalStatus = maritalStatusView.getSelectedItemPosition();
@@ -154,8 +154,50 @@ public class MyDetailsFragment extends Fragment {
 
             }
         });
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+
+                    String phoneNumber = phoneNumberView.getText().toString();
+                    String address = addressView.getText().toString();
+                    int maritalStatus = maritalStatusView.getSelectedItemPosition();
+                    Boolean loveTakeAway = loveTakeAwayView.isChecked();
+                    String favoriteDish = favoriteDishView.getText().toString();
+                    Long birthday = new Long(0);
+                    Calendar beginTime = Calendar.getInstance();
+                    beginTime.set(birthdayView.getYear(), birthdayView.getMonth(), birthdayView.getDay());
+                    birthday = beginTime.getTimeInMillis();
+                    userDetails.setPhoneNumber(phoneNumber);
+                    userDetails.setAddress(address);
+                    userDetails.setMaritalStatus(maritalStatus);
+                    userDetails.setLoveTakeAway(loveTakeAway);
+                    userDetails.setFavoriteDish(favoriteDish);
+                    userDetails.setBirthday(birthday);
+                    Model.instance().setUserDetails(userDetails);
+                    MyDetailsFragmentInterface myDetailsFragmentInterface = (MyDetailsFragmentInterface) getActivity();
+                    myDetailsFragmentInterface.backPressMyDetails();
+
+                    Log.d("back","back");
+
+//                    MyDetailsFragmentInterface myDetailsFragmentInterface = (MyDetailsFragmentInterface) getActivity();
+//                    myDetailsFragmentInterface.backPressMyDetails();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
 }

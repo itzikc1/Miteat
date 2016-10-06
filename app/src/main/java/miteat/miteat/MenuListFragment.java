@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -137,6 +138,27 @@ public class MenuListFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    ListFragmentInterface listFragmentInterface = (ListFragmentInterface) getActivity();
+                    listFragmentInterface.backButton(meeting);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     class MyAddapter extends BaseAdapter {

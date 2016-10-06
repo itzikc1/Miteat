@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -175,6 +176,10 @@ public class MenuPortionsFragment extends Fragment {
         inflater.inflate(R.menu.menu_empty, menu);
     }
 
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -184,6 +189,26 @@ public class MenuPortionsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    MenuFragmentInterface menuFragmentInterface = (MenuFragmentInterface) getActivity();
+                    menuFragmentInterface.saveInterface(meeting);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;

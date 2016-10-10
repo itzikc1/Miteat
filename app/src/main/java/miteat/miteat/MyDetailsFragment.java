@@ -189,10 +189,8 @@ public class MyDetailsFragment extends Fragment {
                     MyDetailsFragmentInterface myDetailsFragmentInterface = (MyDetailsFragmentInterface) getActivity();
                     myDetailsFragmentInterface.backPressMyDetails();
 
-                    Log.d("back","back");
+                    Log.d("back", "back");
 
-//                    MyDetailsFragmentInterface myDetailsFragmentInterface = (MyDetailsFragmentInterface) getActivity();
-//                    myDetailsFragmentInterface.backPressMyDetails();
                     return true;
                 }
                 return false;

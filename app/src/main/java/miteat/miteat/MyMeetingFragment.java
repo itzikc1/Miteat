@@ -4,9 +4,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,19 +20,19 @@ import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Model;
 
 /**
- * Created by Itzik on 29/09/2016.
+ * Created by Itzik on 09/10/2016.
  */
-public class MyBookingFragment extends Fragment {
+public class MyMeetingFragment extends Fragment{
 
     Meeting meeting;
     ListView list;
     List<Booking> data;
     MyAddapter adapter;
 
-    interface MyBookingFragmentInterface {
+    interface MyMeetingFragmentInterface {
         public void detailsLoad(String userId, Boolean confirmation);
 
-        public void bookingMenu(Meeting meeting);
+        public void meetingMenu(Meeting meeting);
 
     }
 
@@ -46,9 +43,9 @@ public class MyBookingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_booking_fragment,
                 container, false);
-    //    setHasOptionsMenu(true);
+        //    setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.myBookingList);
-        data = Model.instance().getMyBookingList();
+        data = Model.instance().getOrderToBooking();
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
@@ -68,8 +65,6 @@ public class MyBookingFragment extends Fragment {
 
         return view;
     }
-
-
     class MyAddapter extends BaseAdapter {
 
         @Override
@@ -92,19 +87,15 @@ public class MyBookingFragment extends Fragment {
                             ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(R.layout.my_booking_row, null);
-               // Log.d("TAG", "create view:" + position);
+                convertView = inflater.inflate(R.layout.my_meeting_row, null);
+                Log.d("TAG", "create view:" + position);
 
             } else {
 
                 Log.d("TAG", "use convert view:" + position);
             }
 
-            final Booking booking = data.get(position);
-
-            if(booking.getConfirmation()==1){
-                convertView.setBackgroundColor(0x6E00C8FF);
-            }
+            final Booking booking  = data.get(position);
 
             TextView userName = (TextView) convertView.findViewById(R.id.userName);
             TextView moreOnUser = (TextView) convertView.findViewById(R.id.moreOnUser);
@@ -112,9 +103,14 @@ public class MyBookingFragment extends Fragment {
             TextView address = (TextView) convertView.findViewById(R.id.address);
             TextView numberOfVoters = (TextView) convertView.findViewById(R.id.numOfVoters);
             RatingBar numberOfStarAvg = (RatingBar) convertView.findViewById(R.id.ratingBar);
-            Button cancelBooking = (Button) convertView.findViewById(R.id.cancelBooking);
+            Button refuse = (Button) convertView.findViewById(R.id.refuse);
+            Button accept = (Button) convertView.findViewById(R.id.accept);
 
-            userName.setText(booking.getMeeting().getUserId());
+            if(booking.getConfirmation()==1){
+                accept.setVisibility(View.GONE);
+            }
+
+            userName.setText(booking.getUserIdOfBooking());
             address.setText(booking.getMeeting().getLocation());
             //change when we have firebase
             numberOfVoters.setText(String.valueOf(Model.instance().getUserDetails().getFeedbacks().size()));
@@ -123,13 +119,8 @@ public class MyBookingFragment extends Fragment {
             moreOnUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
-                    if(booking.getConfirmation()==0||booking.getConfirmation()==2) {
-                        myBookingFragmentInterface.detailsLoad(booking.getId(), false);
-                    }
-                    else{
-                        myBookingFragmentInterface.detailsLoad(booking.getId(), true);
-                    }
+                    MyMeetingFragmentInterface myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    myMeetingFragmentInterface.detailsLoad(booking.getUserIdOfBooking(), true);
 
                 }
             });
@@ -137,21 +128,28 @@ public class MyBookingFragment extends Fragment {
             moreOnMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
-                    myBookingFragmentInterface.bookingMenu(booking.getMeeting());
+                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    myMeetingFragmentInterface.meetingMenu(booking.getMeeting());
 
                 }
             });
 
-            cancelBooking.setOnClickListener(new View.OnClickListener() {
+            refuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    booking.setConfirmation(2);
 
-
-
+                    Model.instance().makeAccept(booking);
                 }
             });
-
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    booking.setConfirmation(1);
+                    booking.getMeeting().setNumberOfPartner(booking.getMeeting().getNumberOfPartner()-booking.getNumberOfPartner());
+                    Model.instance().makeAccept(booking);
+                }
+            });
 
             return convertView;
         }

@@ -34,9 +34,7 @@ public class MeetingSql {
     private static final String LON_LOCATION = "lonLocation";
     private static final String DISTANCE = "distance";
     private static final String TAKE_AWAY = "takeAway";
-    //  private static final String PERSON_CREATE = "personCreate";
     private static final String FOOD_PORTIONS_IDS = "foodPortionsIds";
-
 
     public static void addMeeting(SQLiteDatabase db, Meeting meeting) {
 
@@ -48,7 +46,6 @@ public class MeetingSql {
         values.put(LON_LOCATION, meeting.getLonLocation());
         values.put(DISTANCE, meeting.getDistance());
         values.put(TAKE_AWAY, meeting.getTakeAway());
-        //  values.put(PERSON_CREATE, meeting.getId());
         values.put(NUMBER_OF_PARTNER, meeting.getNumberOfPartner());
         values.put(TYPE_OF_FOOD, meeting.getTypeOfFood());
         values.put(MONEY, meeting.getMoney());
@@ -89,7 +86,6 @@ public class MeetingSql {
             int foodPortionsIdIndex = cursor.getColumnIndex(FOOD_PORTIONS_IDS);
             int imageIndex = cursor.getColumnIndex(IMAGE);
             int distanceIndex = cursor.getColumnIndex(DISTANCE);
-
 
             String userId = cursor.getString(userIdIndex);
             int numberOfPartner = Integer.parseInt(cursor.getString(numberOfPartnerIndex));

@@ -14,7 +14,6 @@ import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
-import miteat.miteat.SQLlite.MeetingSql;
 import miteat.miteat.SQLlite.ModelSql;
 
 /**
@@ -134,6 +133,22 @@ public class Model implements ModelInterface {
     @Override
     public Boolean checkIfBooking(Booking booking) {
         return sqlModel.checkIfBooking(booking);
+    }
+
+    @Override
+    public List<Booking> getOrderToBooking() {
+        return sqlModel.getOrderToBooking();
+    }
+
+    @Override
+    public boolean makeAccept(Booking booking) {
+        return sqlModel.makeAccept(booking);
+    }
+
+    @Override
+    public List<Meeting> getAllMeetingToBooking() {
+        List<Meeting> meetings = sqlModel.getAllMeetingToBooking();
+        return meetings;
     }
 
 

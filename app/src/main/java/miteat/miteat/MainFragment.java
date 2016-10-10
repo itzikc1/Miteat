@@ -42,7 +42,9 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.main_list_fragment,
                 container, false);
         list = (ListView) view.findViewById(R.id.listMeeting);
-        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
+//        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
+        data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
+
         adapter = new MyAddapter();
         list.setAdapter(adapter);
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);

@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
@@ -15,7 +14,6 @@ import miteat.miteat.Model.Entities.Gps;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
-import miteat.miteat.Model.Model;
 import miteat.miteat.Model.ModelInterface;
 import miteat.miteat.MyApplication;
 
@@ -25,7 +23,7 @@ import miteat.miteat.MyApplication;
 public class ModelSql implements ModelInterface {
 
 
-    private static final int VERSION = 3;
+    private static final int VERSION = 1;
 
     MyDBHelper dbHelper;
     private static final String USER_TABLE = "user_table";
@@ -152,6 +150,15 @@ public class ModelSql implements ModelInterface {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         MyBookingSql.addBooking(db,booking);//enter the booking to table
         addMeetingForBooking(booking.getMeeting());//add the meting with user id to meeting table
+        addToMeetingAfterBooking(booking);
+    }
+//this for the host table with fierbase need to change
+    public void addToMeetingAfterBooking(Booking booking){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        booking.setMeetingOrBooking(0);
+        MyBookingSql.addBooking(db,booking);//enter the booking to table
+        addMeetingForBooking(booking.getMeeting());//add the meting with user id to meeting table
+
     }
 
     public void addMeetingForBooking(Meeting meeting){
@@ -230,6 +237,61 @@ public class ModelSql implements ModelInterface {
         else {
             return true;
         }
+    }
+
+    @Override
+    public List<Booking> getOrderToBooking() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Booking> bookings = MyBookingSql.getAllMeeting(db);
+        for(int i =0;i<bookings.size();i++){
+            SQLiteDatabase dbc = dbHelper.getReadableDatabase();
+            Booking booking = bookings.get(i);
+            bookings.get(i).setMeeting(MyBookingMeetingSql.getMeetingWithUser(dbc,booking.getMeeting().getId(),booking.getId()));
+            SQLiteDatabase dbp = dbHelper.getReadableDatabase();
+            int[] ids = MyBookingMeetingSql.getFoodPortions(dbp,booking.getMeeting().getId(),booking.getId());
+            bookings.get(i).getMeeting().setFoodPortionsId(MyBookingFoodPortionsSql.getAllPortionsId(dbp,ids,booking.getMeeting().getId(),booking.getId()));
+        }
+        return bookings;
+
+    }
+
+    @Override
+    public boolean makeAccept(Booking booking) {
+        //say to book maker with firebase
+        if(booking.getConfirmation()==2){
+            deleteBooking(booking);
+        }else{
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MyBookingSql.makeAcceptInMyMeeting(db,booking);
+        }
+        return true;
+    }
+
+    public void deleteBooking(Booking booking){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MyBookingSql.deleteRefuseBooking(db,booking.getId(),booking.getMeeting().getId());
+    }
+    @Override
+    public List<Meeting> getAllMeetingToBooking() {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        // List<Meeting> meetings = MeetingSql.getAllMeeting(db);
+        List<Meeting> meetings = MeetingSql.getAllMeeting(db);
+        for(int i =0;i<meetings.size();i++){
+            int[] ids = MeetingSql.getFoodPortions(db, meetings.get(i).getId());
+            meetings.get(i).setFoodPortionsId(FoodPortionsSql.getAllPortionsId(db, ids, meetings.get(i).getId()));
+            int num = meetings.get(i).getNumberOfPartner()-MyBookingSql.getAllBookingNumberOfPartner(db,meetings.get(i));
+            if(num<0|| num==0){
+                meetings.remove(meetings.get(i));
+            }
+            else {
+                meetings.get(i).setNumberOfPartner(num);
+            }
+           // meetings.get(i).setNumberOfPartner(meetings.get(i).getNumberOfPartner()-MyBookingSql.getAllBookingNumberOfPartner(db,meetings.get(i)));
+        }
+
+        return meetings;
     }
 
 

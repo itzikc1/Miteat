@@ -18,6 +18,7 @@ public class Feedback {
     private float atmosphereStar;
     private float valueStar;
     private boolean takeAwy;
+    private Long dateAndTime;
 
 
     public Feedback(int id, int idMeeting, int idBooking, String fromUserId, String toUserId, float avgStar, String feedBackText, String replyText, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, boolean takeAwy) {

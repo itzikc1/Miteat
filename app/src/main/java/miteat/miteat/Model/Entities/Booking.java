@@ -6,26 +6,28 @@ package miteat.miteat.Model.Entities;
 public class Booking {
 
 
-    private String id;
+    private String id;//the user i want to eat with him
     private Meeting meeting;
-    private boolean confirmation;
+    private int confirmation;//if 1- accept, if 0- waiting,if 2-refuse
     private int numberOfPartner;
-    private String userIdOfBooking;
+    private String userIdOfBooking;//my user booking
+    private int meetingOrBooking;//if 1- booking, if 0- meeting
 
-    public Booking(String id, Meeting meeting, String userIdOfBooking) {
+    public Booking(String id, Meeting meeting, String userIdOfBooking, int meetingOrBooking) {
         this.meeting = meeting;
         this.id = id;
         this.userIdOfBooking = userIdOfBooking;
+        this.meetingOrBooking = meetingOrBooking;
     }
 
-    public boolean isConfirmation() {
+
+    public int getConfirmation() {
         return confirmation;
     }
 
-    public void setConfirmation(boolean confirmation) {
+    public void setConfirmation(int confirmation) {
         this.confirmation = confirmation;
     }
-
     public Meeting getMeeting() {
         return meeting;
     }
@@ -57,4 +59,14 @@ public class Booking {
     public void setUserIdOfBooking(String userIdOfBooking) {
         this.userIdOfBooking = userIdOfBooking;
     }
+
+    public int getMeetingOrBooking() {
+        return meetingOrBooking;
+    }
+
+    public void setMeetingOrBooking(int meetingOrBooking) {
+        this.meetingOrBooking = meetingOrBooking;
+    }
+
+
 }

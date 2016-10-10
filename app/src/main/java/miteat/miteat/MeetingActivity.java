@@ -55,9 +55,9 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         int id = item.getItemId();
         if (id == R.id.menu_back_main) {
 
-//            Intent intent = new Intent(getApplicationContext(),
-//                    MainActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(),
+                    MainActivity.class);
+            startActivity(intent);
             finish();
             return true;
         }

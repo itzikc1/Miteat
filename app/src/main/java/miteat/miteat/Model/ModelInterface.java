@@ -41,4 +41,9 @@ public interface ModelInterface {
 
     public Boolean checkIfBooking(Booking booking);
 
+    public List<Booking> getOrderToBooking();
+
+    public boolean makeAccept(Booking booking);
+
+    public List<Meeting> getAllMeetingToBooking();
 }

@@ -120,7 +120,7 @@ public class BookingFragment extends Fragment {
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Booking booking = new Booking(meeting.getUserId(), meeting, Model.instance().getUserDetails().getUserName());
+                Booking booking = new Booking(meeting.getUserId(), meeting, Model.instance().getUserDetails().getUserName(),1);
                 int numberPlace = Integer.parseInt(numPartners.getText().toString());
                 if (Model.instance().checkIfBooking(booking)) {
                     Toast.makeText(getActivity().getApplicationContext(), "You all ready booking to this meeting!", Toast.LENGTH_LONG).show();
@@ -136,7 +136,7 @@ public class BookingFragment extends Fragment {
 
 
                         booking.setNumberOfPartner(numberPlace);
-                        booking.setConfirmation(false);
+                        booking.setConfirmation(0);
                         Model.instance().bookingToMeeting(booking);
                         Toast.makeText(getActivity().getApplicationContext(), "Thanks for booking with us", Toast.LENGTH_LONG).show();
                         BookingFragmentInterface bookingFragmentInterface = (BookingFragmentInterface) getActivity();

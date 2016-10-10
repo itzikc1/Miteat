@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
             Intent intent = new Intent(getApplicationContext(),
                     MeetingActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
         if (id == R.id.menu_my_details) {
@@ -105,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         }
         if (id == R.id.search) {
 
+            return true;
+        }
+        if (id == R.id.menu_my_Meeting) {
+            Intent intent = new Intent(getApplicationContext(),
+                    MyMeetingActivity.class);
+            startActivity(intent);
             return true;
         }
 

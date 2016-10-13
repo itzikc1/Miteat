@@ -102,16 +102,27 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
             Intent intent = new Intent(getApplicationContext(),
                     MyBookingActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
         if (id == R.id.search) {
 
             return true;
         }
+        if (id == R.id.menu_history) {
+
+            Intent intent = new Intent(getApplicationContext(),
+                    HistoryMeetingAndBookingActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+
+        }
         if (id == R.id.menu_my_Meeting) {
             Intent intent = new Intent(getApplicationContext(),
                     MyMeetingActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
 

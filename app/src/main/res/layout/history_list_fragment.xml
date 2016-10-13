@@ -5,16 +5,17 @@
 
 
     <ListView
-        android:id="@+id/listMeeting"
+        android:id="@+id/historyList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent" />
 
     <TextView
         android:id="@android:id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/emptyMeeting"
+        android:text="@string/emptyHistory"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

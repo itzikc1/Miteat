@@ -43,7 +43,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".MyBookingActivity" />
-        <activity android:name=".MyMeetingActivity"></activity>
+        <activity android:name=".MyMeetingActivity" />
+        <activity android:name=".HistoryMeetingAndBookingActivity"></activity>
     </application>
 
 </manifest>

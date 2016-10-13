@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import miteat.miteat.Model.Entities.Booking;
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
 
@@ -100,7 +101,10 @@ public class MeetingSql {
             int takeAway = Integer.parseInt(cursor.getString(takeAwayIndex));
             // int[] foodPortionsId = convertStringToArray(cursor.getString(foodPortionsIdIndex));//cheak if null
             String image = cursor.getString(imageIndex);
-            Double distance = Double.parseDouble(cursor.getString(distanceIndex));
+            Double distance=0.0;
+            if(cursor.getString(distanceIndex)!=null){
+                 distance = Double.parseDouble(cursor.getString(distanceIndex));
+            }
 
             Meeting meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
             meeting.setImage(image);
@@ -192,6 +196,16 @@ public class MeetingSql {
             return foodPortionsId;
         }
         return null;
+    }
+
+
+    //add Number Of Partner
+    public static void addNumberOfPartnerAfterDeleteBooking(SQLiteDatabase db,int idMeeting,int number) {
+
+        ContentValues args = new ContentValues();
+        args.put(NUMBER_OF_PARTNER, MeetingSql.getMeeting(db,idMeeting).getNumberOfPartner()+number);
+        db.update(MEETING_TABLE, args, ID + "= ?", new String[] {String.valueOf(idMeeting)});
+
     }
 
 

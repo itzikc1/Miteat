@@ -7,10 +7,22 @@
     <string name="myOrder">My Order</string>
     <string name="help">Help</string>
     <string name="search">Search</string>
+    <string name="history">History</string>
     <string name="booking">My Booking</string>
     <string name="google_place_api">AIzaSyA4BRvqWTo-4be58_YOIwImIW5Bq0PaEYI</string>
     <string name="title_activity_add_meeting">AddMeetingActivity</string>
     <string name="addMeeting">Add Meeting</string>
+    <string name="emptyHistory">Empty History</string>
+    <string name="emptyMeeting">Empty Meeting</string>
+    <string name="emptyBooking">Empty Booking</string>
+    <string name="emptyMyMeetingList">empty meeting please add new meeting by click on plus...</string>
+    <string name="emptyMyMeetingDish">empty menu please add dish</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="bookingNow">Booking</string>
+    <string name="invite">Invite</string>
+    <string name="back">Back</string>
+
     <string-array name="takeAwayOption">
         <item>Yes</item>
         <item>No</item>

@@ -2,6 +2,7 @@ package miteat.miteat;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -43,9 +44,9 @@ public class MyMeetingActivity extends AppCompatActivity implements MyMeetingFra
         int id = item.getItemId();
         if (id == R.id.back_to_main) {
 
-//            Intent intent = new Intent(getApplicationContext(),
-//                    MainActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(),
+                    MainActivity.class);
+            startActivity(intent);
             finish();
             return true;
         }
@@ -55,6 +56,9 @@ public class MyMeetingActivity extends AppCompatActivity implements MyMeetingFra
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -78,6 +82,17 @@ public class MyMeetingActivity extends AppCompatActivity implements MyMeetingFra
         infoBookingFragment.setMeeting(meeting);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.myMeeting, infoBookingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
+
+    }
+
+    @Override
+    public void refreshMeetingList() {
+
+        myMeetingFragment = new MyMeetingFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.myMeeting, myMeetingFragment);
         invalidateOptionsMenu();
         transaction.commit();
 

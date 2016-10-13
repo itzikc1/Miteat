@@ -3,7 +3,9 @@ package miteat.miteat.Model;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
+import miteat.miteat.Model.Entities.Feedback;
 import miteat.miteat.Model.Entities.Gps;
+import miteat.miteat.Model.Entities.History;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
@@ -45,5 +47,13 @@ public interface ModelInterface {
 
     public boolean makeAccept(Booking booking);
 
+    public boolean makeRefuseFromMyMeeting(Booking booking);
+
+    public boolean makeRefuseFromMyBooking(Booking booking);
+
     public List<Meeting> getAllMeetingToBooking();
+
+    public List<History> getAllHistoryBookingAndMeeting();
+
+    public void giveFeedBack(Feedback feedback);
 }

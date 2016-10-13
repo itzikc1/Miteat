@@ -34,11 +34,9 @@ public class MyBookingFragment extends Fragment {
 
     interface MyBookingFragmentInterface {
         public void detailsLoad(String userId, Boolean confirmation);
-
         public void bookingMenu(Meeting meeting);
-
+        public void refreshBookingList();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -53,7 +51,7 @@ public class MyBookingFragment extends Fragment {
         list.setAdapter(adapter);
 
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
-        emptyText.setText("no menu");
+        emptyText.setText(R.string.emptyBooking);
         list.setEmptyView(emptyText);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -146,12 +144,12 @@ public class MyBookingFragment extends Fragment {
             cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
+            Model.instance().makeRefuseFromMyBooking(booking);
+                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
+                    myBookingFragmentInterface.refreshBookingList();
 
                 }
             });
-
 
             return convertView;
         }

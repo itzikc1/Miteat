@@ -46,7 +46,7 @@ public class MeetingListFragment extends Fragment {
         list.setAdapter(adapter);
 
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
-        emptyText.setText("empty meeting please add new meeting by click on plus...");
+        emptyText.setText(R.string.emptyMyMeetingList);
         list.setEmptyView(emptyText);
 
 

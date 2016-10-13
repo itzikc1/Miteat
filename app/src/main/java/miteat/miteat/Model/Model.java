@@ -10,7 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
+import miteat.miteat.Model.Entities.Feedback;
 import miteat.miteat.Model.Entities.Gps;
+import miteat.miteat.Model.Entities.History;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
@@ -52,7 +54,7 @@ public class Model implements ModelInterface {
 //        setUserDetails(userDetails);
 
 
-      //  usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
+        //  usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
 
     }
 
@@ -94,7 +96,7 @@ public class Model implements ModelInterface {
 
     @Override
     public void deleteMeeting(Meeting meeting) {
-       // meetings.remove(meeting);
+        // meetings.remove(meeting);
         sqlModel.deleteMeeting(meeting);
     }
 
@@ -146,9 +148,29 @@ public class Model implements ModelInterface {
     }
 
     @Override
+    public boolean makeRefuseFromMyMeeting(Booking booking) {
+        return sqlModel.makeRefuseFromMyMeeting(booking);
+    }
+
+    @Override
+    public boolean makeRefuseFromMyBooking(Booking booking) {
+        return sqlModel.makeRefuseFromMyBooking(booking);
+    }
+
+    @Override
     public List<Meeting> getAllMeetingToBooking() {
         List<Meeting> meetings = sqlModel.getAllMeetingToBooking();
         return meetings;
+    }
+
+    @Override
+    public List<History> getAllHistoryBookingAndMeeting() {
+        return sqlModel.getAllHistoryBookingAndMeeting();
+    }
+
+    @Override
+    public void giveFeedBack(Feedback feedback) {
+        sqlModel.giveFeedBack(feedback);
     }
 
 

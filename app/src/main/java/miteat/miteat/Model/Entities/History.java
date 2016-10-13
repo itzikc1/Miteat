@@ -7,8 +7,40 @@ import java.util.List;
  */
 public class History {
 
-    private String host;
-    private List<String> guests;
+    private String hostId;
+    private Booking booking;
     private Feedback feedback;
 
+    public History(String hostId, Booking booking, Feedback feedback) {
+        this.hostId = hostId;
+        this.booking = booking;
+        this.feedback = feedback;
+    }
+
+
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+
+    public String getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
 }

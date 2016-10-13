@@ -33,6 +33,7 @@ public class MyMeetingFragment extends Fragment{
         public void detailsLoad(String userId, Boolean confirmation);
 
         public void meetingMenu(Meeting meeting);
+        public void refreshMeetingList();
 
     }
 
@@ -50,7 +51,7 @@ public class MyMeetingFragment extends Fragment{
         list.setAdapter(adapter);
 
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
-        emptyText.setText("no menu");
+        emptyText.setText(R.string.emptyBooking);
         list.setEmptyView(emptyText);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,8 +139,10 @@ public class MyMeetingFragment extends Fragment{
                 @Override
                 public void onClick(View v) {
                     booking.setConfirmation(2);
-
-                    Model.instance().makeAccept(booking);
+                    Model.instance().makeRefuseFromMyMeeting(booking);
+                 //   Model.instance().makeAccept(booking);
+                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    myMeetingFragmentInterface.refreshMeetingList();
                 }
             });
             accept.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +151,8 @@ public class MyMeetingFragment extends Fragment{
                     booking.setConfirmation(1);
                     booking.getMeeting().setNumberOfPartner(booking.getMeeting().getNumberOfPartner()-booking.getNumberOfPartner());
                     Model.instance().makeAccept(booking);
+                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    myMeetingFragmentInterface.refreshMeetingList();
                 }
             });
 

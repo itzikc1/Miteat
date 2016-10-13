@@ -48,7 +48,7 @@ public class MainFragment extends Fragment {
         adapter = new MyAddapter();
         list.setAdapter(adapter);
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
-        emptyText.setText("empty meeting!!!");
+        emptyText.setText(R.string.emptyMeeting);
         list.setEmptyView(emptyText);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

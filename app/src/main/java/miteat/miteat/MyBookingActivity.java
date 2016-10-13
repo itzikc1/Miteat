@@ -43,9 +43,9 @@ public class MyBookingActivity extends AppCompatActivity implements MyBookingFra
         int id = item.getItemId();
         if (id == R.id.back_to_main) {
 
-//            Intent intent = new Intent(getApplicationContext(),
-//                    MainActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(),
+                    MainActivity.class);
+            startActivity(intent);
             finish();
             return true;
         }
@@ -55,6 +55,9 @@ public class MyBookingActivity extends AppCompatActivity implements MyBookingFra
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -105,6 +108,15 @@ public class MyBookingActivity extends AppCompatActivity implements MyBookingFra
         invalidateOptionsMenu();
         transaction.commit();
 
+    }
+
+    @Override
+    public void refreshBookingList() {
+        myBookingFragment = new MyBookingFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.myBooking, myBookingFragment);
+        invalidateOptionsMenu();
+        transaction.commit();
     }
 
     @Override

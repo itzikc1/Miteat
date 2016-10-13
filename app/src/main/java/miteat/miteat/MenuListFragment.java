@@ -53,7 +53,7 @@ public class MenuListFragment extends Fragment {
         list.setAdapter(adapter);
 
         TextView emptyText = (TextView)view.findViewById(android.R.id.empty);
-        emptyText.setText("empty menu please add dish");
+        emptyText.setText(R.string.emptyMyMeetingDish);
         list.setEmptyView(emptyText);
 
 

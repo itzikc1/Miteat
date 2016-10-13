@@ -15,137 +15,117 @@ import miteat.miteat.Model.Entities.UserDetails;
 public class FeedBackSql {
 
 
-        private static final String FEED_BACK_TABLE = "feedBack_table";
-        private static final String USER_NAME = "user_name";
-        private static final String PIC_PROFILE = "picProfile";
-        private static final String EARN_MONEY = "earnMoney";
-        private static final String NUMBER_OF_STAR_AVG = "numberOfStarAvg";
-        private static final String PHONE_NUMBER = "phoneNumber";
-        private static final String ADDRESS = "address";
-        private static final String AVG_PAY_FOR_MEAL = "avgPayForMeal";
-        private static final String MAIL = "mail";
-        private static final String FEEDBACKS = "feedbacks";
-        private static final String LOVE_TAKEAWAY = "loveTakeAway";
-        private static final String FAVORITE_DISH = "favoriteDish";
-        private static final String MARITAL_STATUS = "maritalStatus";
-        private static final String CLEANING_STAR = "cleaningStar";
-        private static final String SERVICE_STAR = "serviceStar";
-        private static final String ATMOSPHERE_STAR = "atmosphereStar";
-        private static final String VALUE_STAR = "valueStar";
-        private static final String BIRTHDAY = "birthday";
-
-        public static void addUserDetails(SQLiteDatabase db, UserDetails userDetails) {
-
-            ContentValues values = new ContentValues();
-            values.put(USER_NAME, userDetails.getUserName());
-            values.put(PIC_PROFILE, userDetails.getPicProfile());
-            values.put(EARN_MONEY, userDetails.getEarnMoney());
-            values.put(NUMBER_OF_STAR_AVG, userDetails.getNumberOfStarAvg());
-            values.put(PHONE_NUMBER, userDetails.getPhoneNumber());
-            values.put(ADDRESS, userDetails.getAddress());
-            values.put(AVG_PAY_FOR_MEAL, userDetails.getAvgPayForMeal());
-            values.put(MAIL, userDetails.getMail());
-            values.put(LOVE_TAKEAWAY, userDetails.getLoveTakeAway());
-            values.put(FAVORITE_DISH, userDetails.getFavoriteDish());
-            values.put(MARITAL_STATUS, userDetails.getMaritalStatus());
-            values.put(CLEANING_STAR, userDetails.getCleaningStar());
-            values.put(SERVICE_STAR, userDetails.getServiceStar());
-            values.put(ATMOSPHERE_STAR, userDetails.getAtmosphereStar());
-            values.put(VALUE_STAR, userDetails.getValueStar());
-            values.put(BIRTHDAY, userDetails.getBirthday());
-            db.insert(FEED_BACK_TABLE, USER_NAME, values);
-
-        }
+    private static final String FEED_BACK_TABLE = "feedBack_table";
+    private static final String ID = "id";
+    private static final String ID_BOOKING = "idBooking";
+    private static final String ID_MEETING = "idMeeting";
+    private static final String FROM_USER_ID = "fromUserId";
+    private static final String TO_USER_ID = "toUserId";
+    private static final String FEEDBACK_TEXT = "feedBackText";
+    private static final String REPLY_TEXT = "replyText";
+    private static final String AVG_STAR = "avgStar";
+    private static final String CLEANING_STAR = "cleaningStar";
+    private static final String SERVICE_STAR = "serviceStar";
+    private static final String ATMOSPHERE_STAR = "atmosphereStar";
+    private static final String VALUE_STAR = "valueStar";
+    private static final String TAKE_AWAY = "take_away";
+    private static final String DATE_AND_TIME = "date_and_time";
 
 
-        public static UserDetails getUserDetails(SQLiteDatabase db) {
+    public static void addFeedBackFromUser(SQLiteDatabase db, Feedback feedback) {
 
-            Cursor cursor = db.query(FEED_BACK_TABLE, null, null, null, null, null, null);
-            UserDetails userDetails = null;
-            if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-
-                return userDetails;
-            }
-
-
-            if (cursor.moveToFirst()) {
-
-                int userNameIndex = cursor.getColumnIndex(USER_NAME);
-                int picProfileIndex = cursor.getColumnIndex(PIC_PROFILE);
-                int earnMoneyIndex = cursor.getColumnIndex(EARN_MONEY);
-                int numberOfStarAvgIndex = cursor.getColumnIndex(NUMBER_OF_STAR_AVG);
-                int phoneNumberIndex = cursor.getColumnIndex(PHONE_NUMBER);
-                int addressIndex = cursor.getColumnIndex(ADDRESS);
-                int avgPayForMealIndex = cursor.getColumnIndex(AVG_PAY_FOR_MEAL);
-                int mailIndex = cursor.getColumnIndex(MAIL);
-                int feedbacksIndex = cursor.getColumnIndex(FEEDBACKS);
-                int loveTakeAwayIndex = cursor.getColumnIndex(LOVE_TAKEAWAY);
-                int favoriteDishIndex  = cursor.getColumnIndex(FAVORITE_DISH);
-                int maritalStatusIndex = cursor.getColumnIndex(MARITAL_STATUS);
-
-                int cleaningStarIndex = cursor.getColumnIndex(CLEANING_STAR);
-                int serviceStarIndex = cursor.getColumnIndex(SERVICE_STAR);
-                int atmosphereStarIndex = cursor.getColumnIndex(ATMOSPHERE_STAR);
-                int valueStarIndex = cursor.getColumnIndex(VALUE_STAR);
-                int birthdayIndex = cursor.getColumnIndex(BIRTHDAY);
-
-
-                String userName = cursor.getString(userNameIndex);
-                String picProfile = cursor.getString(picProfileIndex);
-                double earnMoney = Double.parseDouble(cursor.getString(earnMoneyIndex));
-                float numberOfStarAvg = Float.parseFloat(cursor.getString(numberOfStarAvgIndex));
-                float cleaningStar = Float.parseFloat(cursor.getString(cleaningStarIndex));
-                float serviceStar = Float.parseFloat(cursor.getString(serviceStarIndex));
-                float atmosphereStar = Float.parseFloat(cursor.getString(atmosphereStarIndex));
-                float valueStar = Float.parseFloat(cursor.getString(valueStarIndex));
-                Long birthday = Long.parseLong(cursor.getString(birthdayIndex));
-                String phoneNumber = cursor.getString(phoneNumberIndex);
-                String address = cursor.getString(addressIndex);
-                double avgPayForMeal = Double.parseDouble(cursor.getString(avgPayForMealIndex));
-                String mail = cursor.getString(mailIndex);
-                //  List<Feedback> feedbacks = cursor.getString(feedbacksIndex);
-                Boolean loveTakeAway = Boolean.parseBoolean(cursor.getString(loveTakeAwayIndex));
-                String favoriteDish = cursor.getString(favoriteDishIndex);
-                int maritalStatus = Integer.parseInt(cursor.getString(maritalStatusIndex));
-                userDetails =new UserDetails(userName,mail,phoneNumber);
-                userDetails.setAllParm(numberOfStarAvg,cleaningStar,serviceStar,atmosphereStar,valueStar,earnMoney,picProfile,address,avgPayForMeal,maritalStatus,loveTakeAway,favoriteDish,birthday);
-            }
-            return userDetails;
-        }
-
-
-        public static void deleteUserDetails(SQLiteDatabase db, String userName) {
-            db.delete(FEED_BACK_TABLE, USER_NAME + " = '" + userName + "'", null);
-        }
-
-
-        public static void create(SQLiteDatabase db) {
-            db.execSQL("create table " +
-                    FEED_BACK_TABLE + " (" +
-                    USER_NAME + " TEXT," +
-                    PIC_PROFILE + " TEXT," +
-                    EARN_MONEY + " DOUBLE," +
-                    NUMBER_OF_STAR_AVG + " FLOAT," +
-                    CLEANING_STAR + " FLOAT," +
-                    SERVICE_STAR + " FLOAT," +
-                    ATMOSPHERE_STAR + " FLOAT," +
-                    VALUE_STAR + " FLOAT," +
-                    BIRTHDAY + " TEXT," +
-                    PHONE_NUMBER + " TEXT," +
-                    ADDRESS + " TEXT," +
-                    AVG_PAY_FOR_MEAL + " DOUBLE," +
-                    MAIL + " TEXT," +
-                    FEEDBACKS + " TEXT," +
-                    LOVE_TAKEAWAY + " BOOLEAN," +
-                    FAVORITE_DISH + " TEXT," +
-                    MARITAL_STATUS + " INTEGER);");
-        }
-
-        public static void drop(SQLiteDatabase db) {
-            db.execSQL("drop table " + FEED_BACK_TABLE);
-        }
-
+        ContentValues values = new ContentValues();
+        values.put(ID,feedback.getId());
+        values.put(ID_BOOKING,feedback.getIdBooking());
+        values.put(ID_MEETING, feedback.getIdMeeting());
+        values.put(FROM_USER_ID,feedback.getFromUserId());
+        values.put(TO_USER_ID,feedback.getToUserId());
+        values.put(FEEDBACK_TEXT, feedback.getFeedBackText());
+        values.put(REPLY_TEXT, feedback.getReplyText());
+        values.put(AVG_STAR, feedback.getAvgStar());
+        values.put(CLEANING_STAR,feedback.getCleaningStar());
+        values.put(SERVICE_STAR, feedback.getServiceStar());
+        values.put(ATMOSPHERE_STAR, feedback.getAtmosphereStar());
+        values.put(VALUE_STAR, feedback.getValueStar());
+        values.put(TAKE_AWAY, feedback.isTakeAwy());
+        values.put(DATE_AND_TIME, feedback.getDateAndTime());
+        db.insert(FEED_BACK_TABLE, ID, values);
     }
+
+    public static Feedback getFeedback(SQLiteDatabase db,String idUserGaveFeedback,String idBooking, int IdMeeting, Long startTime) {
+
+
+        String[] selectionArgs = {String.valueOf(idUserGaveFeedback),String.valueOf(idBooking), String.valueOf(IdMeeting),String.valueOf(startTime)};
+        Cursor cursor = db.query(FEED_BACK_TABLE, null, FROM_USER_ID + " = ?" + "and " + ID_BOOKING + " = ?" + "and " + ID_MEETING + " = ?" + "and " + DATE_AND_TIME + " = ?", selectionArgs, null, null, null);
+
+
+
+        Feedback feedback = null;
+        if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
+            return feedback;
+        }
+        if (cursor.moveToFirst()) {
+
+            int idIndex = cursor.getColumnIndex(ID);
+           // int idMeetingIndex = cursor.getColumnIndex(ID_MEETING);
+           // int idBookingIndex = cursor.getColumnIndex(ID_BOOKING);
+            int fromUserIdIndex = cursor.getColumnIndex(FROM_USER_ID);
+            int toUserIdIndex = cursor.getColumnIndex(TO_USER_ID);
+            int feedBackTextIndex = cursor.getColumnIndex(FEEDBACK_TEXT);
+            int replyTextIndex = cursor.getColumnIndex(REPLY_TEXT);
+            int avgStarIndex = cursor.getColumnIndex(AVG_STAR);
+            int cleaningStarIndex = cursor.getColumnIndex(CLEANING_STAR);
+            int serviceStarIndex = cursor.getColumnIndex(SERVICE_STAR);
+            int atmosphereStarIndex = cursor.getColumnIndex(ATMOSPHERE_STAR);
+            int valueStarIndex = cursor.getColumnIndex(VALUE_STAR);
+            int takeAwyIndex = cursor.getColumnIndex(TAKE_AWAY);
+          //  int dateAndTimeIndex = cursor.getColumnIndex(DATE_AND_TIME);
+
+            int id = Integer.parseInt(cursor.getString(idIndex));
+            String fromUserId = cursor.getString(fromUserIdIndex);
+            String toUserId = cursor.getString(toUserIdIndex);
+            String feedBackText = cursor.getString(feedBackTextIndex);
+            String replyText = cursor.getString(replyTextIndex);
+            float avgStar = Float.parseFloat(cursor.getString(avgStarIndex));
+            float cleaningStar = Float.parseFloat(cursor.getString(cleaningStarIndex));
+            float serviceStar = Float.parseFloat(cursor.getString(serviceStarIndex));
+            float atmosphereStar = Float.parseFloat(cursor.getString(atmosphereStarIndex));
+            float valueStar = Float.parseFloat(cursor.getString(valueStarIndex));
+          //  Long dateAndTime = Long.parseLong(cursor.getString(dateAndTimeIndex));
+            Boolean takeAway = Boolean.parseBoolean(cursor.getString(takeAwyIndex));
+
+            feedback = new Feedback(id,IdMeeting,idBooking,fromUserId,toUserId,feedBackText,replyText,cleaningStar,serviceStar,atmosphereStar,valueStar,takeAway,startTime);
+
+            }
+        return feedback;
+    }
+
+
+    public static void create(SQLiteDatabase db) {
+        db.execSQL("create table " +
+                FEED_BACK_TABLE + " (" +
+                ID + " INTEGER," +
+                ID_BOOKING + " TEXT," +
+                ID_MEETING + " INTEGER," +
+                FROM_USER_ID + " TEXT," +
+                TO_USER_ID + " TEXT," +
+                FEEDBACK_TEXT + " TEXT," +
+                REPLY_TEXT + " TEXT," +
+                AVG_STAR + " FLOAT," +
+                CLEANING_STAR + " FLOAT," +
+                SERVICE_STAR + " FLOAT," +
+                ATMOSPHERE_STAR + " FLOAT," +
+                VALUE_STAR + " FLOAT," +
+                TAKE_AWAY + " BOOLEAN," +
+                DATE_AND_TIME + " TEXT);");
+
+     }
+
+    public static void drop(SQLiteDatabase db) {
+        db.execSQL("drop table " + FEED_BACK_TABLE);
+    }
+
+}
 
 
 

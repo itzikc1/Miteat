@@ -1,5 +1,7 @@
 package miteat.miteat.Model.Entities;
 
+import android.util.Log;
+
 /**
  * Created by Itzik on 11/09/2016.
  */
@@ -7,7 +9,7 @@ public class Feedback {
 
     private int id;
     private int idMeeting;
-    private int idBooking;
+    private String idBooking;
     private String fromUserId;
     private String toUserId;
     private float avgStar;
@@ -17,25 +19,25 @@ public class Feedback {
     private float serviceStar;
     private float atmosphereStar;
     private float valueStar;
-    private boolean takeAwy;
+    private boolean takeAway;
     private Long dateAndTime;
 
 
-    public Feedback(int id, int idMeeting, int idBooking, String fromUserId, String toUserId, float avgStar, String feedBackText, String replyText, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, boolean takeAwy) {
+    public Feedback(int id, int idMeeting, String idBooking, String fromUserId, String toUserId, String feedBackText, String replyText, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, boolean takeAway, Long dateAndTime) {
 
         this.id = id;
         this.idMeeting = idMeeting;
         this.idBooking = idBooking;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
-        this.avgStar = avgStar;
         this.feedBackText = feedBackText;
         this.replyText = replyText;
         this.cleaningStar = cleaningStar;
         this.serviceStar = serviceStar;
         this.atmosphereStar = atmosphereStar;
         this.valueStar = valueStar;
-        this.takeAwy = takeAwy;
+        this.takeAway = takeAway;
+        this.dateAndTime= dateAndTime;
 
 
     }
@@ -101,18 +103,18 @@ public class Feedback {
     }
 
     public boolean isTakeAwy() {
-        return takeAwy;
+        return takeAway;
     }
 
-    public void setTakeAwy(boolean takeAwy) {
-        this.takeAwy = takeAwy;
+    public void setTakeAway(boolean takeAwy) {
+        this.takeAway = takeAwy;
     }
 
-    public int getIdBooking() {
+    public String getIdBooking() {
         return idBooking;
     }
 
-    public void setIdBooking(int idBooking) {
+    public void setIdBooking(String idBooking) {
         this.idBooking = idBooking;
     }
 
@@ -148,5 +150,11 @@ public class Feedback {
         this.avgStar = avgStar;
     }
 
+    public Long getDateAndTime() {
+        return dateAndTime;
+    }
 
+    public void setDateAndTime(Long dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
 }

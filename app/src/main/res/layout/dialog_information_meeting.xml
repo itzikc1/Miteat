@@ -45,7 +45,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/invite"
@@ -54,7 +54,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Invite " />
+            android:text="@string/invite" />
 
 
     </LinearLayout>

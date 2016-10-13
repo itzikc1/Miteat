@@ -241,7 +241,7 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="Back" />
+                android:text="@string/back" />
 
 
 

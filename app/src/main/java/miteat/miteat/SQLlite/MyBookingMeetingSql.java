@@ -193,6 +193,14 @@ public class MyBookingMeetingSql {
     }
 
 
+
+    public static void deleteRefuseBooking(SQLiteDatabase db, String idUser,int meetingId) {
+        String [] selectionArgs ={String.valueOf(meetingId),idUser};
+        String[] params = new String[1];
+        params[0] = String.valueOf(0);
+        db.delete(MY_BOOKING_MEETING_TABLE, ID + " = '" + meetingId + "'"+" and "+USER_ID+ " = '" +idUser+"'", null);
+    }
+
     public static void deleteMeeting(SQLiteDatabase db, int id) {
 
         db.delete(MY_BOOKING_MEETING_TABLE, ID + " = '" + id + "'", null);

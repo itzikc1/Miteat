@@ -1,11 +1,12 @@
 package miteat.miteat.Model.Entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Itzik on 14/07/2016.
  */
-public class FoodPortions {
+public class FoodPortions  {
 
 
     private int meetingId;
@@ -28,6 +29,7 @@ public class FoodPortions {
         this.allergens = allergens;
     }
 
+    public FoodPortions(){}
     public int getId() {
         return id;
     }

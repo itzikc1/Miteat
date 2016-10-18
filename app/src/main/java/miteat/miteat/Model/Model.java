@@ -16,6 +16,7 @@ import miteat.miteat.Model.Entities.History;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
+import miteat.miteat.MyApplication;
 import miteat.miteat.SQLlite.ModelSql;
 
 /**
@@ -27,15 +28,13 @@ public class Model implements ModelInterface {
     private final static Model instance = new Model();
 
     ModelSql sqlModel;
-
-    //ModelFirebase modelFirebase;
-
-    List<Meeting> meetings = new LinkedList<Meeting>();
+    ModelFirebase modelFirebase;
+    //  List<Meeting> meetings = new LinkedList<Meeting>();
     HashMap<String, UserDetails> usersDetails = new HashMap<String, UserDetails>();
 
     private Model() {
         sqlModel = new ModelSql();
-        //  modelFirebase = new ModelFirebase(MyApplication.getAppContext());
+        modelFirebase = new ModelFirebase(MyApplication.getAppContext());
         //make fake meeting
 //        for (int i = 0; i < 10; i++) {
 //            UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
@@ -78,20 +77,97 @@ public class Model implements ModelInterface {
 
     @Override
     public void addMeeting(Meeting meeting) {
-        meetings.add(meeting);
+        //  meetings.add(meeting);
         sqlModel.addMeeting(meeting);
     }
 
+//    public Boolean checkMeetingIfUse(final Meeting meeting) {
+//
+//        Model.instance().getMeetingAsync(meeting, new Model.GetMeetingInterface() {
+//            @Override
+//            public void onResult(Meeting meetings) {
+//
+//                if (meetings != null) {
+//                    Boolean b = false;
+//                    Meeting meeting1 = getMeeting(meetings.getId());
+//                if(meetings.getNumberOfPartner()<meeting1.getNumberOfPartner()){
+//                   b=true;
+//                }
+//
+//                }else {
+//
+//                }
+//
+//            }
+//            @Override
+//            public void onCancel() {
+//            }
+//        });
+//
+//        return true;
+//    }
+
     @Override
     public List<Meeting> getAllMeeting() {
+
         List<Meeting> meetings = sqlModel.getAllMeeting();
         return meetings;
-        //return meetings;
+        // return modelFirebase.getAllMeeting();
+
     }
+
+    public interface GetAllMeetingInterface {
+        public void onResult(List<Meeting> meetings);
+
+        public void onCancel();
+    }
+
+    public interface GetMeetingInterface {
+        public void onResult(Meeting meetings);
+
+        public void onCancel();
+    }
+
+    public interface GetAllBookingInterface {
+        public void onResult(List<Booking> bookings);
+
+        public void onCancel();
+    }
+
+    public boolean getMeetingAsync(Meeting meeting, GetMeetingInterface listener) {
+        modelFirebase.getMeetingAsync(meeting, listener);
+        return false;
+    }
+
+    public void getAllMeetingsAsynch(GetAllMeetingInterface listener) {
+        modelFirebase.getAllMeetingAsynch(listener);
+    }
+
+    public void getAllMeetingsToBookingAsynch(GetAllMeetingInterface listener) {
+        sqlModel.getAllMeetingToBooking();
+        modelFirebase.getAllMeetingToBooking(listener);
+    }
+
+    public void getOrderToBookingAsync(GetAllBookingInterface listener) {
+        modelFirebase.getOrderToBooking(listener);
+    }
+
+    public void getMyBookingListAsync(GetAllBookingInterface listener) {
+        modelFirebase.getMyBookingList(listener);
+    }
+
+//    public interface GetUserDetailsInterface {
+//        public void onResult(UserDetails userDetails);
+//
+//        public void onCancel();
+//    }
+//    public void getUserDetailsAsynch(GetUserDetailsInterface listener){
+//        modelFirebase.getAllStudentsAsynch(listener);
+//    }
 
     @Override
     public Meeting getMeeting(int id) {
-        return null;
+        return sqlModel.getMeeting(id);
     }
 
     @Override
@@ -171,6 +247,11 @@ public class Model implements ModelInterface {
     @Override
     public void giveFeedBack(Feedback feedback) {
         sqlModel.giveFeedBack(feedback);
+    }
+
+    @Override
+    public void setUpdateToMeetingWithNumberOfPartner(List<Booking> bookings) {
+
     }
 
 

@@ -18,7 +18,6 @@ import miteat.miteat.Model.Entities.History;
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Model.Entities.User;
 import miteat.miteat.Model.Entities.UserDetails;
-import miteat.miteat.Model.Model;
 import miteat.miteat.Model.ModelInterface;
 import miteat.miteat.MyApplication;
 
@@ -29,7 +28,7 @@ public class ModelSql implements ModelInterface {
 
 
     private static final int VERSION = 1;
-
+    public SaveInFirebase saveInFirebase;
     MyDBHelper dbHelper;
     private static final String USER_TABLE = "user_table";
     private static final String GPS_TABLE = "gps_table";
@@ -39,9 +38,12 @@ public class ModelSql implements ModelInterface {
     private static final String ID_MEETING_MAKER = "id_meeting_maker";
     private static final String FEED_BACK_TABLE = "feedBack_table";
     private static final String MY_BOOKING_TABLE = "my_booking_table";
-
+    private static final String MY_BOOKING_MEETING_TABLE = "my_booking_meeting_table";
+    private static final String MY_BOOKING_FOOD_PORTIONS_TABLE = "my_booking_food_portions_table";
+    private String userName ="nivi";
 
     public ModelSql() {
+        saveInFirebase = new SaveInFirebase(MyApplication.getAppContext());
         dbHelper = new MyDBHelper(MyApplication.getAppContext());
     }
 
@@ -77,32 +79,24 @@ public class ModelSql implements ModelInterface {
             return 1;
         }
         int cnt = cursor.getCount();
-        //  cursor.close();
         return cnt;
     }
 
     @Override
     public void addMeeting(Meeting meeting) {
-        // int num = numberOfRow(MEETING_TABLE);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
-//        Cursor cursor = db.query(MEETING_TABLE, null, null, null, null, null, null);
-//        int num = cursor.getCount();
         if (meeting.getId() == -1) {
             int id = IdMeetingMakerSql.getId(db);
             IdMeetingMakerSql.deleteId(db, id);
             meeting.setId(id);
-            Log.d("id", String.valueOf(id));
         }
         MeetingSql.addMeeting(db, meeting);
+        saveInFirebase.addMeeting(meeting);
         for (int i = 0; i < meeting.getFoodPortionsId().size(); i++) {
             meeting.getFoodPortionsId().get(i).setId(i);
             meeting.getFoodPortionsId().get(i).setMeetingId(meeting.getId());
             addFoodPortions(meeting.getFoodPortionsId().get(i));
-
         }
-
     }
 
     public void addFoodPortions(FoodPortions foodPortions) {
@@ -120,7 +114,10 @@ public class ModelSql implements ModelInterface {
             meetings.get(i).setFoodPortionsId(FoodPortionsSql.getAllPortionsId(db, ids, meetings.get(i).getId()));
         }
         return meetings;
+
+        // return modelFirebase.getAllMeeting();
     }
+
 
     @Override
     public Meeting getMeeting(int id) {
@@ -135,6 +132,8 @@ public class ModelSql implements ModelInterface {
     public void deleteMeeting(Meeting meeting) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         MeetingSql.deleteMeeting(db, meeting.getId());
+        //check if all ready booking
+        saveInFirebase.deleteMeeting(meeting);
         FoodPortionsSql.deleteFoodPortions(db, meeting.getId());
     }
 
@@ -155,7 +154,8 @@ public class ModelSql implements ModelInterface {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         MyBookingSql.addBooking(db, booking);//enter the booking to table
         addMeetingForBooking(booking.getMeeting());//add the meting with user id to meeting table
-        addToMeetingAfterBooking(booking);
+        //  addToMeetingAfterBooking(booking);
+        saveInFirebase.bookingToMeeting(booking);
     }
 
     //this for the host table with fierbase need to change
@@ -164,7 +164,6 @@ public class ModelSql implements ModelInterface {
         booking.setMeetingOrBooking(0);
         MyBookingSql.addBooking(db, booking);//enter the booking to table
         addMeetingForBooking(booking.getMeeting());//add the meting with user id to meeting table
-
     }
 
     public void addMeetingForBooking(Meeting meeting) {
@@ -196,6 +195,7 @@ public class ModelSql implements ModelInterface {
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         UserDetailsSql.addUserDetails(db, userDetails);
+        saveInFirebase.setUserDetails(userDetails);
     }
 
     @Override
@@ -205,7 +205,7 @@ public class ModelSql implements ModelInterface {
         int num = cursor.getCount();
 
         if (num == 0) {
-            UserDetails userDetails = new UserDetails("itzik", "mail", "0525541676");
+            UserDetails userDetails = new UserDetails(userName, "mail", "0525541676");
             // userDetails.setNumberOfStarAvg(3.6f);
             return userDetails;
         }
@@ -229,7 +229,7 @@ public class ModelSql implements ModelInterface {
             if (nowTime.compareTo(bookings.get(i).getMeeting().getDateAndEndTime()) == 1) {
                 SQLiteDatabase dbe = dbHelper.getWritableDatabase();
                 MyBookingSql.enterBookingOrMeetingToHistory(dbe, bookings.get(i).getId(), bookings.get(i).getMeeting().getId());
-                if(bookings.get(i).getConfirmation()==0 ||bookings.get(i).getConfirmation()==2){
+                if (bookings.get(i).getConfirmation() == 0 || bookings.get(i).getConfirmation() == 2) {
                     makeRefuseFromMyBooking(bookings.get(i));
                 }
                 bookings.remove(i);
@@ -258,6 +258,8 @@ public class ModelSql implements ModelInterface {
     @Override
     public List<Booking> getOrderToBooking() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //get from firebase
         List<Booking> bookings = MyBookingSql.getAllMeeting(db);
         for (int i = 0; i < bookings.size(); i++) {
             SQLiteDatabase dbc = dbHelper.getReadableDatabase();
@@ -270,7 +272,7 @@ public class ModelSql implements ModelInterface {
             if (nowTime.compareTo(bookings.get(i).getMeeting().getDateAndEndTime()) == 1) {
                 SQLiteDatabase dbe = dbHelper.getWritableDatabase();
                 MyBookingSql.enterBookingOrMeetingToHistory(dbe, bookings.get(i).getId(), bookings.get(i).getMeeting().getId());
-                if(bookings.get(i).getConfirmation()==0 ||bookings.get(i).getConfirmation()==2){
+                if (bookings.get(i).getConfirmation() == 0 || bookings.get(i).getConfirmation() == 2) {
                     makeRefuseFromMyMeeting(bookings.get(i));
                 }
                 bookings.remove(i);
@@ -289,19 +291,10 @@ public class ModelSql implements ModelInterface {
     @Override
     public boolean makeAccept(Booking booking) {
         //say to book maker with firebase
-//        if (booking.getConfirmation() == 2) {
-//            if (booking.getMeeting().getUserId() == Model.instance().getUserDetails().getUserName()) {
-//                // add Number Of Partner After Delete Booking
-//                addNumberOfPartnerAfterDeleteBooking(booking.getMeeting().getId(), booking.getNumberOfPartner());
-//            }
-//            deleteBooking(booking);
-//        } else {
-//
-//            SQLiteDatabase db = dbHelper.getWritableDatabase();
-//            MyBookingSql.makeAcceptInMyMeeting(db, booking);
-//        }
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         MyBookingSql.makeAcceptInMyMeeting(db, booking);
+        saveInFirebase.makeAccept(booking);
         return true;
     }
 
@@ -310,6 +303,7 @@ public class ModelSql implements ModelInterface {
         // add Number Of Partner After Delete Booking
         addNumberOfPartnerAfterDeleteBooking(booking.getMeeting().getId(), booking.getNumberOfPartner());
         deleteBooking(booking);
+        saveInFirebase.makeRefuseFromMyMeeting(booking);
         return false;
     }
 
@@ -317,6 +311,7 @@ public class ModelSql implements ModelInterface {
     public boolean makeRefuseFromMyBooking(Booking booking) {
         //add partners to meeting in meeting user
         deleteBooking(booking);
+        saveInFirebase.makeRefuseFromMyBooking(booking);
         return false;
     }
 
@@ -334,6 +329,12 @@ public class ModelSql implements ModelInterface {
 
     }
 
+    public void addNumberOfPartnerAfterPlusBooking(int idMeeting, int number) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        MeetingSql.addNumberOfPartnerAfterPlusBooking(db, idMeeting, number);
+
+    }
+
     @Override
     public List<Meeting> getAllMeetingToBooking() {
 
@@ -343,15 +344,22 @@ public class ModelSql implements ModelInterface {
         for (int i = 0; i < meetings.size(); i++) {
             int[] ids = MeetingSql.getFoodPortions(db, meetings.get(i).getId());
             meetings.get(i).setFoodPortionsId(FoodPortionsSql.getAllPortionsId(db, ids, meetings.get(i).getId()));
-            int num = meetings.get(i).getNumberOfPartner() - MyBookingSql.getAllBookingNumberOfPartner(db, meetings.get(i));
-            if (num < 0 || num == 0) {
+            int num = meetings.get(i).getNumberOfPartner() - MyBookingSql.getAllBookingNumberOfPartner(db, meetings.get(i));//minus partners
+            Calendar cls = Calendar.getInstance();
+            Long nowTime = new Long(0);
+            nowTime = cls.getTimeInMillis();
+
+            if (meetings.get(i).getDateAndEndTime().compareTo(nowTime) == -1) {
+                saveInFirebase.deleteMeetingToBooking(meetings.get(i));
+            }
+            if ((num < 0) || (num == 0) || (meetings.get(i).getDateAndEndTime().compareTo(nowTime) == -1)) {
+                //saveInFirebase.deleteMeetingToBooking(meetings.get(i));
                 meetings.remove(meetings.get(i));
             } else {
-                meetings.get(i).setNumberOfPartner(num);
+               // meetings.get(i).setNumberOfPartner(num);
+                saveInFirebase.uploadMeetingToBooking(meetings.get(i));
             }
-            // meetings.get(i).setNumberOfPartner(meetings.get(i).getNumberOfPartner()-MyBookingSql.getAllBookingNumberOfPartner(db,meetings.get(i)));
         }
-
         return meetings;
     }
 
@@ -375,7 +383,7 @@ public class ModelSql implements ModelInterface {
                 bookings.get(i).getMeeting().setFoodPortionsId(MyBookingFoodPortionsSql.getAllPortionsId(dbp, ids, booking.getMeeting().getId(), booking.getId()));
             }
 
-              histories.add(new History(bookings.get(i).getId(),bookings.get(i),getFeedBackAfterMeeting(bookings.get(i).getUserIdOfBooking(),bookings.get(i).getId(),bookings.get(i).getMeeting().getId(),bookings.get(i).getMeeting().getDateAndTime())));
+            histories.add(new History(bookings.get(i).getId(), bookings.get(i), getFeedBackAfterMeeting(bookings.get(i).getUserIdOfBooking(), bookings.get(i).getId(), bookings.get(i).getMeeting().getId(), bookings.get(i).getMeeting().getDateAndTime())));
         }
         return histories;
     }
@@ -387,10 +395,16 @@ public class ModelSql implements ModelInterface {
         FeedBackSql.addFeedBackFromUser(db, feedback);
     }
 
+    @Override
+    public void setUpdateToMeetingWithNumberOfPartner(List<Booking> bookings) {
+
+
+    }
+
 
     public Feedback getFeedBackAfterMeeting(String idUserGaveFeedback, String idBooking, int IdMeeting, Long startTime) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        return FeedBackSql.getFeedback(db,idUserGaveFeedback,idBooking,IdMeeting,startTime);
+        return FeedBackSql.getFeedback(db, idUserGaveFeedback, idBooking, IdMeeting, startTime);
     }
 
 

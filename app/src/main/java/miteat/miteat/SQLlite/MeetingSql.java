@@ -65,9 +65,9 @@ public class MeetingSql {
         params[0] = String.valueOf(id);
 
         Cursor cursor = db.query(MEETING_TABLE, null, ID + "=?", params, null, null, null, null);
-
+        Meeting meeting = null;
         if (!(cursor.moveToFirst()) || cursor.getCount() == 0) {
-            Meeting meeting = null;
+
             return meeting;
         }
 
@@ -106,13 +106,12 @@ public class MeetingSql {
                  distance = Double.parseDouble(cursor.getString(distanceIndex));
             }
 
-            Meeting meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
+             meeting = new Meeting(id,userId, numberOfPartner, typeOfFood, money, dateAndTime, dateAndEndTime, location, latLocation, lonLocation, insurance, takeAway);
             meeting.setImage(image);
             meeting.setDistance(distance);
            // meeting.setUserId(userId);
             return meeting;
         }
-        Meeting meeting = null;
         return meeting;
     }
     public static List<Meeting> getAllMeeting(SQLiteDatabase db) {
@@ -200,13 +199,22 @@ public class MeetingSql {
 
 
     //add Number Of Partner
-    public static void addNumberOfPartnerAfterDeleteBooking(SQLiteDatabase db,int idMeeting,int number) {
+public static void addNumberOfPartnerAfterDeleteBooking(SQLiteDatabase db,int idMeeting,int number) {
 
         ContentValues args = new ContentValues();
         args.put(NUMBER_OF_PARTNER, MeetingSql.getMeeting(db,idMeeting).getNumberOfPartner()+number);
         db.update(MEETING_TABLE, args, ID + "= ?", new String[] {String.valueOf(idMeeting)});
 
     }
+
+    public static void addNumberOfPartnerAfterPlusBooking(SQLiteDatabase db,int idMeeting,int number) {
+
+        ContentValues args = new ContentValues();
+        args.put(NUMBER_OF_PARTNER, MeetingSql.getMeeting(db,idMeeting).getNumberOfPartner()-number);
+        db.update(MEETING_TABLE, args, ID + "= ?", new String[] {String.valueOf(idMeeting)});
+
+    }
+
 
 
     public static void deleteMeeting(SQLiteDatabase db, int id) {

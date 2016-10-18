@@ -56,4 +56,6 @@ public interface ModelInterface {
     public List<History> getAllHistoryBookingAndMeeting();
 
     public void giveFeedBack(Feedback feedback);
+
+    public void setUpdateToMeetingWithNumberOfPartner(List<Booking> bookings);
 }

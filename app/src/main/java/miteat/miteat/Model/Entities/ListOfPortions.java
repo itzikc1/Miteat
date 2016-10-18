@@ -13,7 +13,6 @@ public class ListOfPortions {
 
     public ListOfPortions(){
 
-
     }
 
     public ArrayList<Integer> getPortionsIds() {

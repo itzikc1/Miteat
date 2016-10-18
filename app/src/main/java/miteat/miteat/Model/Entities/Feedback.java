@@ -42,6 +42,7 @@ public class Feedback {
 
     }
 
+    public Feedback(){}
     public String getFromUserId() {
         return fromUserId;
     }

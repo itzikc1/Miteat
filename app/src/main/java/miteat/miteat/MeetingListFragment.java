@@ -40,11 +40,12 @@ public class MeetingListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.menu_list_fragment,
                 container, false);
+
         list = (ListView) view.findViewById(R.id.listPortions);
         data = Model.instance().getAllMeeting();
         adapter = new MyAddapter();
         list.setAdapter(adapter);
-
+       // loadMeetingsData();
         TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
         emptyText.setText(R.string.emptyMyMeetingList);
         list.setEmptyView(emptyText);
@@ -102,7 +103,25 @@ public class MeetingListFragment extends Fragment {
             }
         });
 
+
+        //loadMeetingsData();
         return view;
+    }
+    void loadMeetingsData(){
+//        progressBar.setVisibility(View.VISIBLE);
+        Model.instance().getAllMeetingsAsynch(new Model.GetAllMeetingInterface() {
+            @Override
+            public void onResult(List<Meeting> meetings) {
+ //               progressBar.setVisibility(View.GONE);
+                data = meetings;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
 
@@ -110,6 +129,7 @@ public class MeetingListFragment extends Fragment {
 
         @Override
         public int getCount() {
+
             return data.size();
         }
 

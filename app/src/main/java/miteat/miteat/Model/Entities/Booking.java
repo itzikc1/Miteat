@@ -8,7 +8,7 @@ public class Booking {
 
     private String id;//the user i want to eat with him
     private Meeting meeting;
-    private int confirmation;//if 1- accept, if 0- waiting,if 2-refuse
+    private int confirmation;//if 1- accept, if 0- waiting,if 2-refuse,if-3 booked cancel
     private int numberOfPartner;
     private String userIdOfBooking;//my user booking
     private int meetingOrBooking;//if 1- booking, if 0- meeting
@@ -20,6 +20,7 @@ public class Booking {
         this.meetingOrBooking = meetingOrBooking;
     }
 
+    public Booking(){}
 
     public int getConfirmation() {
         return confirmation;

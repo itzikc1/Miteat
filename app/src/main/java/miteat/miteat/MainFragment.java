@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Meeting;
@@ -27,7 +28,7 @@ import miteat.miteat.Model.Model;
 public class MainFragment extends Fragment {
 
     ListView list;
-    List<Meeting> data;
+    List<Meeting> data = new LinkedList<Meeting>();
     MyAddapter adapter;
 
     interface MainListFragmentInterface {
@@ -43,7 +44,10 @@ public class MainFragment extends Fragment {
                 container, false);
         list = (ListView) view.findViewById(R.id.listMeeting);
 //        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
-        data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
+
+       // data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
+
+        loadDataMeetingToBooking();
 
         adapter = new MyAddapter();
         list.setAdapter(adapter);
@@ -104,6 +108,22 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    void loadDataMeetingToBooking(){
+        Model.instance().getAllMeetingsToBookingAsynch(new Model.GetAllMeetingInterface() {
+            @Override
+            public void onResult(List<Meeting> meetings) {
+                data = meetings;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+
+    }
 
     class MyAddapter extends BaseAdapter {
 

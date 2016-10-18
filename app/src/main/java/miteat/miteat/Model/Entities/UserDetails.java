@@ -43,6 +43,7 @@ public class UserDetails {
 
     }
 
+    public  UserDetails(){}
     public void setAllParm(float numberOfStarAvg, float cleaningStar, float serviceStar, float atmosphereStar, float valueStar, double earnMoney, String picProfile, String address, double avgPayForMeal, int maritalStatus, Boolean loveTakeAway, String favoriteDish, Long birthday) {
 
         this.numberOfStarAvg = numberOfStarAvg;

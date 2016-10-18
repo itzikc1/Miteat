@@ -16,6 +16,7 @@ public class History {
         this.booking = booking;
         this.feedback = feedback;
     }
+    public History(){}
 
 
 

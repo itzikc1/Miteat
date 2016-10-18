@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
@@ -29,7 +30,7 @@ public class MyBookingFragment extends Fragment {
 
     Meeting meeting;
     ListView list;
-    List<Booking> data;
+    List<Booking> data = new LinkedList<Booking>();
     MyAddapter adapter;
 
     interface MyBookingFragmentInterface {
@@ -46,7 +47,8 @@ public class MyBookingFragment extends Fragment {
                 container, false);
     //    setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.myBookingList);
-        data = Model.instance().getMyBookingList();
+       // data = Model.instance().getMyBookingList();
+        loadBookingListFromFireBase();
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
@@ -67,6 +69,20 @@ public class MyBookingFragment extends Fragment {
         return view;
     }
 
+
+    void loadBookingListFromFireBase() {
+        Model.instance().getMyBookingListAsync(new Model.GetAllBookingInterface() {
+            @Override
+            public void onResult(List<Booking> bookings) {
+                data = bookings;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
+    }
 
     class MyAddapter extends BaseAdapter {
 
@@ -100,9 +116,6 @@ public class MyBookingFragment extends Fragment {
 
             final Booking booking = data.get(position);
 
-            if(booking.getConfirmation()==1){
-                convertView.setBackgroundColor(0x6E00C8FF);
-            }
 
             TextView userName = (TextView) convertView.findViewById(R.id.userName);
             TextView moreOnUser = (TextView) convertView.findViewById(R.id.moreOnUser);
@@ -111,6 +124,17 @@ public class MyBookingFragment extends Fragment {
             TextView numberOfVoters = (TextView) convertView.findViewById(R.id.numOfVoters);
             RatingBar numberOfStarAvg = (RatingBar) convertView.findViewById(R.id.ratingBar);
             Button cancelBooking = (Button) convertView.findViewById(R.id.cancelBooking);
+
+            if(booking.getConfirmation()==1){
+                convertView.setBackgroundColor(0x6E00C8FF);
+            }
+            if(booking.getConfirmation() ==2){
+                booking.setConfirmation(3);
+                convertView.setBackgroundColor(0x6EAA00FF);
+                cancelBooking.setText("Delete");
+            }
+
+
 
             userName.setText(booking.getMeeting().getUserId());
             address.setText(booking.getMeeting().getLocation());
@@ -144,10 +168,17 @@ public class MyBookingFragment extends Fragment {
             cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-            Model.instance().makeRefuseFromMyBooking(booking);
-                    MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
-                    myBookingFragmentInterface.refreshBookingList();
-
+                    if(booking.getConfirmation()==3) {
+                        booking.setConfirmation(2);
+                        Model.instance().makeRefuseFromMyBooking(booking);
+                        MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
+                        myBookingFragmentInterface.refreshBookingList();
+                    }else {
+                        booking.setConfirmation(2);
+                        Model.instance().makeRefuseFromMyBooking(booking);
+                        MyBookingFragmentInterface myBookingFragmentInterface = (MyBookingFragmentInterface) getActivity();
+                        myBookingFragmentInterface.refreshBookingList();
+                    }
                 }
             });
 

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import miteat.miteat.Model.Entities.Booking;
@@ -22,17 +23,18 @@ import miteat.miteat.Model.Model;
 /**
  * Created by Itzik on 09/10/2016.
  */
-public class MyMeetingFragment extends Fragment{
+public class MyMeetingFragment extends Fragment {
 
     Meeting meeting;
     ListView list;
-    List<Booking> data;
+    List<Booking> data = new LinkedList<Booking>();
     MyAddapter adapter;
 
     interface MyMeetingFragmentInterface {
         public void detailsLoad(String userId, Boolean confirmation);
 
         public void meetingMenu(Meeting meeting);
+
         public void refreshMeetingList();
 
     }
@@ -46,7 +48,11 @@ public class MyMeetingFragment extends Fragment{
                 container, false);
         //    setHasOptionsMenu(true);
         list = (ListView) view.findViewById(R.id.myBookingList);
-        data = Model.instance().getOrderToBooking();
+
+        // data = Model.instance().getOrderToBooking();
+
+        loadDataMyMeetingOrderToBooking();
+
         adapter = new MyAddapter();
         list.setAdapter(adapter);
 
@@ -60,12 +66,25 @@ public class MyMeetingFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // FoodPortions f = data.get(position);
-
             }
         });
-
         return view;
     }
+
+    void loadDataMyMeetingOrderToBooking() {
+        Model.instance().getOrderToBookingAsync(new Model.GetAllBookingInterface() {
+            @Override
+            public void onResult(List<Booking> bookings) {
+                data = bookings;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
+    }
+
     class MyAddapter extends BaseAdapter {
 
         @Override
@@ -96,7 +115,7 @@ public class MyMeetingFragment extends Fragment{
                 Log.d("TAG", "use convert view:" + position);
             }
 
-            final Booking booking  = data.get(position);
+            final Booking booking = data.get(position);
 
             TextView userName = (TextView) convertView.findViewById(R.id.userName);
             TextView moreOnUser = (TextView) convertView.findViewById(R.id.moreOnUser);
@@ -107,8 +126,14 @@ public class MyMeetingFragment extends Fragment{
             Button refuse = (Button) convertView.findViewById(R.id.refuse);
             Button accept = (Button) convertView.findViewById(R.id.accept);
 
-            if(booking.getConfirmation()==1){
+            if (booking.getConfirmation() == 1) {
                 accept.setVisibility(View.GONE);
+            }
+            if(booking.getConfirmation() == 2){
+                accept.setVisibility(View.GONE);
+                refuse.setText("Delete");
+                convertView.setBackgroundColor(0x6EAA00FF);
+                booking.setConfirmation(3);
             }
 
             userName.setText(booking.getUserIdOfBooking());
@@ -129,7 +154,7 @@ public class MyMeetingFragment extends Fragment{
             moreOnMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    MyMeetingFragmentInterface myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
                     myMeetingFragmentInterface.meetingMenu(booking.getMeeting());
 
                 }
@@ -138,20 +163,26 @@ public class MyMeetingFragment extends Fragment{
             refuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(booking.getConfirmation()==3){
+                        Model.instance().makeRefuseFromMyMeeting(booking);
+                        MyMeetingFragmentInterface myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                        myMeetingFragmentInterface.refreshMeetingList();
+                    }else {
                     booking.setConfirmation(2);
                     Model.instance().makeRefuseFromMyMeeting(booking);
-                 //   Model.instance().makeAccept(booking);
-                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    //   Model.instance().makeAccept(booking);
+                    MyMeetingFragmentInterface myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
                     myMeetingFragmentInterface.refreshMeetingList();
+                    }
                 }
             });
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     booking.setConfirmation(1);
-                    booking.getMeeting().setNumberOfPartner(booking.getMeeting().getNumberOfPartner()-booking.getNumberOfPartner());
+                    booking.getMeeting().setNumberOfPartner(booking.getMeeting().getNumberOfPartner() - booking.getNumberOfPartner());
                     Model.instance().makeAccept(booking);
-                    MyMeetingFragmentInterface  myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
+                    MyMeetingFragmentInterface myMeetingFragmentInterface = (MyMeetingFragmentInterface) getActivity();
                     myMeetingFragmentInterface.refreshMeetingList();
                 }
             });
@@ -164,7 +195,6 @@ public class MyMeetingFragment extends Fragment{
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
     }
-
 
 
 }

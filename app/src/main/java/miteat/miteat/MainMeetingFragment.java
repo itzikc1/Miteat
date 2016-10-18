@@ -57,8 +57,8 @@ public class MainMeetingFragment extends Fragment {
     private Double lat;
     private Double lon;
     private Spinner spinner;
+    private int numberOfBooked;
     ArrayAdapter<CharSequence> dataAdapterSpinner;
-    // private List<FoodPortions> data = new LinkedList<FoodPortions>();
     int PLACE_PICKER_REQUEST = 1;
 
     interface MeetingFragmentInterface {
@@ -66,7 +66,6 @@ public class MainMeetingFragment extends Fragment {
 
         public void saveOrCencel();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,9 +95,7 @@ public class MainMeetingFragment extends Fragment {
         dataAdapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapterSpinner);
 
-
         if (meeting != null) {
-
             numberParticipantsView.setText(String.valueOf(meeting.getNumberOfPartner()));
             numberOfMoneyView.setText(String.valueOf(meeting.getMoney()));
             lat = meeting.getLatLocation();
@@ -125,7 +122,6 @@ public class MainMeetingFragment extends Fragment {
             safeCheckBox.setChecked(false);
         }
 
-
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, countries);
 
         multiAutoComplete.setAdapter(adapter);
@@ -134,19 +130,17 @@ public class MainMeetingFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Long f = new Long(444);
+
                 Long startMillis = new Long(0);
                 Long endMillis = new Long(0);
                 String typeFood = multiAutoComplete.getText().toString();
@@ -161,35 +155,30 @@ public class MainMeetingFragment extends Fragment {
                 Boolean bool = safeCheckBox.isChecked();
                 int takeAwaySelection = spinner.getSelectedItemPosition();
                 Meeting newMeeting = new Meeting(-1, Model.instance().getUserDetails().getUserName(), numberPlace, typeFood, money, startMillis, endMillis, address, lat, lon, bool, takeAwaySelection);
-//                Calendar cls = Calendar.getInstance();
-//                Long itzik =new Long(0);
-//                itzik= cls.getTimeInMillis();
-
-//              Log.d("details", "time: " + startMillis + " end time : " + itzik );
-//                int i = endMillis.compareTo(startMillis);
-//
-//                    Log.d("time",String.valueOf(i) );
 
                 if (address == null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
                 } else if (numberPlace < 1) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
+                } else if (meeting != null) {
+                    if((meeting.getNumberOfPartner()-numberOfBooked)<numberPlace){
+                        Toast.makeText(getActivity().getApplicationContext(), "minimum for partners: "+(meeting.getNumberOfPartner()-numberOfBooked), Toast.LENGTH_LONG).show();
+                    }
                 } else if (endMillis.compareTo(startMillis) == -1) {
                     Toast.makeText(getActivity().getApplicationContext(), "The start time before  end time", Toast.LENGTH_LONG).show();
                 } else {
 
-
                     if (meeting == null) {
                         newMeeting.setFoodPortionsId(new LinkedList<FoodPortions>());
-
+                        Model.instance().addMeeting(newMeeting);
                     } else {
+
                         newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
                         Log.d("delete meeting ", String.valueOf(meeting.getId()));
                         newMeeting.setId(meeting.getId());
                         Model.instance().deleteMeeting(meeting);
+                        Model.instance().addMeeting(newMeeting);
                     }
-
-                    Model.instance().addMeeting(newMeeting);
                     MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
                     meetingFragmentInterface.saveOrCencel();
                 }
@@ -201,7 +190,6 @@ public class MainMeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
                 meetingFragmentInterface.saveOrCencel();
-
             }
         });
 
@@ -226,17 +214,12 @@ public class MainMeetingFragment extends Fragment {
                 newMeeting.setLonLocation(lon);
                 if (meeting == null) {
                     newMeeting.setFoodPortionsId(new LinkedList<FoodPortions>());
-
                 } else {
                     newMeeting.setFoodPortionsId(meeting.getFoodPortionsId());
                     newMeeting.setId(meeting.getId());
-
-
                 }
                 MeetingFragmentInterface meetingFragmentInterface = (MeetingFragmentInterface) getActivity();
                 meetingFragmentInterface.menuStart(newMeeting);
-
-
             }
         });
 
@@ -249,7 +232,6 @@ public class MainMeetingFragment extends Fragment {
 
         return view;
     }
-
 
     @Override
     public void onResume() {
@@ -313,11 +295,28 @@ public class MainMeetingFragment extends Fragment {
     }
 
     public void setMenuList(Meeting meeting) {
-        //this.data=data;
         this.meeting = meeting;
-
+        numberOfBooked=0;
+        checkIfEdit();
     }
 
+    public void checkIfEdit() {
+        Model.instance().getMeetingAsync(meeting, new Model.GetMeetingInterface() {
+            @Override
+            public void onResult(Meeting meetings) {
+                if (meetings != null) {
+                    numberOfBooked = meetings.getNumberOfPartner();
+//                    if (meetings.getNumberOfPartner() < meeting.getNumberOfPartner()) {
+//                        save.setVisibility(View.GONE);
+//                    }
+                }
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        });
+    }
 
 
 }

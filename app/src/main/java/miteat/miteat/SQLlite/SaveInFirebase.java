@@ -6,6 +6,9 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoQuery;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -103,7 +106,12 @@ public class SaveInFirebase {
     }
 
     public void bookingToMeeting(Booking booking) {
+
         Firebase stRef = myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
+//        GeoFire geoFire = new GeoFire();
+//        GeoQuery g;
+//        g
+//        Firebase stRef = myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
         stRef.setValue(booking);
         Firebase stReff = myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId());
         stReff.setValue(booking);

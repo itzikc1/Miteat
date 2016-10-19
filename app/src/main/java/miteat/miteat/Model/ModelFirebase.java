@@ -1,11 +1,18 @@
 package miteat.miteat.Model;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +44,6 @@ public class ModelFirebase {
     private static final String ALL_MEETING_TO_BOOKING_TABLE = "all_meeting_to_booking_table";
 
     Firebase myFirebaseRef;
-
 
     ModelFirebase(Context context) {
         Firebase.setAndroidContext(context);
@@ -93,10 +99,48 @@ public class ModelFirebase {
     }
 
 
-    public void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
+//    public void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
+//
+//        Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
+//        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                final List<Meeting> meetings = new LinkedList<Meeting>();
+//                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
+//                    Meeting meeting = stSnapshot.getValue(Meeting.class);
+//                    meetings.add(meeting);
+//                }
+//                listener.onResult(meetings);
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//            }
+//        });
+//
+//    }
 
+    public synchronized void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
+        Gps gps = Model.instance().getGpsLocation();
         Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
-        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+   //   Query quRef = stRef.orderByChild("latLocation").limitToLast(5).endAt(gps.getLatitude());
+
+        Query quRef = stRef.orderByChild("latLocation").endAt(gps.getLatitude());
+
+//        .orderByChild('latitude')
+//                .startAt(whereAmI.latitude - 0.002)
+//                .endAt(whereAmI.latitude + 0.002)
+//                .orderByChild('longitude')
+//                .startAt(whereAmI.longitude- 0.002)
+//                .endAt(whereAmI.longitude+ 0.002)
+
+
+      //  GeoLocation location =new GeoLocation(Double.valueOf(gps.getLatitude()),Double.valueOf(gps.getLongitude()));
+     //   GeoFire geoFire = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
+    //    GeoQuery query = new GeoQuery(stRef,location,5);
+   //     GeoQuery geoQuery = quRef.queryAtLocation(location, 1.6);
+
+        quRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 final List<Meeting> meetings = new LinkedList<Meeting>();
@@ -111,7 +155,6 @@ public class ModelFirebase {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
-
     }
 
 

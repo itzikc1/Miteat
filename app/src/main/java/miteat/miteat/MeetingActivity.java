@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
+import miteat.miteat.Service.GpsService;
 
 public class MeetingActivity extends AppCompatActivity implements MainMeetingFragment.MeetingFragmentInterface, MenuListFragment.ListFragmentInterface, MenuPortionsFragment.MenuFragmentInterface, MeetingListFragment.MeetingListFragmentInterface {
     FragmentManager manager;
@@ -173,5 +174,13 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
         transaction.replace(R.id.meeting_main, mainMeetingFragment);
         invalidateOptionsMenu();
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

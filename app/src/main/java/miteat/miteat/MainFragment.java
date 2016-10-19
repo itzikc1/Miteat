@@ -112,7 +112,9 @@ public class MainFragment extends Fragment {
         Model.instance().getAllMeetingsToBookingAsynch(new Model.GetAllMeetingInterface() {
             @Override
             public void onResult(List<Meeting> meetings) {
-                data = meetings;
+
+                data = Model.instance().sortByDistance(meetings);
+              //  data = meetings;
                 adapter.notifyDataSetChanged();
             }
 

@@ -254,6 +254,11 @@ public class Model implements ModelInterface {
 
     }
 
+    @Override
+    public void updateMeetingToBookingWithTime() {
+        sqlModel.updateMeetingToBookingWithTime();
+
+    }
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
 

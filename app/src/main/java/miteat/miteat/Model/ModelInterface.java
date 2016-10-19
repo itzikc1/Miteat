@@ -58,4 +58,6 @@ public interface ModelInterface {
     public void giveFeedBack(Feedback feedback);
 
     public void setUpdateToMeetingWithNumberOfPartner(List<Booking> bookings);
+
+    public void updateMeetingToBookingWithTime();
 }

@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -30,7 +31,8 @@ public class MainFragment extends Fragment {
     ListView list;
     List<Meeting> data = new LinkedList<Meeting>();
     MyAddapter adapter;
-
+    ProgressBar progressBar;
+    TextView emptyText;
     interface MainListFragmentInterface {
         public void booking(Meeting meeting);
 
@@ -46,14 +48,14 @@ public class MainFragment extends Fragment {
 //        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
 
        // data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
-
+        progressBar = (ProgressBar) view.findViewById(R.id.mainListProgressBar);
         loadDataMeetingToBooking();
 
         adapter = new MyAddapter();
         list.setAdapter(adapter);
-        TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
-        emptyText.setText(R.string.emptyMeeting);
-        list.setEmptyView(emptyText);
+         emptyText = (TextView) view.findViewById(android.R.id.empty);
+     //   emptyText.setText(R.string.emptyMeeting);
+        //list.setEmptyView(emptyText);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -109,13 +111,18 @@ public class MainFragment extends Fragment {
     }
 
     void loadDataMeetingToBooking(){
+        progressBar.setVisibility(View.VISIBLE);
         Model.instance().getAllMeetingsToBookingAsynch(new Model.GetAllMeetingInterface() {
             @Override
             public void onResult(List<Meeting> meetings) {
-
                 data = Model.instance().sortByDistance(meetings);
-              //  data = meetings;
+                if(data.size()==0){
+                    emptyText.setText(R.string.emptyMeeting);
+                    list.setEmptyView(emptyText);
+                }
+                progressBar.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
+
             }
 
             @Override

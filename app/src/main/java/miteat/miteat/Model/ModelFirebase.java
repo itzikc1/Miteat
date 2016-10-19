@@ -120,10 +120,31 @@ public class ModelFirebase {
 //
 //    }
 
-    public synchronized void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
+    public  void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
         Gps gps = Model.instance().getGpsLocation();
+        if(gps==null){
+                    Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
+        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                final List<Meeting> meetings = new LinkedList<Meeting>();
+                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
+                    Meeting meeting = stSnapshot.getValue(Meeting.class);
+                    meetings.add(meeting);
+                }
+                listener.onResult(meetings);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
+        }
+        else {
+
         Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
    //   Query quRef = stRef.orderByChild("latLocation").limitToLast(5).endAt(gps.getLatitude());
+
 
         Query quRef = stRef.orderByChild("latLocation").endAt(gps.getLatitude());
 
@@ -155,6 +176,7 @@ public class ModelFirebase {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+        }
     }
 
 

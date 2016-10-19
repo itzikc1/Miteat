@@ -92,6 +92,7 @@ public class ModelSql implements ModelInterface {
         }
         MeetingSql.addMeeting(db, meeting);
         saveInFirebase.addMeeting(meeting);
+        uploadMeetingToBookingAfterSaving(meeting);//upload meeting to booking
         for (int i = 0; i < meeting.getFoodPortionsId().size(); i++) {
             meeting.getFoodPortionsId().get(i).setId(i);
             meeting.getFoodPortionsId().get(i).setMeetingId(meeting.getId());
@@ -337,7 +338,6 @@ public class ModelSql implements ModelInterface {
 
     @Override
     public List<Meeting> getAllMeetingToBooking() {
-
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         // List<Meeting> meetings = MeetingSql.getAllMeeting(db);
         List<Meeting> meetings = MeetingSql.getAllMeeting(db);
@@ -361,6 +361,16 @@ public class ModelSql implements ModelInterface {
             }
         }
         return meetings;
+    }
+
+    public void uploadMeetingToBookingAfterSaving(Meeting meeting){
+        Calendar cls = Calendar.getInstance();
+        Long nowTime = new Long(0);
+        nowTime = cls.getTimeInMillis();
+
+        if (meeting.getDateAndEndTime().compareTo(nowTime) == 1) {
+            saveInFirebase.uploadMeetingToBooking(meeting);
+        }
     }
 
     @Override
@@ -398,6 +408,24 @@ public class ModelSql implements ModelInterface {
     @Override
     public void setUpdateToMeetingWithNumberOfPartner(List<Booking> bookings) {
 
+
+    }
+
+    @Override
+    public void updateMeetingToBookingWithTime() {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Meeting> meetings = MeetingSql.getAllMeeting(db);
+        for (int i = 0; i < meetings.size(); i++) {
+          //  int[] ids = MeetingSql.getFoodPortions(db, meetings.get(i).getId());
+         //   meetings.get(i).setFoodPortionsId(FoodPortionsSql.getAllPortionsId(db, ids, meetings.get(i).getId()));
+            Calendar cls = Calendar.getInstance();
+            Long nowTime = new Long(0);
+            nowTime = cls.getTimeInMillis();
+            if (meetings.get(i).getDateAndEndTime().compareTo(nowTime) == -1) {
+                saveInFirebase.deleteMeetingToBooking(meetings.get(i));
+            }
+        }
 
     }
 

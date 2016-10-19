@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
+import miteat.miteat.Service.UpdateService;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.Delegate, MainFragment.MainListFragmentInterface, BookingFragment.BookingFragmentInterface, UserDetailsFragment.UserDetailsInterface, MyDetailsFragment.MyDetailsFragmentInterface, BookingListMenuFragment.BookingListMenuFragmentInterface {
     protected LocationManager locManager;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent updateIntent = new Intent(MainActivity.this, UpdateService.class);
+        startService(updateIntent);
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!enabled) {
@@ -42,10 +45,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
             Intent intent = new Intent(MainActivity.this, GpsService.class);
             startService(intent);
 
-//            startActivity(
-//                    new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//            Intent intent = new Intent(MainActivity.this,GpsService.class);
-//            startService(intent);
         }
 
 
@@ -54,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         mainFragment = new MainFragment();
         transaction.add(R.id.frag_container, mainFragment);
         transaction.commit();
+
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(MainActivity.this, GpsService.class);
+        stopService(intent);
 
     }
 
@@ -190,6 +196,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         finish();
     }
 
+    public void onHomePressed(){
+
+    }
 
     public void search() {
 

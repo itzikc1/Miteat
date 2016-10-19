@@ -34,6 +34,10 @@
             android:name=".Service.GpsService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".Service.UpdateService"
+            android:enabled="true"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

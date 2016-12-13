@@ -33,6 +33,7 @@ public class MainFragment extends Fragment {
     MyAddapter adapter;
     ProgressBar progressBar;
     TextView emptyText;
+
     interface MainListFragmentInterface {
         public void booking(Meeting meeting);
 
@@ -47,15 +48,15 @@ public class MainFragment extends Fragment {
         list = (ListView) view.findViewById(R.id.listMeeting);
 //        data = Model.instance().sortByDistance(Model.instance().getAllMeeting());
 
-       // data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
+        // data = Model.instance().sortByDistance(Model.instance().getAllMeetingToBooking());
         progressBar = (ProgressBar) view.findViewById(R.id.mainListProgressBar);
-        loadDataMeetingToBooking();
 
         adapter = new MyAddapter();
         list.setAdapter(adapter);
-         emptyText = (TextView) view.findViewById(android.R.id.empty);
-     //   emptyText.setText(R.string.emptyMeeting);
-        //list.setEmptyView(emptyText);
+        emptyText = (TextView) view.findViewById(android.R.id.empty);
+        loadDataMeetingToBooking();
+        //  emptyText.setText(R.string.emptyMeeting);
+        //  list.setEmptyView(emptyText);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -102,7 +103,7 @@ public class MainFragment extends Fragment {
                 dialog.show();
 
 
-               // Log.d("samll", "samll press in main !!!!!!");
+                // Log.d("samll", "samll press in main !!!!!!");
 
             }
         });
@@ -110,19 +111,19 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    void loadDataMeetingToBooking(){
+    void loadDataMeetingToBooking() {
         progressBar.setVisibility(View.VISIBLE);
+        //   Model.instance().updateMeetingToBookingWithTime();//update my meeting list
         Model.instance().getAllMeetingsToBookingAsynch(new Model.GetAllMeetingInterface() {
             @Override
             public void onResult(List<Meeting> meetings) {
                 data = Model.instance().sortByDistance(meetings);
-                if(data.size()==0){
+                if (data.size() == 0) {
                     emptyText.setText(R.string.emptyMeeting);
                     list.setEmptyView(emptyText);
                 }
                 progressBar.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -130,8 +131,6 @@ public class MainFragment extends Fragment {
 
             }
         });
-
-
     }
 
     class MyAddapter extends BaseAdapter {
@@ -157,10 +156,10 @@ public class MainFragment extends Fragment {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.main_row_list, null);
-             //   Log.d("TAG", "create view:" + position);
+                //   Log.d("TAG", "create view:" + position);
 
             } else {
-              //  Log.d("TAG", "use convert view:" + position);
+                //  Log.d("TAG", "use convert view:" + position);
             }
 
 
@@ -180,7 +179,7 @@ public class MainFragment extends Fragment {
 
             else
                 time.setText(cls.get(Calendar.HOUR_OF_DAY) + ":" + "0" + cls.get(Calendar.MINUTE));
-            if(meeting.getDistance()!=null){
+            if (meeting.getDistance() != null) {
                 locationn.setText(new DecimalFormat("##.##").format(meeting.getDistance()) + " KM from you");//only two digit
             }
 

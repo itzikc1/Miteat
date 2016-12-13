@@ -367,7 +367,6 @@ public class ModelSql implements ModelInterface {
         Calendar cls = Calendar.getInstance();
         Long nowTime = new Long(0);
         nowTime = cls.getTimeInMillis();
-
         if (meeting.getDateAndEndTime().compareTo(nowTime) == 1) {
             saveInFirebase.uploadMeetingToBooking(meeting);
         }

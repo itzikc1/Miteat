@@ -29,12 +29,23 @@ public class Model implements ModelInterface {
 
     ModelSql sqlModel;
     ModelFirebase modelFirebase;
+    Gps gps;
+
+    public Gps getGps() {
+        return gps;
+    }
+
+    public void setGps(Gps gps) {
+        this.gps = gps;
+    }
+
     //  List<Meeting> meetings = new LinkedList<Meeting>();
     HashMap<String, UserDetails> usersDetails = new HashMap<String, UserDetails>();
 
     private Model() {
         sqlModel = new ModelSql();
         modelFirebase = new ModelFirebase(MyApplication.getAppContext());
+        this.gps = getGpsLocation();
         //make fake meeting
 //        for (int i = 0; i < 10; i++) {
 //            UserDetails userDetails = new UserDetails("itzik" + i, "12345", 55224);
@@ -52,7 +63,6 @@ public class Model implements ModelInterface {
 //        userDetails.setNumberOfStarAvg(3.6f);
 //        setUserDetails(userDetails);
 
-
         //  usersDetails.put(userDetails.getUserName(), userDetails);//only for offline
 
     }
@@ -68,6 +78,7 @@ public class Model implements ModelInterface {
     @Override
     public void addGps(Gps gps) {
         sqlModel.addGps(gps);
+        this.gps = gps;
     }
 
     @Override
@@ -296,7 +307,7 @@ public class Model implements ModelInterface {
             return list;
         }
         for (int i = 0; i < list.size(); i++) {
-            Double dis = distance(Double.parseDouble(getGpsLocation().getLatitude()), Double.parseDouble(getGpsLocation().getLongitude()), list.get(i).getLatLocation(), list.get(i).getLonLocation());
+            Double dis = distance(Double.parseDouble(gps.getLatitude()), Double.parseDouble(gps.getLongitude()), list.get(i).getLatLocation(), list.get(i).getLonLocation());
             list.get(i).setDistance(dis);
         }
 

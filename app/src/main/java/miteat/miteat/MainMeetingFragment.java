@@ -160,11 +160,13 @@ public class MainMeetingFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter a Address", Toast.LENGTH_LONG).show();
                 } else if (numberPlace < 1) {
                     Toast.makeText(getActivity().getApplicationContext(), "Please enter number bigger than 0", Toast.LENGTH_LONG).show();
-                } else if (meeting != null) {
+                }
+                else if (meeting != null && numberOfBooked!=-1) {
                     if((meeting.getNumberOfPartner()-numberOfBooked)<numberPlace){
                         Toast.makeText(getActivity().getApplicationContext(), "minimum for partners: "+(meeting.getNumberOfPartner()-numberOfBooked), Toast.LENGTH_LONG).show();
                     }
-                } else if (endMillis.compareTo(startMillis) == -1) {
+                }
+                else if (endMillis.compareTo(startMillis) == -1) {
                     Toast.makeText(getActivity().getApplicationContext(), "The start time before  end time", Toast.LENGTH_LONG).show();
                 } else {
 
@@ -272,7 +274,9 @@ public class MainMeetingFragment extends Fragment {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         Intent intent;
         try {
-            intent = builder.build(getActivity().getApplicationContext());
+            intent = builder.build(getActivity());
+
+          //  intent = builder.build(getActivity().getApplicationContext());
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
             e.printStackTrace();
@@ -290,13 +294,13 @@ public class MainMeetingFragment extends Fragment {
 
             String a = String.format("Place: %s", place.getAddress());
             address = a;
-            Log.d("address", a);
+        //    Log.d("address", a);
         }
     }
 
     public void setMenuList(Meeting meeting) {
         this.meeting = meeting;
-        numberOfBooked=0;
+        numberOfBooked=-1;
         checkIfEdit();
     }
 

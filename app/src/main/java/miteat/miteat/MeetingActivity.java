@@ -11,7 +11,6 @@ import android.view.MenuItem;
 
 import miteat.miteat.Model.Entities.FoodPortions;
 import miteat.miteat.Model.Entities.Meeting;
-import miteat.miteat.Service.GpsService;
 
 public class MeetingActivity extends AppCompatActivity implements MainMeetingFragment.MeetingFragmentInterface, MenuListFragment.ListFragmentInterface, MenuPortionsFragment.MenuFragmentInterface, MeetingListFragment.MeetingListFragmentInterface {
     FragmentManager manager;
@@ -20,8 +19,6 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
     MenuPortionsFragment menuPortionsFragment;
     MeetingListFragment meetingListFragment;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-
-
     private String picName;
     int PLACE_PICKER_REQUEST = 1;
 
@@ -29,17 +26,12 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
+
         meetingListFragment = new MeetingListFragment();
         manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.meeting_main, meetingListFragment);
         transaction.commit();
-
-//        mainMeetingFragment = new MainMeetingFragment();
-//        manager = getFragmentManager();
-//        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.add(R.id.meeting_main, mainMeetingFragment);
-//        transaction.commit();
 
     }
 
@@ -167,7 +159,6 @@ public class MeetingActivity extends AppCompatActivity implements MainMeetingFra
 
     @Override
     public void editMeeting(Meeting meeting) {
-        //need to be edit screen
         mainMeetingFragment = new MainMeetingFragment();
         mainMeetingFragment.setMenuList(meeting);
         FragmentTransaction transaction = manager.beginTransaction();

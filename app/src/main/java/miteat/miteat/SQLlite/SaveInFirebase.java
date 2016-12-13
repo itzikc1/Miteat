@@ -7,7 +7,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.util.LinkedList;
@@ -38,6 +42,8 @@ public class SaveInFirebase {
     private static final String MY_BOOKING_MEETING_TABLE = "my_booking_meeting_table";
     private static final String MY_BOOKING_FOOD_PORTIONS_TABLE = "my_booking_food_portions_table";
     private static final String ALL_MEETING_TO_BOOKING_TABLE = "all_meeting_to_booking_table";
+    private static final String GEO_FIRE = "geofire";
+
 
     Firebase myFirebaseRef;
 
@@ -108,16 +114,15 @@ public class SaveInFirebase {
     public void bookingToMeeting(Booking booking) {
 
         Firebase stRef = myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
-//        GeoFire geoFire = new GeoFire();
-//        GeoQuery g;
-//        g
-//        Firebase stRef = myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
+
         stRef.setValue(booking);
         Firebase stReff = myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId());
         stReff.setValue(booking);
         int num = booking.getMeeting().getNumberOfPartner() - booking.getNumberOfPartner();
         if (num == 0) {
             myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(booking.getMeeting().getUserId() + booking.getMeeting().getId()).removeValue();
+            myFirebaseRef.child(GEO_FIRE).child(booking.getMeeting().getUserId() + booking.getMeeting().getId()).removeValue();
+
         } else {
             booking.getMeeting().setNumberOfPartner(booking.getMeeting().getNumberOfPartner() - booking.getNumberOfPartner());
             Firebase stRefff = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
@@ -153,17 +158,27 @@ public class SaveInFirebase {
 
         Firebase stReff = myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId());
         stReff.setValue(booking);
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GEO_FIRE);
+//        GeoFire geoFire = new GeoFire(ref);
+//        geoFire.setLocation(booking.getUserIdOfBooking() + booking.getMeeting().getId(), new GeoLocation(booking.getMeeting().getLatLocation(), booking.getMeeting().getLonLocation()), new GeoFire.CompletionListener() {
+//            @Override
+//            public void onComplete(String key, DatabaseError error) {
+//
+//            }
+//
+//        });
         return false;
     }
 
     public boolean makeRefuseFromMyMeeting(Booking booking) {
 
-        if (booking.getConfirmation() == 3) {
+        if (booking.getConfirmation() == 3) {//canceled the booking
             myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId()).removeValue();
         } else {
             myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId()).removeValue();
             Firebase stReff = myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId());
             stReff.setValue(booking);
+
             addNumberOfPartners(booking);
         }
         return false;
@@ -178,6 +193,16 @@ public class SaveInFirebase {
             myFirebaseRef.child(MY_BOOKING_TABLE).child(booking.getUserIdOfBooking()).child(booking.getMeeting().getUserId() + booking.getMeeting().getId()).removeValue();
             Firebase stReff = myFirebaseRef.child(MY_BOOKING_MEETING_TABLE).child(booking.getMeeting().getUserId()).child(booking.getUserIdOfBooking() + booking.getMeeting().getId());
             stReff.setValue(booking);
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GEO_FIRE);
+            GeoFire geoFire = new GeoFire(ref);
+            geoFire.setLocation(booking.getMeeting().getUserId() + booking.getMeeting().getId(), new GeoLocation(booking.getMeeting().getLatLocation(), booking.getMeeting().getLonLocation()), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+
+                }
+
+            });
             addNumberOfPartners(booking);
         }
 
@@ -201,13 +226,31 @@ public class SaveInFirebase {
     }
 
     public void uploadMeetingToBooking(Meeting meetings) {
-        Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(meetings.getUserId() + meetings.getId());
-        stRef.setValue(meetings);
+
+         Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(meetings.getUserId() + meetings.getId());
+          stRef.setValue(meetings);
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GEO_FIRE);
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.setLocation(meetings.getUserId() + meetings.getId(), new GeoLocation(meetings.getLatLocation(), meetings.getLonLocation()), new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+
+            }
+
+        });
+
+
+
+       // Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(meetings.getUserId() + meetings.getId());
+      //  stRef.setValue(meetings);
 
     }
 
     public void deleteMeetingToBooking(Meeting meetings) {
         myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(meetings.getUserId() + meetings.getId()).removeValue();
+        myFirebaseRef.child(GEO_FIRE).child(meetings.getUserId() + meetings.getId()).removeValue();
     }
 
     public void addNumberOfPartners(final Booking booking) {

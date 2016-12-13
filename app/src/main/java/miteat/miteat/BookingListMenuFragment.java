@@ -154,37 +154,44 @@ public class BookingListMenuFragment extends Fragment {
             cost.setText(String.valueOf(st.getCost()));
             allergens.setText(st.getAllergens());
             ArrayList<String> image = new ArrayList<String>();
-            for (int i = 0; i < st.getImages().size(); i++) {
-                image.add(st.getImages().get(i));
-            }
-            if (image.size() != 0) {
-
-                for (int i = 0; i < image.size(); i++) {
-                    layoutParams.setMargins(1, 1, 1, 1);
-                    layoutParams.gravity = Gravity.CENTER;
-                    final ImageView imageView = new ImageView(getActivity());
-                    final String srt = image.get(i);
-
-                    ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
-                        @Override
-                        public void onResult(Bitmap imageBmp) {
-                            if (imageBmp == null) {
-                                //mProgress.setVisibility(layout.getVisibility());
-
-                                // Log.d("null image","null image load");
-                            } else {
-                                if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
-                                    imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
-                                }
-                                // mProgress.setVisibility(layout.GONE);
-                                imageView.setImageBitmap(imageBmp);
-                            }
-                        }
-                    });
-                    imageView.setLayoutParams(layoutParams);
-                    layout.addView(imageView);
+            if (st.getImages() != null) {
+                for (int i = 0; i < st.getImages().size(); i++) {
+                    image.add(st.getImages().get(i));
                 }
 
+                if (image.size() != 0) {
+
+                    for (int i = 0; i < image.size(); i++) {
+                        layoutParams.setMargins(1, 1, 1, 1);
+                        layoutParams.gravity = Gravity.CENTER;
+                        final ImageView imageView = new ImageView(getActivity());
+                        final String srt = image.get(i);
+
+                        ModelCloudinary.getInstance().loadImage(image.get(i), new ModelCloudinary.LoadImageListener() {
+                            @Override
+                            public void onResult(Bitmap imageBmp) {
+                                if (imageBmp == null) {
+                                    //mProgress.setVisibility(layout.getVisibility());
+
+                                    // Log.d("null image","null image load");
+                                } else {
+                                    if (imageBmp.getWidth() > 1080 || imageBmp.getHeight() > 720) {
+                                        imageBmp = Bitmap.createScaledBitmap(imageBmp, 800, 1080, true);
+                                    }
+                                    // mProgress.setVisibility(layout.GONE);
+                                    imageView.setImageBitmap(imageBmp);
+                                }
+                            }
+                        });
+                        imageView.setLayoutParams(layoutParams);
+                        layout.addView(imageView);
+                    }
+
+                } else {
+                    final ImageView imageView = new ImageView(getActivity());
+                    imageView.setImageResource(R.drawable.chef);
+                    layout.addView(imageView);
+                }
             } else {
                 final ImageView imageView = new ImageView(getActivity());
                 imageView.setImageResource(R.drawable.chef);

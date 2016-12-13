@@ -1,10 +1,9 @@
 package miteat.miteat.Model;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.location.Location;
 import android.util.Log;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -13,7 +12,13 @@ import com.firebase.client.ValueEventListener;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.geofire.core.GeoHash;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -42,12 +47,16 @@ public class ModelFirebase {
     private static final String MY_BOOKING_MEETING_TABLE = "my_booking_meeting_table";
     private static final String MY_BOOKING_FOOD_PORTIONS_TABLE = "my_booking_food_portions_table";
     private static final String ALL_MEETING_TO_BOOKING_TABLE = "all_meeting_to_booking_table";
+    private static final String GEO_FIRE = "geofire";
+
 
     Firebase myFirebaseRef;
+
 
     ModelFirebase(Context context) {
         Firebase.setAndroidContext(context);
         myFirebaseRef = new Firebase("https://miteat-74d63.firebaseio.com/");
+
     }
 
 
@@ -120,33 +129,27 @@ public class ModelFirebase {
 //
 //    }
 
-    public  void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
-        Gps gps = Model.instance().getGpsLocation();
-        if(gps==null){
-                    Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
-        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                final List<Meeting> meetings = new LinkedList<Meeting>();
-                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
-                    Meeting meeting = stSnapshot.getValue(Meeting.class);
-                    meetings.add(meeting);
+    public void getAllMeetingToBooking(final Model.GetAllMeetingInterface listener) {
+        final  Gps gps = Model.instance().getGps();
+        final List<Meeting> meetings = new LinkedList<Meeting>();
+        if (gps == null) {
+            Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
+            stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+//                    final List<Meeting> meetings = new LinkedList<Meeting>();
+                    for (DataSnapshot stSnapshot : snapshot.getChildren()) {
+                        Meeting meeting = stSnapshot.getValue(Meeting.class);
+                        meetings.add(meeting);
+                    }
+                    listener.onResult(meetings);
                 }
-                listener.onResult(meetings);
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-        }
-        else {
-
-        Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
-   //   Query quRef = stRef.orderByChild("latLocation").limitToLast(5).endAt(gps.getLatitude());
-
-
-        Query quRef = stRef.orderByChild("latLocation").endAt(gps.getLatitude());
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                }
+            });
+        } else {
 
 //        .orderByChild('latitude')
 //                .startAt(whereAmI.latitude - 0.002)
@@ -154,29 +157,116 @@ public class ModelFirebase {
 //                .orderByChild('longitude')
 //                .startAt(whereAmI.longitude- 0.002)
 //                .endAt(whereAmI.longitude+ 0.002)
+            //   Query quRef = stRef.orderByChild("latLocation").limitToLast(5).endAt(gps.getLatitude());
 
 
-      //  GeoLocation location =new GeoLocation(Double.valueOf(gps.getLatitude()),Double.valueOf(gps.getLongitude()));
-     //   GeoFire geoFire = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
-    //    GeoQuery query = new GeoQuery(stRef,location,5);
-   //     GeoQuery geoQuery = quRef.queryAtLocation(location, 1.6);
+            //   Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE);
+            //     Query quRef = stRef.orderByChild("latLocation").endAt(gps.getLatitude());
+//        quRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                final List<Meeting> meetings = new LinkedList<Meeting>();
+//                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
+//                    Meeting meeting = stSnapshot.getValue(Meeting.class);
+//                    meetings.add(meeting);
+//                }
+//                listener.onResult(meetings);
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//            }
+//        });
 
-        quRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                final List<Meeting> meetings = new LinkedList<Meeting>();
-                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
-                    Meeting meeting = stSnapshot.getValue(Meeting.class);
-                    meetings.add(meeting);
-                }
-                listener.onResult(meetings);
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
+//            Runnable doQuery = new Runnable() {
+//                @Override
+//                public void run() {
+//                    Gps gps = Model.instance().getGpsLocation();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
+            GeoLocation location = new GeoLocation(Double.valueOf(gps.getLatitude()), Double.valueOf(gps.getLongitude()));
+            GeoFire geoFire = new GeoFire(ref);
+            //GeoHash hash = new GeoHash()
+            GeoQuery geoQuery = geoFire.queryAtLocation(location, 900);
+            final List<String> m = new LinkedList<String>();
+         //   final List<Meeting> meetings = new LinkedList<Meeting>();
+
+                    geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                        @Override
+                        public void onKeyEntered(String key, GeoLocation location) {
+
+                            Firebase stRef = myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(key);
+                            stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot snapshot) {
+                                    Meeting meeting1 = snapshot.getValue(Meeting.class);
+                                    Calendar cls = Calendar.getInstance();
+                                    Long nowTime = new Long(0);
+                                    nowTime = cls.getTimeInMillis();
+                                    if (meeting1.getDateAndEndTime().compareTo(nowTime) == -1) {//update my meeting list
+                                        myFirebaseRef.child(ALL_MEETING_TO_BOOKING_TABLE).child(meeting1.getUserId() + meeting1.getId()).removeValue();
+                                        myFirebaseRef.child(GEO_FIRE).child(meeting1.getUserId() + meeting1.getId()).removeValue();
+                                       // saveInFirebase.deleteMeetingToBooking(meetings.get(i));
+                                    }else{
+                                        meetings.add(meeting1);
+                                        listener.onResult(meetings);
+                                    }
+                                    //  Meeting meeting = stSnapshot.getValue(Meeting.class);
+                                //    Double dis = distance(Double.parseDouble(gps.getLatitude()), Double.parseDouble(gps.getLongitude()), meeting1.getLatLocation(), meeting1.getLonLocation());
+                                 //   meeting1.setDistance(dis);
+
+
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+                                }
+                            });
+
+                            //  m.add(key);
+                            //   Log.d("theNode: ", key);
+ //                           listener.onResult(meetings);
+                        }
+
+                        @Override
+                        public void onKeyExited(String key) {
+
+                        }
+
+                        @Override
+                        public void onKeyMoved(String key, GeoLocation location) {
+
+                        }
+
+                        @Override
+                        public void onGeoQueryReady() {
+
+                        }
+
+                        @Override
+                        public void onGeoQueryError(DatabaseError error) {
+
+                        }
+                    });
+                  //  Log.d("the Node : ", String.valueOf(m.size()));
+ //               }
+//             };
+//            Thread thread = new Thread(doQuery);
+//
+//            thread.start();
+           // while (meetings.size()==0){
+              //  Log.d("thread","test....");
+         //   }
+//            while (thread.getState()==Thread.State.RUNNABLE){
+//            Log.d("thread","test....");
+//            }
+           //    listener.onResult(meetings);
+
+
         }
+
     }
 
 
@@ -315,6 +405,18 @@ public class ModelFirebase {
     }
 
     public void giveFeedBack(Feedback feedback) {
+
+    }
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(lat1);
+        locationA.setLongitude(lon1);
+        Location locationB = new Location("point B");
+        locationB.setLatitude(lat2);
+        locationB.setLongitude(lon2);
+        float distance = locationA.distanceTo(locationB) / 1000; //in KM
+        return (double) distance;
 
     }
 

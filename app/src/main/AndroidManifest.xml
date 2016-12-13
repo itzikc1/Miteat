@@ -37,7 +37,11 @@
         <service
             android:name=".Service.UpdateService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
+
+        <service android:name="com.google.android.gms.measurement.AppMeasurementService"
+            android:enabled="true"
+            android:exported="false"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

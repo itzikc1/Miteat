@@ -22,6 +22,14 @@
     <string name="bookingNow">Booking</string>
     <string name="invite">Invite</string>
     <string name="back">Back</string>
+    <string name="cancelBooking">Canceled Booking!</string>
+    <string name="theUser">the user</string>
+    <string name="canceledBooking">canceled the booking!</string>
+    <string name="youYetOneBooking">You get one booking</string>
+    <string name="wantToEnjoy">want to enjoy with you</string>
+    <string name="accept">accept</string>
+    <string name="refusedBooking">Refused booking</string>
+
 
     <string-array name="takeAwayOption">
         <item>Yes</item>

@@ -3,6 +3,7 @@ package miteat.miteat.SQLlite;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,7 +39,12 @@ public class MyBookingFoodPortionsSql {
         values.put(MEETING_ID, foodPortions.getMeetingId());
         values.put(NAME, foodPortions.getName());
         values.put(DISH_NUMBER, foodPortions.getDishNumber());
-        values.put(IMAGES, convertArrayToString(foodPortions.getImages()));
+        if(foodPortions.getImages()!=null){
+            values.put(IMAGES, convertArrayToString(foodPortions.getImages()));
+        }else{
+            values.put(IMAGES,"null");
+        }
+
         values.put(NUMBER_OF_FOOD_PORTIONS, foodPortions.getNumberOfFoodPortions());
         values.put(COST, foodPortions.getCost());
         values.put(ALLERGENS, foodPortions.getAllergens());

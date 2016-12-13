@@ -149,11 +149,11 @@ public class MeetingListFragment extends Fragment {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.my_meeting_list_row, null);
-                Log.d("TAG", "create view:" + position);
+               // Log.d("TAG", "create view:" + position);
 
 
             } else {
-                Log.d("TAG", "use convert view:" + position);
+             //   Log.d("TAG", "use convert view:" + position);
             }
 
             Meeting meeting = data.get(position);

@@ -20,7 +20,8 @@ public class Booking {
         this.meetingOrBooking = meetingOrBooking;
     }
 
-    public Booking(){}
+    public Booking() {
+    }
 
     public int getConfirmation() {
         return confirmation;
@@ -29,6 +30,7 @@ public class Booking {
     public void setConfirmation(int confirmation) {
         this.confirmation = confirmation;
     }
+
     public Meeting getMeeting() {
         return meeting;
     }

@@ -13,6 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.File;
+
 import miteat.miteat.Model.Entities.Meeting;
 import miteat.miteat.Service.GpsService;
 import miteat.miteat.Service.UpdateService;
@@ -60,6 +65,41 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Del
         super.onDestroy();
         Intent intent = new Intent(MainActivity.this, GpsService.class);
         stopService(intent);
+//        System.exit(0);
+//        try {
+//            trimCache(this);
+//            // Toast.makeText(this,"onDestroy " ,Toast.LENGTH_LONG).show();
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    public static void trimCache(Context context) {
+//        try {
+//            File dir = context.getCacheDir();
+//            if (dir != null && dir.isDirectory()) {
+//                deleteDir(dir);
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
+//    }
+//
+//    public static boolean deleteDir(File dir) {
+//        if (dir != null && dir.isDirectory()) {
+//            String[] children = dir.list();
+//            for (int i = 0; i < children.length; i++) {
+//                boolean success = deleteDir(new File(dir, children[i]));
+//                if (!success) {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        // The directory is now empty so delete it
+//        return dir.delete();
 
     }
 

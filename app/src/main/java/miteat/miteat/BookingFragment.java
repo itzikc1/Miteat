@@ -76,9 +76,12 @@ public class BookingFragment extends Fragment {
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         image = new ArrayList<String>();
+
         for (int i = 0; i < meeting.getFoodPortionsId().size(); i++) {
-            for (int j = 0; j < meeting.getFoodPortionsId().get(i).getImages().size(); j++) {
-                image.add(meeting.getFoodPortionsId().get(i).getImages().get(j));
+            if (meeting.getFoodPortionsId().get(i).getImages() != null) {
+                for (int j = 0; j < meeting.getFoodPortionsId().get(i).getImages().size(); j++) {
+                    image.add(meeting.getFoodPortionsId().get(i).getImages().get(j));
+                }
             }
         }
         star.setRating(userDetails.getNumberOfStarAvg());
@@ -120,7 +123,7 @@ public class BookingFragment extends Fragment {
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Booking booking = new Booking(meeting.getUserId(), meeting, Model.instance().getUserDetails().getUserName(),1);
+                Booking booking = new Booking(meeting.getUserId(), meeting, Model.instance().getUserDetails().getUserName(), 1);
                 int numberPlace = Integer.parseInt(numPartners.getText().toString());
                 if (Model.instance().checkIfBooking(booking)) {
                     Toast.makeText(getActivity().getApplicationContext(), "You all ready booking to this meeting!", Toast.LENGTH_LONG).show();
